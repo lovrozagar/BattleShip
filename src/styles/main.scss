@@ -1,6 +1,11 @@
+$background-color: #03254c;
+$transparent-low-grey-color: #ffffffa6;
+$main-color: #ffffff;
+$input-hover-color: #4985e01f;
+
 :root {
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: $main-color;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -28,4 +33,132 @@ html,
 body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
+  background-color: $background-color;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  text-align: center;
+  h1 {
+    font-family: 'Big Shoulders Stencil Text', cursive;
+    font-size: 5rem;
+    letter-spacing: 0.1rem;
+  }
+  h2 {
+    margin-top: 2rem;
+    max-width: 800px;
+    font-weight: 300;
+  }
+  .name-form {
+    margin-top: 2.75rem;
+  }
+  .play-now-button {
+    margin-top: 1rem;
+  }
+}
+
+// ENTER COMBAT BUTTON / SVG CARRIER MASK
+.play-now-button {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 350px;
+  height: 5rem;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  -webkit-mask-size: 100%;
+  -webkit-mask: url('../assets/images/battleship.svg') no-repeat 50% 50%;
+  mask: url('../assets/images/battleship.svg') no-repeat 50% 50%;
+  cursor: pointer;
+}
+.play-now-button:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: 0px 0 0 0 white;
+  transition: box-shadow 1s ease;
+}
+.play-now-button:hover:after {
+  box-shadow: 0px -15px 50px 1.5px $transparent-low-grey-color;
+}
+.play-now-button .text-play-button {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 100%;
+  font-size: 0.95rem;
+  letter-spacing: 3px;
+  text-align: center;
+  color: white;
+  transform: translate(-50%, -50%);
+  transition: all 0.8s ease;
+}
+.play-now-button:hover .text-play-button {
+  color: black;
+}
+.play-now-button:before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 100%;
+  width: 0;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  transition: all 0.8s ease;
+}
+.play-now-button:hover:before {
+  width: 100%;
+}
+
+// CAPTAIN NAME FORM
+.name-form {
+  margin: 0 auto;
+  position: relative;
+  max-width: 200px;
+  .name-input {
+    width: 100%;
+    padding-inline: 0.5em;
+    padding-block: 0.7em;
+    border: none;
+    border-bottom: 0.1rem solid $transparent-low-grey-color;
+    font-size: 1rem;
+    color: $main-color;
+    background-color: transparent;
+    &::placeholder {
+      color: $transparent-low-grey-color;
+    }
+    &:hover {
+      background: $input-hover-color;
+    }
+    &:focus {
+      outline: none;
+    }
+    &:focus ~ .input-border {
+      width: 100%;
+    }
+  }
+  .input-border {
+    position: absolute;
+    background: $main-color;
+    width: 0%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    transition: 0.3s;
+  }
 }
