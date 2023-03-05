@@ -1,7 +1,8 @@
 $background-color: #03254c;
 $transparent-low-grey-color: #ffffffa6;
 $main-color: #ffffff;
-$input-hover-color: #4985e01f;
+$input-background-color: #00000033;
+$transparent-shadow-color: #0000004d;
 
 :root {
   color-scheme: light dark;
@@ -40,6 +41,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: url('../assets/images/worldMap.svg') bottom / cover no-repeat;
 }
 
 .content-container {
@@ -47,22 +49,41 @@ body {
   flex-direction: column;
   max-width: 1000px;
   text-align: center;
-  h1 {
-    font-family: 'Big Shoulders Stencil Text', cursive;
-    font-size: 5rem;
-    letter-spacing: 0.1rem;
+  .pregame-card {
+    padding: 5rem 3.5rem;
+    h1 {
+      font-family: 'Big Shoulders Stencil Text', cursive;
+      font-size: 5rem;
+      letter-spacing: 0.1rem;
+    }
+    h2 {
+      margin-top: 2rem;
+      max-width: 800px;
+      font-weight: 300;
+    }
+    .name-form {
+      margin-top: 2.75rem;
+    }
+    .play-now-button {
+      margin-top: 1rem;
+    }
   }
-  h2 {
-    margin-top: 2rem;
-    max-width: 800px;
-    font-weight: 300;
-  }
-  .name-form {
-    margin-top: 2.75rem;
-  }
-  .play-now-button {
-    margin-top: 1rem;
-  }
+}
+
+// PREGAME CARD
+.pregame-card {
+  border: 2px solid transparent;
+  backdrop-filter: blur(10px);
+  box-shadow: 0px 0px 30px 1px $transparent-shadow-color;
+  border-radius: 17px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: border-color 0.5s;
+  user-select: none;
+  cursor: pointer;
+}
+.pregame-card:hover {
+  border: 2px solid $transparent-shadow-color;
 }
 
 // ENTER COMBAT BUTTON / SVG CARRIER MASK
@@ -98,14 +119,14 @@ body {
 .play-now-button .text-play-button {
   position: absolute;
   left: 50%;
-  bottom: 0;
+  bottom: -0.2rem;
   width: 100%;
   font-size: 0.95rem;
   letter-spacing: 3px;
   text-align: center;
   color: white;
   transform: translate(-50%, -50%);
-  transition: all 0.8s ease;
+  transition: color 0.8s ease;
 }
 .play-now-button:hover .text-play-button {
   color: black;
@@ -119,7 +140,7 @@ body {
   width: 0;
   background-color: white;
   transform: translate(-50%, -50%);
-  transition: all 0.8s ease;
+  transition: width 0.8s ease;
 }
 .play-now-button:hover:before {
   width: 100%;
@@ -142,11 +163,10 @@ body {
     &::placeholder {
       color: $transparent-low-grey-color;
     }
-    &:hover {
-      background: $input-hover-color;
-    }
+    &:hover,
     &:focus {
       outline: none;
+      background: $input-background-color;
     }
     &:focus ~ .input-border {
       width: 100%;
