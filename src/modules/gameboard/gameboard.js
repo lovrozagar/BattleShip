@@ -10,6 +10,30 @@ const gameboard = () => {
     placeX,
     placeY,
     receiveAttack,
+    recordHit,
+    getShip,
+    isEveryShipSunk,
+  }
+}
+
+// FLEET
+
+function addToFleet(shipName) {
+  switch (shipName.name) {
+    case 'carrier':
+      this.fleet.push(ship('carrier', 5))
+      break
+    case 'battleship':
+      this.fleet.push(ship('battleship', 4))
+      break
+    case 'cruiser':
+      this.fleet.push(ship('cruiser', 3))
+      break
+    case 'submarine':
+      this.fleet.push(ship('submarine', 3))
+      break
+    default:
+      this.fleet.push(ship('destroyer', 2))
   }
 }
 
@@ -62,39 +86,58 @@ function placeY(battleship, start) {
     this.board[i][j] = battleship.name
   })
 
-  addToFleet(battleship)
+  this.addToFleet(battleship)
 }
 
 function isOutOfBounds(shipLength, boardLength, field) {
   return shipLength > boardLength - field
 }
 
-// RECEIVE ATTACK
+// RECORD ATTACKS
 
-// function receiveAttack(coords) {
-//   const [x, y] = coords
-//   if (this.board[x][y] !== 'carrier') {
-//     this.fleet.
-//   }
-// }
+function receiveAttack(coords) {
+  const [x, y] = coords
+  this.recordHit(x, y)
+}
 
-function addToFleet(shipName) {
-  switch (shipName) {
+function recordHit(x, y) {
+  switch (this.board[x][y]) {
     case 'carrier':
-      this.fleet.push(ship('carrier', 5))
+      this.getShip('carrier').hit()
+      this.board[x][y] = 'hit'
       break
     case 'battleship':
-      this.fleet.push(ship('battleship', 4))
+      this.getShip('battleship').hit()
+      this.board[x][y] = 'hit'
       break
     case 'cruiser':
-      this.fleet.push(ship('cruiser', 3))
+      this.getShip('cruiser').hit()
+      this.board[x][y] = 'hit'
       break
     case 'submarine':
-      this.fleet.push(ship('submarine', 3))
+      this.getShip('submarine').hit()
+      this.board[x][y] = 'hit'
+      break
+    case 'destroyer':
+      this.getShip('destroyer').hit()
+      this.board[x][y] = 'hit'
       break
     default:
-      this.fleet.push(ship('destroyer', 2))
+      this.board[x][y] = 'missed'
   }
+}
+
+// GET SHIPS
+
+function getShip(shipName) {
+  return this.fleet.filter((battleship) => battleship.name === shipName)[0]
+}
+
+// ARE ALL SUNK
+
+function isEveryShipSunk() {
+  const sunk = this.fleet.filter((battleship) => battleship.isSunk === true)
+  return sunk.length === 5
 }
 
 export default gameboard
