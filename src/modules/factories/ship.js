@@ -1,7 +1,8 @@
-const ship = (length) => {
+const ship = (name, length) => {
   const timesHit = 0
   const isSunk = false
   return {
+    name,
     length,
     timesHit,
     isSunk,

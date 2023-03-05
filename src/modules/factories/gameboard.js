@@ -1,4 +1,4 @@
-import ship from '../ship/ship'
+import ship from './ship'
 
 const gameboard = () => {
   const board = new Array(10).fill('x').map(() => new Array(10).fill('x'))
