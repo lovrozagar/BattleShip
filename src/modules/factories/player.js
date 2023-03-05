@@ -30,7 +30,7 @@ function isEmptyField(coordinate) {
   if (!coordinate.length) return false
 
   const [x, y] = coordinate
-  return this.board.board[x][y] === 'x'
+  return this.board.board[x][y] !== 'missed' && this.board.board[x][y] !== 'hit'
 }
 
 function cpuPlay() {
