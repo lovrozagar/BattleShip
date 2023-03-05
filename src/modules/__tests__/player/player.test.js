@@ -7,7 +7,7 @@ describe('player', () => {
   // INTI PLAYERS BEFORE EACH TEST
   beforeEach(() => {
     combatant = player('combatant')
-    cpu = player('cpu')
+    cpu = player('cpu', true)
   })
 
   test('player turn', () => {
@@ -17,10 +17,14 @@ describe('player', () => {
 
   test('each coordinate can be played only once', () => {
     combatant.playTurn([0, 0])
-    cpu.playTurn([3, 3])
     combatant.playTurn([0, 0])
-    cpu.playTurn([3, 3])
     expect(combatant.turn).toBe(1)
-    expect(cpu.turn).toBe(1)
+  })
+
+  test('cpu plays random turn', () => {
+    cpu.playTurn()
+    cpu.playTurn()
+    cpu.playTurn()
+    expect(cpu.turn).toBe(3)
   })
 })
