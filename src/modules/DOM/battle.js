@@ -1,6 +1,6 @@
-const battle = (() => {
-  const BOARD_SIZE = 10
+import helper from './helper'
 
+const battle = (() => {
   function loadBoardsSection() {
     const app = document.getElementById('app')
 
@@ -13,8 +13,8 @@ const battle = (() => {
     loadBoardTitle(friendlyBoardContainer, 'FRIENDLY WATERS')
     loadBoardTitle(enemyBoardContainer, 'ENEMY WATERS')
 
-    loadBoard(friendlyBoardContainer, 'friendly')
-    loadBoard(enemyBoardContainer, 'enemy')
+    helper.loadBoard(friendlyBoardContainer, 'friendly')
+    helper.loadBoard(enemyBoardContainer, 'enemy')
 
     boardsSection.appendChild(friendlyBoardContainer)
     boardsSection.appendChild(enemyBoardContainer)
@@ -28,23 +28,6 @@ const battle = (() => {
     boardTitle.textContent = title
 
     container.appendChild(boardTitle)
-  }
-
-  function loadBoard(container, friendlyOrEnemy) {
-    const board = document.createElement('div')
-    board.id = `board-${friendlyOrEnemy}`
-    board.classList.add('board', friendlyOrEnemy)
-
-    for (let i = 0; i < BOARD_SIZE; i += 1) {
-      for (let j = 0; j < BOARD_SIZE; j += 1) {
-        const field = document.createElement('div')
-        field.className = 'field'
-
-        board.appendChild(field)
-      }
-    }
-
-    container.appendChild(board)
   }
 
   return { loadBoardsSection }
