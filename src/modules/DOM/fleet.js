@@ -49,7 +49,7 @@ const fleet = (() => {
         loadDestroyerX(info)
         break
       case 'destroyerY':
-        if (info.found.submarine) return
+        if (info.found.destroyer) return
         loadDestroyerY(info)
         break
       default:
