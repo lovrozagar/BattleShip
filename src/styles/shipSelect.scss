@@ -1,13 +1,15 @@
 .fleet-setup {
-  display: grid;
-  grid-template-columns: 1fr;
-  width: 100%;
-  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: wrap;
   backdrop-filter: blur(10px);
   background-color: rgba(0, 0, 0, 0.5);
   box-shadow: 0px 0px 30px 1px #0000004d;
   .ship-card {
     flex: 1;
+    max-width: 150px;
+    min-width: 100px;
     position: relative;
     background: transparent;
     user-select: none;
@@ -22,10 +24,10 @@
     filter: brightness(0.75);
     opacity: 0.75;
     img {
+      pointer-events: none;
       position: relative;
       z-index: 3;
-      height: min(calc(1.5rem + 2vw), 2.5rem);
-      min-width: 5rem;
+      height: min(calc(1rem + 1.5vw), 2rem);
     }
     p {
       position: relative;

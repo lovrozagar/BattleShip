@@ -1,8 +1,10 @@
 @import './variables.scss';
+@import './setup.scss';
 @import './board.scss';
 @import './shipSelect.scss';
 @import './playNowButton.scss';
 @import './pregameCard.scss';
+@import './playerNameForm.scss';
 
 :root {
   color-scheme: light dark;
@@ -49,6 +51,12 @@ body {
   padding: 1rem;
   text-align: center;
 
+  h1 {
+    font-family: 'Big Shoulders Stencil Text', cursive;
+    font-size: min(calc(2.5rem + 2.5vw), 5rem);
+    letter-spacing: 0.1rem;
+  }
+
   // PREGAME
   .pregame-card {
     padding: min(calc(2rem + 3vw), 5rem) min(calc(1rem + 2vw), 3rem);
@@ -63,12 +71,5 @@ body {
     .play-now-button {
       margin-top: 1rem;
     }
-  }
-  .setup-container {
-    display: grid;
-    place-items: center;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: 1rem;
-    width: 100%;
   }
 }

@@ -4,6 +4,18 @@ const helper = (() => {
     app.replaceChildren('')
   }
 
+  function loadHeader(container, className) {
+    const header = document.createElement('header')
+    header.classList.add('header', `${className}`)
+
+    const title = document.createElement('h1')
+    title.textContent = 'BATTLESHIP'
+
+    header.appendChild(title)
+
+    container.appendChild(header)
+  }
+
   const BOARD_SIZE = 10
 
   function loadBoard(container, friendlyOrEnemy) {
@@ -63,7 +75,7 @@ const helper = (() => {
     container.appendChild(fieldContainer)
   }
 
-  return { deleteAppContent, loadBoard }
+  return { deleteAppContent, loadHeader, loadBoard }
 })()
 
 export default helper
