@@ -1,0 +1,61 @@
+.play-now-button {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 350px;
+  aspect-ratio: 4/1;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  -webkit-mask-size: 100%;
+  -webkit-mask: url('../assets/images/battleshipX.svg') no-repeat 50% 50%;
+  mask: url('../assets/images/battleshipX.svg') no-repeat 50% 50%;
+  cursor: pointer;
+}
+.play-now-button:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: 0px 0 0 0 white;
+  transition: box-shadow 1s ease;
+}
+.play-now-button:hover:after,
+.play-now-button:focus:after {
+  box-shadow: 0px -15px 50px 1.5px $transparent-low-grey-color;
+}
+.play-now-button .text-play-button {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 100%;
+  font-size: min(calc(0.5rem + 0.5vw), 0.95rem);
+  letter-spacing: 3px;
+  text-align: center;
+  color: white;
+  transform: translate(-50%, -50%);
+  transition: color 0.8s ease;
+}
+.play-now-button:hover .text-play-button,
+.play-now-button:focus .text-play-button {
+  color: black;
+}
+.play-now-button:before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 100%;
+  width: 0;
+  background-color: white;
+  transform: translate(-50%, -50%);
+  transition: width 0.8s ease;
+}
+.play-now-button:hover:before,
+.play-now-button:focus:before {
+  width: 100%;
+}

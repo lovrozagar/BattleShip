@@ -1,0 +1,35 @@
+.name-form {
+  margin: 0 auto;
+  position: relative;
+  max-width: 80%;
+  .name-input {
+    width: 100%;
+    padding-inline: 0.5em;
+    padding-block: 0.7em;
+    border: none;
+    border-bottom: 0.1rem solid $transparent-low-grey-color;
+    font-size: min(calc(0.6rem + 0.6vw), 1rem);
+    color: $main-color;
+    background-color: transparent;
+    &::placeholder {
+      color: $transparent-low-grey-color;
+    }
+    &:hover,
+    &:focus {
+      outline: none;
+      background: $input-background-color;
+    }
+    &:focus ~ .input-border {
+      width: 100%;
+    }
+  }
+  .input-border {
+    position: absolute;
+    background: $main-color;
+    width: 0%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    transition: 0.3s;
+  }
+}

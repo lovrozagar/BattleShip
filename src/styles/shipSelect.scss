@@ -1,0 +1,85 @@
+.fleet-setup {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  max-width: 40rem;
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 30px 1px #0000004d;
+  .ship-card {
+    flex: 1;
+    position: relative;
+    background: transparent;
+    user-select: none;
+    white-space: nowrap;
+    transition: all 0.05s linear;
+    font-family: inherit;
+    border: 2px solid white;
+    margin: calc(0.25rem + 0.5vw);
+    padding: 0.25rem;
+    color: white;
+    background: rgba(0, 0, 0, 1);
+    filter: brightness(0.75);
+    opacity: 0.75;
+    img {
+      position: relative;
+      z-index: 3;
+      height: min(calc(1.5rem + 2vw), 2.5rem);
+      min-width: 5rem;
+    }
+    p {
+      position: relative;
+      z-index: 3;
+    }
+  }
+}
+
+.ship-card:before,
+.ship-card:after {
+  content: '';
+  z-index: 2;
+  position: absolute;
+  background: rgba(0, 0, 0, 1);
+  transition: all 0.2s linear;
+}
+
+.ship-card:before {
+  width: calc(100% + 6px);
+  height: calc(100% - 16px);
+  top: 8px;
+  left: -3px;
+}
+
+.ship-card:after {
+  width: calc(100% - 16px);
+  height: calc(100% + 6px);
+  top: -3px;
+  left: 8px;
+}
+
+.ship-card:hover {
+  cursor: crosshair;
+}
+
+.ship-card:active {
+  transform: scale(0.95);
+  filter: brightness(100%) !important;
+  opacity: 1 !important;
+}
+
+.ship-card:focus {
+  filter: brightness(100%) !important;
+  opacity: 1 !important;
+}
+
+.ship-card:hover:before,
+.ship-card:focus:before {
+  height: calc(100% - 32px);
+  top: 16px;
+}
+
+.ship-card:hover:after,
+.ship-card:focus:after {
+  width: calc(100% - 32px);
+  left: 16px;
+}
