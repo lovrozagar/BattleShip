@@ -6,6 +6,7 @@ const gameboard = () => {
   return {
     board,
     fleet,
+    getBoard,
     addToFleet,
     placeX,
     placeY,
@@ -14,6 +15,10 @@ const gameboard = () => {
     getShip,
     isEveryShipSunk,
   }
+}
+
+function getBoard() {
+  return this.board
 }
 
 // FLEET
@@ -44,10 +49,10 @@ function placeX(battleship, start) {
   const [x, y] = start
   const shipPlacement = []
 
-  if (isOutOfBounds(shipLength, this.board.length, y)) return
+  if (isOutOfBounds(shipLength, this.board.length, y)) return false
 
   for (let j = y; j < this.board.length; j++) {
-    if (this.board[x][j] !== 'x') return
+    if (this.board[x][j] !== 'x') return false
 
     shipPlacement.push([x, j])
     shipLength -= 1
@@ -58,10 +63,12 @@ function placeX(battleship, start) {
 
   shipPlacement.forEach((coordinate) => {
     const [i, j] = coordinate
-    this.board[i][j] = battleship.name
+    this.board[i][j] = `${battleship.name}X`
   })
 
   this.addToFleet(battleship)
+
+  return true
 }
 
 function placeY(battleship, start) {
@@ -69,10 +76,10 @@ function placeY(battleship, start) {
   const [x, y] = start
   const shipPlacement = []
 
-  if (isOutOfBounds(shipLength, this.board.length, x)) return
+  if (isOutOfBounds(shipLength, this.board.length, x)) return false
 
   for (let i = x; i < this.board.length; i++) {
-    if (this.board[i][y] !== 'x') return
+    if (this.board[i][y] !== 'x') return false
 
     shipPlacement.push([i, y])
     shipLength -= 1
@@ -83,10 +90,12 @@ function placeY(battleship, start) {
 
   shipPlacement.forEach((coordinate) => {
     const [i, j] = coordinate
-    this.board[i][j] = battleship.name
+    this.board[i][j] = `${battleship.name}Y`
   })
 
   this.addToFleet(battleship)
+
+  return true
 }
 
 function isOutOfBounds(shipLength, boardLength, field) {
