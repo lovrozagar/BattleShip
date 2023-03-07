@@ -7,10 +7,11 @@ import helper from './helper'
 import tip from '../../assets/images/tip.svg'
 
 const setup = (() => {
-  function loadSetup() {
-    helper.deleteAppContent()
-    loadSetupContent()
-  }
+  // function loadSetup() {
+  //   helper.deleteAppContent()
+  //   loadSetupContent()
+  //   draggableFields()
+  // }
 
   function loadSetupContent() {
     const app = document.getElementById('app')
@@ -23,10 +24,36 @@ const setup = (() => {
     helper.loadHeader(app, 'setup')
     loadTip(app)
 
-    helper.loadBoard(setupContainer, 'setup')
-    loadFleetSelectSection(setupContainer)
+    addAxisButtons(setupContainer)
+
+    const boardAndFleet = document.createElement('div')
+    boardAndFleet.className = 'board-fleet-container'
+    helper.loadBoard(boardAndFleet, 'setup')
+    loadFleetSelectSection(boardAndFleet)
+
+    setupContainer.appendChild(boardAndFleet)
 
     app.appendChild(setupContainer)
+  }
+
+  function addAxisButtons(container) {
+    const buttonContainer = document.createElement('div')
+    buttonContainer.className = 'axis-button-container'
+
+    const buttonX = document.createElement('button')
+    buttonX.id = 'x-button'
+    buttonX.className = 'axis-button'
+    buttonX.textContent = 'X axis'
+
+    const buttonY = document.createElement('button')
+    buttonY.id = 'y-button'
+    buttonY.className = 'axis-button'
+    buttonY.textContent = 'Y axis'
+
+    buttonContainer.appendChild(buttonX)
+    buttonContainer.appendChild(buttonY)
+
+    container.appendChild(buttonContainer)
   }
 
   function loadTip(container) {
@@ -69,28 +96,38 @@ const setup = (() => {
     const image = document.createElement('img')
     const name = document.createElement('p')
 
-    card.classList.add('ship-card', shipName)
+    card.className = 'ship-card'
     image.className = 'ship-image'
     name.className = 'ship-name'
 
     switch (shipName) {
       case 'carrier':
+        card.dataset.shipName = 'carrier'
+        card.dataset.shipLength = 5
         image.src = carrier
         name.textContent = 'Carrier'
         break
       case 'battleship':
+        card.dataset.shipName = 'battleship'
+        card.dataset.shipLength = 4
         image.src = battleship
         name.textContent = 'Battleship'
         break
       case 'cruiser':
+        card.dataset.shipName = 'cruiser'
+        card.dataset.shipLength = 3
         image.src = cruiser
         name.textContent = 'Cruiser'
         break
       case 'submarine':
+        card.dataset.shipName = 'submarine'
+        card.dataset.shipLength = 3
         image.src = submarine
         name.textContent = 'Submarine'
         break
       case 'destroyer':
+        card.dataset.shipName = 'destroyer'
+        card.dataset.shipLength = 2
         image.src = destroyer
         name.textContent = 'Destroyer'
         break
@@ -103,7 +140,7 @@ const setup = (() => {
     return card
   }
 
-  return { loadSetup }
+  return { loadSetupContent }
 })()
 
 export default setup
