@@ -31,6 +31,7 @@ const DragDrop = (() => {
 
   function dragDrop(dragObject, foundObj, playerBoardArray) {
     const fieldContainer = document.getElementById('field-container')
+
     fieldContainer.childNodes.forEach((node, index) => {
       node.addEventListener('drop', () => {
         const x = parseInt(index / 10, 10)

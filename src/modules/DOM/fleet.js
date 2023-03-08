@@ -10,6 +10,21 @@ import destroyerX from '../../assets/images/destroyerX.svg'
 import destroyerY from '../../assets/images/destroyerY.svg'
 
 const fleet = (() => {
+  function loadFleet(found, map) {
+    const board = document.getElementById('field-container')
+    const mapArray = map.board
+
+    for (let i = 0; i < mapArray.length; i += 1) {
+      for (let j = 0; j < mapArray[0].length; j += 1) {
+        // IF FIELD IS NOT EMPTY ON MAP LOAD SHIP
+        if (mapArray[i][j] !== 'x') {
+          loadShipOnBoard(mapArray[i][j], { found, board, i, j })
+        }
+        // LOAD SHIP FROM MAP
+      }
+    }
+  }
+
   function loadShipOnBoard(boardElement, info) {
     switch (boardElement) {
       case 'carrierX':
@@ -291,25 +306,6 @@ const fleet = (() => {
 
     // SET CARRIER AS FOUND
     info.found.destroyer = true
-  }
-
-  function loadFleet(foundObj, map) {
-    const board = document.getElementById('field-container')
-
-    for (let i = 0; i < map.length; i += 1) {
-      for (let j = 0; j < map[0].length; j += 1) {
-        // IF FIELD IS NOT EMPTY ON MAP LOAD SHIP
-        if (map[i][j] !== 'x') {
-          loadShipOnBoard(map[i][j], {
-            foundObj,
-            board,
-            i,
-            j,
-          })
-        }
-        // LOAD SHIP FROM MAP
-      }
-    }
   }
 
   return { loadFleet, loadShipOnBoard }
