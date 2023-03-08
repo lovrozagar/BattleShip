@@ -1,4 +1,5 @@
 .axis-button-container {
+  grid-column: 1/3;
   display: flex;
   justify-content: center;
   gap: min(10%, 2rem);

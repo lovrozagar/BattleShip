@@ -46,7 +46,8 @@ const helper = (() => {
   }
 
   function loadNumbers(container) {
-    const numberContainer = document.createElement('number-container')
+    const numberContainer = document.createElement('div')
+    numberContainer.id = 'number-container'
     numberContainer.classList = 'number-container'
     const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -61,7 +62,8 @@ const helper = (() => {
   }
 
   function loadFields(container) {
-    const fieldContainer = document.createElement('field-container')
+    const fieldContainer = document.createElement('div')
+    fieldContainer.id = 'field-container'
     fieldContainer.className = 'field-container'
 
     for (let i = 0; i < BOARD_SIZE; i += 1) {
