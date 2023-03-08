@@ -293,7 +293,26 @@ const fleet = (() => {
     info.found.destroyer = true
   }
 
-  return { loadShipOnBoard }
+  function loadFleet(foundObj, map) {
+    const board = document.getElementById('field-container')
+
+    for (let i = 0; i < map.length; i += 1) {
+      for (let j = 0; j < map[0].length; j += 1) {
+        // IF FIELD IS NOT EMPTY ON MAP LOAD SHIP
+        if (map[i][j] !== 'x') {
+          loadShipOnBoard(map[i][j], {
+            foundObj,
+            board,
+            i,
+            j,
+          })
+        }
+        // LOAD SHIP FROM MAP
+      }
+    }
+  }
+
+  return { loadFleet, loadShipOnBoard }
 })()
 
 export default fleet

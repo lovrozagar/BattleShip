@@ -8,10 +8,15 @@ const player = (name, isCpu = false) => {
     isCpu,
     board,
     turn,
+    getMap,
     playTurn,
     cpuPlay,
     isEmptyField,
   }
+}
+
+function getMap() {
+  return this.board
 }
 
 function playTurn(coordinate = []) {
