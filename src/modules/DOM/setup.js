@@ -5,6 +5,7 @@ import submarine from '../../assets/images/submarineX.svg'
 import destroyer from '../../assets/images/destroyerX.svg'
 import helper from './helper'
 import tip from '../../assets/images/tip.svg'
+import reset from '../../assets/images/reset.svg'
 
 const setup = (() => {
   // function loadSetup() {
@@ -24,8 +25,6 @@ const setup = (() => {
     helper.loadHeader(app, 'setup')
     loadTip(app)
 
-    addAxisButtons(setupContainer)
-
     const boardAndFleet = document.createElement('div')
     boardAndFleet.className = 'board-fleet-container'
     helper.loadBoard(boardAndFleet, 'setup')
@@ -34,6 +33,10 @@ const setup = (() => {
     setupContainer.appendChild(boardAndFleet)
 
     app.appendChild(setupContainer)
+    loadResetAndContinueButtons(app)
+
+    const boardContainer = document.getElementById('board-setup')
+    addAxisButtons(boardContainer)
   }
 
   function addAxisButtons(container) {
@@ -67,7 +70,7 @@ const setup = (() => {
     const text = document.createElement('div')
     text.className = 'tip-text'
     text.textContent =
-      'Drag the ship on the board to place it, double click on the ship to rotate axis.'
+      'Click on the axis button to change the placement axis, drag and drop the ship on the board.'
 
     tipSection.appendChild(tipImage)
     tipSection.appendChild(text)
@@ -138,6 +141,26 @@ const setup = (() => {
     card.appendChild(name)
 
     return card
+  }
+
+  function loadResetAndContinueButtons(container) {
+    const buttonContainer = document.createElement('section')
+    buttonContainer.id = 'reset-continue-section'
+    buttonContainer.className = 'reset-continue-section'
+
+    const resetButton = document.createElement('button')
+    resetButton.className = 'reset-button'
+    resetButton.textContent = 'Reset'
+
+    const continueButton = document.createElement('button')
+    continueButton.className = 'continue-button'
+    continueButton.textContent = 'Confirm'
+
+
+    buttonContainer.appendChild(resetButton)
+    buttonContainer.appendChild(continueButton)
+
+    container.appendChild(buttonContainer)
   }
 
   return { loadSetupContent }

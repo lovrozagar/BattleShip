@@ -3,9 +3,9 @@
   flex-direction: column;
   justify-content: center;
   flex-wrap: wrap;
-  backdrop-filter: blur(10px);
-  background-color: rgba(0, 0, 0, 0.5);
-  box-shadow: 0px 0px 30px 1px #0000004d;
+  // backdrop-filter: blur(10px);
+  // background-color: rgba(0, 0, 0, 0.5);
+  // box-shadow: 0px 0px 30px 1px #0000004d;
   .ship-card {
     flex: 1;
     max-width: 150px;
@@ -14,7 +14,7 @@
     background: transparent;
     user-select: none;
     white-space: nowrap;
-    transition: all 0.05s linear;
+    transition: all 0.05s linear, visibility 0.01s linear;
     font-family: inherit;
     border: 2px solid white;
     margin: calc(0.25rem + 0.5vw);
@@ -42,7 +42,7 @@
   z-index: 2;
   position: absolute;
   background: rgba(0, 0, 0, 1);
-  transition: all 0.2s linear;
+  transition: all 0.2s linear, visibility 0.01s linear;
 }
 
 .ship-card:before {

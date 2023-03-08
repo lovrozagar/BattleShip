@@ -3,34 +3,48 @@
   min-height: 100vh;
   padding: 1rem;
   text-align: center;
+  .header.setup {
+    margin-bottom: 3rem;
+  }
   .tip-setup {
     display: grid;
     place-items: center;
     grid-template-columns: auto 1fr;
     gap: 1rem;
     max-width: 680px;
-    margin: 0 auto 2rem auto;
+    margin: 0 auto 0.5rem auto;
     padding: 1rem;
     backdrop-filter: blur(10px);
     background-color: rgba(0, 0, 0, 0.5);
     .tip-image {
-      height: 2rem;
+      height: min(calc(1rem + 2vw), 2.5rem);
     }
     .tip-text {
       text-align: start;
       font-size: min(calc(0.75rem + 1vw), 1.25rem);
     }
   }
-  .header.setup {
-    margin-bottom: 2rem;
-  }
   .setup-container {
-    display: flex;
-    justify-content: center;
     max-width: 680px;
     margin: 0 auto;
-    // grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    // grid-template-columns: 1fr 10%;
+    padding: 1rem 1rem 2rem 1rem;
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .board-fleet-container {
+    display: flex;
+    justify-content: center;
     gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  .reset-continue-section {
+    display: flex;
+    justify-content: center;
+    gap: min(10%, 2rem);
+    max-width: 680px;
+    margin: 0.5rem auto;
+    padding: 1rem;
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.5);
   }
 }
