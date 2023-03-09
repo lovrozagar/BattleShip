@@ -30,7 +30,7 @@ function getFleet() {
   return this.fleet
 }
 
-function getShipOnDrag(shipInfoObj) {
+function getShipOnDrag() {
   return this.shipOnDrag
 }
 

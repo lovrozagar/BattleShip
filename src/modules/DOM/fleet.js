@@ -1,3 +1,4 @@
+// ASSETS
 import carrierX from '../../assets/images/carrierX.svg'
 import carrierY from '../../assets/images/carrierY.svg'
 import battleshipX from '../../assets/images/battleshipX.svg'
@@ -8,64 +9,67 @@ import submarineX from '../../assets/images/submarineX.svg'
 import submarineY from '../../assets/images/submarineY.svg'
 import destroyerX from '../../assets/images/destroyerX.svg'
 import destroyerY from '../../assets/images/destroyerY.svg'
+// FACTORIES
+import Game from '../factories/game'
 
 const fleet = (() => {
-  function loadFleet(found, map) {
+  function loadFleet() {
     const board = document.getElementById('field-container')
-    const mapArray = map.board
+    const map = Game.state.getPlayer().getMap()
+    const boardArray = map.getBoard()
 
-    for (let i = 0; i < mapArray.length; i += 1) {
-      for (let j = 0; j < mapArray[0].length; j += 1) {
+    for (let i = 0; i < boardArray.length; i += 1) {
+      for (let j = 0; j < boardArray[0].length; j += 1) {
         // IF FIELD IS NOT EMPTY ON MAP LOAD SHIP
-        if (mapArray[i][j] !== 'x') {
-          loadShipOnBoard(mapArray[i][j], { found, board, i, j })
+        if (boardArray[i][j] !== 'x') {
+          loadShipOnBoard(boardArray[i][j], { board, i, j })
         }
-        // LOAD SHIP FROM MAP
       }
     }
   }
 
-  function loadShipOnBoard(boardElement, info) {
+  function loadShipOnBoard(boardElement, data) {
+    const map = Game.state.getPlayer().getMap()
     switch (boardElement) {
       case 'carrierX':
-        if (info.found.carrier) return
-        loadCarrierX(info)
+        if (map.getShip('carrier').isFound) return
+        loadCarrierX(data)
         break
       case 'carrierY':
-        if (info.found.carrier) return
-        loadCarrierY(info)
+        if (map.getShip('carrier').isFound) return
+        loadCarrierY(data)
         break
       case 'battleshipX':
-        if (info.found.battleship) return
-        loadBattleshipX(info)
+        if (map.getShip('battleship').isFound) return
+        loadBattleshipX(data)
         break
       case 'battleshipY':
-        if (info.found.battleship) return
-        loadBattleshipY(info)
+        if (map.getShip('battleship').isFound) return
+        loadBattleshipY(data)
         break
       case 'cruiserX':
-        if (info.found.cruiser) return
-        loadCruiserX(info)
+        if (map.getShip('cruiser').isFound) return
+        loadCruiserX(data)
         break
       case 'cruiserY':
-        if (info.found.cruiser) return
-        loadCruiserY(info)
+        if (map.getShip('cruiser').isFound) return
+        loadCruiserY(data)
         break
       case 'submarineX':
-        if (info.found.submarine) return
-        loadSubmarineX(info)
+        if (map.getShip('submarine').isFound) return
+        loadSubmarineX(data)
         break
       case 'submarineY':
-        if (info.found.submarine) return
-        loadSubmarineY(info)
+        if (map.getShip('submarine').isFound) return
+        loadSubmarineY(data)
         break
       case 'destroyerX':
-        if (info.found.destroyer) return
-        loadDestroyerX(info)
+        if (map.getShip('destroyer').isFound) return
+        loadDestroyerX(data)
         break
       case 'destroyerY':
-        if (info.found.destroyer) return
-        loadDestroyerY(info)
+        if (map.getShip('destroyer').isFound) return
+        loadDestroyerY(data)
         break
       default:
         break
@@ -91,7 +95,7 @@ const fleet = (() => {
         : `, ${backgroundPosition}`
 
     // SET CARRIER AS FOUND
-    info.found.carrier = true
+    Game.state.getPlayer().getMap().getShip('carrier').found()
   }
 
   function loadCarrierY(info) {
@@ -113,7 +117,7 @@ const fleet = (() => {
         : `, ${backgroundPosition}`
 
     // SET CARRIER AS FOUND
-    info.found.carrier = true
+    Game.state.getPlayer().getMap().getShip('carrier').found()
   }
 
   function loadBattleshipX(info) {
@@ -137,7 +141,7 @@ const fleet = (() => {
         : `, ${backgroundPosition}`
 
     // SET CARRIER AS FOUND
-    info.found.battleship = true
+    Game.state.getPlayer().getMap().getShip('battleship').found()
   }
 
   function loadBattleshipY(info) {
@@ -161,7 +165,7 @@ const fleet = (() => {
         : `, ${backgroundPosition}`
 
     // SET CARRIER AS FOUND
-    info.found.battleship = true
+    Game.state.getPlayer().getMap().getShip('battleship').found()
   }
 
   function loadCruiserX(info) {
@@ -185,7 +189,7 @@ const fleet = (() => {
         : `, ${backgroundPosition}`
 
     // SET CARRIER AS FOUND
-    info.found.cruiser = true
+    Game.state.getPlayer().getMap().getShip('cruiser').found()
   }
 
   function loadCruiserY(info) {
@@ -209,7 +213,7 @@ const fleet = (() => {
         : `, ${backgroundPosition}`
 
     // SET CARRIER AS FOUND
-    info.found.cruiser = true
+    Game.state.getPlayer().getMap().getShip('cruiser').found()
   }
 
   function loadSubmarineX(info) {
@@ -233,7 +237,7 @@ const fleet = (() => {
         : `, ${backgroundPosition}`
 
     // SET CARRIER AS FOUND
-    info.found.submarine = true
+    Game.state.getPlayer().getMap().getShip('submarine').found()
   }
 
   function loadSubmarineY(info) {
@@ -257,7 +261,7 @@ const fleet = (() => {
         : `, ${backgroundPosition}`
 
     // SET CARRIER AS FOUND
-    info.found.submarine = true
+    Game.state.getPlayer().getMap().getShip('submarine').found()
   }
 
   function loadDestroyerX(info) {
@@ -281,7 +285,7 @@ const fleet = (() => {
         : `, ${backgroundPosition}`
 
     // SET CARRIER AS FOUND
-    info.found.destroyer = true
+    Game.state.getPlayer().getMap().getShip('destroyer').found()
   }
 
   function loadDestroyerY(info) {
@@ -305,7 +309,7 @@ const fleet = (() => {
         : `, ${backgroundPosition}`
 
     // SET CARRIER AS FOUND
-    info.found.destroyer = true
+    Game.state.getPlayer().getMap().getShip('destroyer').found()
   }
 
   return { loadFleet, loadShipOnBoard }

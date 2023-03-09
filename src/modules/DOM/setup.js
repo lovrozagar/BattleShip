@@ -5,7 +5,6 @@ import submarine from '../../assets/images/submarineX.svg'
 import destroyer from '../../assets/images/destroyerX.svg'
 import helper from './helper'
 import tip from '../../assets/images/tip.svg'
-import reset from '../../assets/images/reset.svg'
 
 const setup = (() => {
   // function loadSetup() {
@@ -14,7 +13,7 @@ const setup = (() => {
   //   draggableFields()
   // }
 
-  function loadSetupContent() {
+  function loadSetupContent(map) {
     const app = document.getElementById('app')
     app.classList.add('setup')
 
@@ -33,19 +32,24 @@ const setup = (() => {
     setupContainer.appendChild(boardAndFleet)
 
     app.appendChild(setupContainer)
-    loadResetAndContinueButtons(app)
+    loadResetContinueButtons(app)
 
     const boardContainer = document.getElementById('board-setup')
+
     addAxisButtons(boardContainer)
+    initAxisButtons()
+    initResetContinueButtons(map)
   }
 
   function addAxisButtons(container) {
     const buttonContainer = document.createElement('div')
+    buttonContainer.id = 'axis-button-container'
     buttonContainer.className = 'axis-button-container'
 
     const buttonX = document.createElement('button')
     buttonX.id = 'x-button'
-    buttonX.className = 'axis-button'
+    // DEFAULT SELECTED BUTTON
+    buttonX.classList.add('axis-button', 'selected')
     buttonX.textContent = 'X axis'
 
     const buttonY = document.createElement('button')
@@ -57,6 +61,19 @@ const setup = (() => {
     buttonContainer.appendChild(buttonY)
 
     container.appendChild(buttonContainer)
+  }
+
+  function initAxisButtons() {
+    const buttonX = document.getElementById('x-button')
+    const buttonY = document.getElementById('y-button')
+
+    buttonX.addEventListener('click', () => handleButton(buttonX, buttonY))
+    buttonY.addEventListener('click', () => handleButton(buttonY, buttonX))
+  }
+
+  function handleButton(button, oppositeButton) {
+    button.classList.add('selected')
+    oppositeButton.classList.remove('selected')
   }
 
   function loadTip(container) {
@@ -143,25 +160,63 @@ const setup = (() => {
     return card
   }
 
-  function loadResetAndContinueButtons(container) {
+  function loadResetContinueButtons(container) {
     const buttonContainer = document.createElement('section')
     buttonContainer.id = 'reset-continue-section'
     buttonContainer.className = 'reset-continue-section'
 
     const resetButton = document.createElement('button')
+    resetButton.id = 'reset-button'
     resetButton.className = 'reset-button'
     resetButton.textContent = 'Reset'
 
     const continueButton = document.createElement('button')
+    continueButton.id = 'continue-button'
     continueButton.className = 'continue-button'
     continueButton.textContent = 'Confirm'
-
 
     buttonContainer.appendChild(resetButton)
     buttonContainer.appendChild(continueButton)
 
     container.appendChild(buttonContainer)
   }
+
+  function initResetContinueButtons(map) {
+    const resetButton = document.getElementById('reset-button')
+    const continueButton = document.getElementById('continue-button')
+
+    resetButton.addEventListener('click', () => handleReset(map))
+    continueButton.addEventListener('click', handleContinue)
+  }
+
+  function handleReset(map) {
+    const fieldContainer = document.getElementById('field-container')
+    const { board } = map
+
+    resetFleetSelect()
+    resetArray(board)
+    resetBackground(fieldContainer)
+  }
+
+  function resetFleetSelect() {
+    const fleet = document.getElementById('fleet-setup')
+
+    fleet.childNodes.forEach((node) => (node.style.visibility = 'visible'))
+  }
+
+  function resetArray(array) {
+    for (let i = 0; i < array.length; i += 1) {
+      for (let j = 0; j < array[0].length; j += 1) {
+        array[i][j] = 'x'
+      }
+    }
+  }
+
+  function resetBackground(node) {
+    node.style.backgroundImage = ''
+  }
+
+  function handleContinue() {}
 
   return { loadSetupContent }
 })()
