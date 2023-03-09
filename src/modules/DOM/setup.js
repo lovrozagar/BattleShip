@@ -10,40 +10,48 @@ import tip from '../../assets/images/tip.svg'
 import Game from '../factories/game'
 
 const setup = (() => {
-  // function loadSetup() {
-  //   helper.deleteAppContent()
-  //   loadSetupContent()
-  //   draggableFields()
-  // }
-  function loadSetupContent(map) {
+  function loadSetupContent() {
     const app = document.getElementById('app')
     app.classList.add('setup')
 
-    const setupContainer = document.createElement('div')
+    app.appendChild(helper.getHeader('setup'))
+    app.appendChild(getTip())
+    app.appendChild(getSetupContainer())
+    app.appendChild(getResetContinueButtons())
+
+    initButtons()
+  }
+
+  function getTip() {
+    const tipSection = document.createElement('section')
+    tipSection.className = 'tip-setup'
+
+    const tipImage = document.createElement('img')
+    tipImage.className = 'tip-image'
+    tipImage.src = tip
+
+    const text = document.createElement('div')
+    text.className = 'tip-text'
+    text.textContent =
+      'Click on the axis button to change the placement axis, drag and drop the ship on the board.'
+
+    tipSection.appendChild(tipImage)
+    tipSection.appendChild(text)
+
+    return tipSection
+  }
+
+  function getSetupContainer() {
+    const setupContainer = document.createElement('section')
     setupContainer.id = 'setup-container'
     setupContainer.className = 'setup-container'
 
-    helper.loadHeader(app, 'setup')
-    loadTip(app)
+    setupContainer.appendChild(getBoardAndFleet())
 
-    const boardAndFleet = document.createElement('div')
-    boardAndFleet.className = 'board-fleet-container'
-    helper.loadBoard(boardAndFleet, 'setup')
-    loadFleetSelectSection(boardAndFleet)
-
-    setupContainer.appendChild(boardAndFleet)
-
-    app.appendChild(setupContainer)
-    loadResetContinueButtons(app)
-
-    const boardContainer = document.getElementById('board-setup')
-
-    addAxisButtons(boardContainer)
-    initAxisButtons()
-    initResetContinueButtons(map)
+    return setupContainer
   }
 
-  function addAxisButtons(container) {
+  function getAxisButtons() {
     const buttonContainer = document.createElement('div')
     buttonContainer.id = 'axis-button-container'
     buttonContainer.className = 'axis-button-container'
@@ -62,45 +70,23 @@ const setup = (() => {
     buttonContainer.appendChild(buttonX)
     buttonContainer.appendChild(buttonY)
 
-    container.appendChild(buttonContainer)
+    return buttonContainer
   }
 
-  function initAxisButtons() {
-    const buttonX = document.getElementById('x-button')
-    const buttonY = document.getElementById('y-button')
+  function getBoardAndFleet() {
+    const boardAndFleet = document.createElement('div')
+    boardAndFleet.className = 'board-fleet-container'
 
-    buttonX.addEventListener('click', () => handleButton(buttonX, buttonY))
-    buttonY.addEventListener('click', () => handleButton(buttonY, buttonX))
+    boardAndFleet.appendChild(helper.getBoard('setup'))
+    boardAndFleet.appendChild(getFleetSelectSection())
+
+    const boardContainer = boardAndFleet.querySelector('#board-setup')
+    boardContainer.appendChild(getAxisButtons())
+
+    return boardAndFleet
   }
 
-  function handleButton(button, oppositeButton) {
-    const map = Game.state.getPlayer().getMap()
-
-    button.id === 'x-button' ? map.setAxisX() : map.setAxisY()
-    button.classList.add('selected')
-    oppositeButton.classList.remove('selected')
-  }
-
-  function loadTip(container) {
-    const tipSection = document.createElement('section')
-    tipSection.className = 'tip-setup'
-
-    const tipImage = document.createElement('img')
-    tipImage.className = 'tip-image'
-    tipImage.src = tip
-
-    const text = document.createElement('div')
-    text.className = 'tip-text'
-    text.textContent =
-      'Click on the axis button to change the placement axis, drag and drop the ship on the board.'
-
-    tipSection.appendChild(tipImage)
-    tipSection.appendChild(text)
-
-    container.appendChild(tipSection)
-  }
-
-  function loadFleetSelectSection(container) {
+  function getFleetSelectSection() {
     const fleetSection = document.createElement('section')
     fleetSection.id = 'fleet-setup'
     fleetSection.className = 'fleet-setup'
@@ -108,15 +94,15 @@ const setup = (() => {
     const fleet = ['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer']
 
     fleet.forEach((ship) => {
-      const shipCard = loadShipCard(ship)
+      const shipCard = getShipCard(ship)
       shipCard.draggable = 'true'
       fleetSection.appendChild(shipCard)
     })
 
-    container.appendChild(fleetSection)
+    return fleetSection
   }
 
-  function loadShipCard(shipName) {
+  function getShipCard(shipName) {
     const card = document.createElement('button')
     const content = document.createElement('div')
     const image = document.createElement('img')
@@ -169,7 +155,7 @@ const setup = (() => {
     return card
   }
 
-  function loadResetContinueButtons(container) {
+  function getResetContinueButtons() {
     const buttonContainer = document.createElement('section')
     buttonContainer.id = 'reset-continue-section'
     buttonContainer.className = 'reset-continue-section'
@@ -187,20 +173,41 @@ const setup = (() => {
     buttonContainer.appendChild(resetButton)
     buttonContainer.appendChild(continueButton)
 
-    container.appendChild(buttonContainer)
+    return buttonContainer
   }
 
-  function initResetContinueButtons(map) {
+  function initButtons() {
+    initAxisButtons()
+    initResetContinueButtons()
+  }
+
+  function initAxisButtons() {
+    const buttonX = document.getElementById('x-button')
+    const buttonY = document.getElementById('y-button')
+
+    buttonX.addEventListener('click', () => handleButton(buttonX, buttonY))
+    buttonY.addEventListener('click', () => handleButton(buttonY, buttonX))
+  }
+
+  function handleButton(button, oppositeButton) {
+    const map = Game.state.getPlayer().getMap()
+
+    button.id === 'x-button' ? map.setAxisX() : map.setAxisY()
+    button.classList.add('selected')
+    oppositeButton.classList.remove('selected')
+  }
+
+  function initResetContinueButtons() {
     const resetButton = document.getElementById('reset-button')
     const continueButton = document.getElementById('continue-button')
+    const board = Game.state.getPlayer().getMap().getBoard()
 
-    resetButton.addEventListener('click', () => handleReset(map))
+    resetButton.addEventListener('click', () => handleReset(board))
     continueButton.addEventListener('click', handleContinue)
   }
 
-  function handleReset(map) {
+  function handleReset(board) {
     const fieldContainer = document.getElementById('field-container')
-    const { board } = map
 
     resetFleetSelect()
     resetArray(board)
@@ -211,7 +218,7 @@ const setup = (() => {
     const map = Game.state.getPlayer().getMap()
     const fleet = document.getElementById('fleet-setup')
 
-    fleet.childNodes.forEach((node) => (node.classList.remove('hidden')))
+    fleet.childNodes.forEach((node) => node.classList.remove('hidden'))
     map.getFleet().forEach((warship) => warship.resetFound())
     map.setFleetEmpty()
   }
