@@ -1,6 +1,7 @@
 import ship from '../factories/ship'
 import fleet from './fleet'
 import Game from '../factories/game'
+import helper from './helper'
 
 const DragDrop = (() => {
   function initDraggableFields() {
@@ -46,37 +47,40 @@ const DragDrop = (() => {
 
   function dragDrop() {
     const fieldContainer = document.getElementById('field-container')
-    const shipOnDrag = Game.state.getPlayer().getMap().getShipOnDrag()
-    const map = Game.state.getPlayer().getMap()
 
     fieldContainer.childNodes.forEach((node, index) => {
       node.addEventListener('drop', () => {
         node.classList.remove('hovering')
-        const x = parseInt(index / 10, 10)
-        const y = index % 10
-        let isPlaced
-
-        if (map.getAxis() === 'X') {
-          isPlaced = map.placeX(ship(shipOnDrag.name, shipOnDrag.length), [
-            x,
-            y,
-          ])
-        } else {
-          isPlaced = map.placeY(ship(shipOnDrag.name, shipOnDrag.length), [
-            x,
-            y,
-          ])
-        }
+        const [x, y] = helper.getCoordinatesFromIndex(index)
+        const [isPlaced, shipOnDrag] = dropIfValid(x, y)
 
         fleet.loadFleet()
-        if (isPlaced) {
-          const battleship = document.querySelector(
-            `[data-ship-name=${shipOnDrag.name}]`
-          )
-          battleship.classList.add('hidden')
-        }
+        hideIfPlaced(isPlaced, shipOnDrag)
       })
     })
+  }
+
+  function dropIfValid(x, y) {
+    const map = Game.state.getPlayer().getMap()
+    const shipOnDrag = Game.state.getPlayer().getMap().getShipOnDrag()
+
+    if (map.getAxis() === 'X') {
+      return [
+        map.placeX(ship(shipOnDrag.name, shipOnDrag.length), [x, y]),
+        shipOnDrag.name,
+      ]
+    }
+    return [
+      map.placeY(ship(shipOnDrag.name, shipOnDrag.length), [x, y]),
+      shipOnDrag.name,
+    ]
+  }
+
+  function hideIfPlaced(isPlaced, shipOnDrag) {
+    if (!isPlaced) return
+
+    const battleship = document.querySelector(`[data-ship-name=${shipOnDrag}]`)
+    battleship.classList.add('hidden')
   }
 
   return { initDraggableFields }
