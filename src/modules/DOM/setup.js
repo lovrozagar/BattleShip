@@ -5,6 +5,7 @@ import submarine from '../../assets/images/submarineX.svg'
 import destroyer from '../../assets/images/destroyerX.svg'
 import helper from './helper'
 import tip from '../../assets/images/tip.svg'
+import Game from '../factories/game'
 
 const setup = (() => {
   // function loadSetup() {
@@ -12,7 +13,6 @@ const setup = (() => {
   //   loadSetupContent()
   //   draggableFields()
   // }
-
   function loadSetupContent(map) {
     const app = document.getElementById('app')
     app.classList.add('setup')
@@ -199,9 +199,12 @@ const setup = (() => {
   }
 
   function resetFleetSelect() {
+    const map = Game.state.getPlayer().getMap()
     const fleet = document.getElementById('fleet-setup')
 
     fleet.childNodes.forEach((node) => (node.style.visibility = 'visible'))
+    map.getFleet().forEach((warship) => warship.resetFound())
+    map.setFleetEmpty()
   }
 
   function resetArray(array) {
@@ -214,6 +217,8 @@ const setup = (() => {
 
   function resetBackground(node) {
     node.style.backgroundImage = ''
+    node.style.backgroundSize = ''
+    node.style.backgroundPosition = ''
   }
 
   function handleContinue() {}

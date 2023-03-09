@@ -12,6 +12,7 @@ const gameboard = () => {
     getFleet,
     getShip,
     getShipOnDrag,
+    setFleetEmpty,
     setShipOnDrag,
     addToFleet,
     placeX,
@@ -58,6 +59,10 @@ function addToFleet(shipName) {
     default:
       this.fleet.push(ship('destroyer', 2))
   }
+}
+
+function setFleetEmpty() {
+  this.fleet = []
 }
 
 // PLACEMENT
