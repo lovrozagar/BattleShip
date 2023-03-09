@@ -33,25 +33,19 @@
   will-change: transform;
 }
 
-.axis-button:disabled,
-.reset-button:disabled,
-.continue-button:disabled {
-  pointer-events: none;
-}
-
 .axis-button:hover,
 .reset-button:hover,
 .continue-button:hover {
-  color: #000;
-  border-color: #000000;
-  background-color: #ffffff;
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
 
 .axis-button:active,
-.reset-button:hover,
-.continue-button:hover {
-  box-shadow: none;
-  transform: translateY(0);
+.reset-button:active,
+.continue-button:active,
+.axis-button.selected,
+.reset-button.selected,
+.continue-button.selected {
+  color: #000;
+  background-color: #ffffff;
 }

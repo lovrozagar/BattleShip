@@ -4,7 +4,7 @@
   justify-content: center;
   flex-wrap: wrap;
   // backdrop-filter: blur(10px);
-  // background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   // box-shadow: 0px 0px 30px 1px #0000004d;
   .ship-card {
     flex: 1;
@@ -21,17 +21,38 @@
     padding: 0.25rem;
     color: white;
     background: rgba(0, 0, 0, 1);
-    filter: brightness(0.75);
     opacity: 0.75;
-    img {
+    filter: brightness(0.75);
+    &.hidden {
+      background: rgba(0, 0, 0, 0.5);
       pointer-events: none;
-      position: relative;
-      z-index: 3;
-      height: min(calc(1rem + 1.5vw), 2rem);
+      opacity: 0.5;
+      filter: brightness(0.5);
+      &::before,
+      &::after {
+        background: transparent;
+      }
+      &:focus {
+        opacity: 0.5;
+        filter: brightness(0.5);
+      }
+      .ship-content {
+        visibility: hidden;
+      }
     }
-    p {
-      position: relative;
-      z-index: 3;
+    .ship-content {
+      img {
+        filter: invert(13%) sepia(15%) saturate(18%) hue-rotate(328deg)
+          brightness(104%) contrast(83%);
+        pointer-events: none;
+        position: relative;
+        z-index: 3;
+        height: min(calc(1rem + 1.5vw), 2rem);
+      }
+      p {
+        position: relative;
+        z-index: 3;
+      }
     }
   }
 }
@@ -65,13 +86,13 @@
 
 .ship-card:active {
   transform: scale(0.95);
-  filter: brightness(100%) !important;
-  opacity: 1 !important;
+  filter: brightness(100%);
+  opacity: 1;
 }
 
 .ship-card:focus {
-  filter: brightness(100%) !important;
-  opacity: 1 !important;
+  filter: brightness(100%);
+  opacity: 1;
 }
 
 .ship-card:hover:before,

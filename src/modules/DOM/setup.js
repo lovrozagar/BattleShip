@@ -118,10 +118,12 @@ const setup = (() => {
 
   function loadShipCard(shipName) {
     const card = document.createElement('button')
+    const content = document.createElement('div')
     const image = document.createElement('img')
     const name = document.createElement('p')
 
     card.className = 'ship-card'
+    content.className = 'ship-content'
     image.className = 'ship-image'
     name.className = 'ship-name'
 
@@ -159,8 +161,10 @@ const setup = (() => {
       default:
     }
 
-    card.appendChild(image)
-    card.appendChild(name)
+    content.appendChild(image)
+    content.appendChild(name)
+
+    card.appendChild(content)
 
     return card
   }
@@ -207,7 +211,7 @@ const setup = (() => {
     const map = Game.state.getPlayer().getMap()
     const fleet = document.getElementById('fleet-setup')
 
-    fleet.childNodes.forEach((node) => (node.style.visibility = 'visible'))
+    fleet.childNodes.forEach((node) => (node.classList.remove('hidden')))
     map.getFleet().forEach((warship) => warship.resetFound())
     map.setFleetEmpty()
   }
