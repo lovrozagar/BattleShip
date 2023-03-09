@@ -3,22 +3,40 @@ import ship from './ship'
 const gameboard = () => {
   const board = new Array(10).fill('x').map(() => new Array(10).fill('x'))
   const fleet = []
+  const shipOnDrag = { name: '', length: 0 }
   return {
     board,
     fleet,
+    shipOnDrag,
     getBoard,
+    getFleet,
+    getShip,
+    getShipOnDrag,
+    setShipOnDrag,
     addToFleet,
     placeX,
     placeY,
     receiveAttack,
     recordHit,
-    getShip,
     isEveryShipSunk,
   }
 }
 
 function getBoard() {
   return this.board
+}
+
+function getFleet() {
+  return this.fleet
+}
+
+function getShipOnDrag(shipInfoObj) {
+  return this.shipOnDrag
+}
+
+function setShipOnDrag(shipInfoObj) {
+  this.shipOnDrag.name = shipInfoObj.name
+  this.shipOnDrag.length = shipInfoObj.length
 }
 
 // FLEET

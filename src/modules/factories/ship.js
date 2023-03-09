@@ -1,13 +1,16 @@
 const ship = (name, length) => {
   const timesHit = 0
   const isSunk = false
+  const isFound = false
   return {
     name,
     length,
     timesHit,
     isSunk,
+    isFound,
     hit,
     sunk,
+    found,
   }
 }
 
@@ -18,6 +21,10 @@ function hit() {
 
 function sunk() {
   this.isSunk = true
+}
+
+function found() {
+  this.isFound = true
 }
 
 export default ship
