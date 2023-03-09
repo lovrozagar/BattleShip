@@ -3,15 +3,20 @@ import ship from './ship'
 const gameboard = () => {
   const board = new Array(10).fill('x').map(() => new Array(10).fill('x'))
   const fleet = []
+  const axis = 'X'
   const shipOnDrag = { name: '', length: 0 }
   return {
     board,
     fleet,
+    axis,
     shipOnDrag,
     getBoard,
     getFleet,
     getShip,
+    getAxis,
     getShipOnDrag,
+    setAxisX,
+    setAxisY,
     setFleetEmpty,
     setShipOnDrag,
     addToFleet,
@@ -23,6 +28,8 @@ const gameboard = () => {
   }
 }
 
+// GETTERS
+
 function getBoard() {
   return this.board
 }
@@ -31,8 +38,26 @@ function getFleet() {
   return this.fleet
 }
 
+function getAxis() {
+  return this.axis
+}
+
 function getShipOnDrag() {
   return this.shipOnDrag
+}
+
+function getShip(shipName) {
+  return this.fleet.filter((battleship) => battleship.name === shipName)[0]
+}
+
+// SETTERS
+
+function setAxisX() {
+  this.axis = 'X'
+}
+
+function setAxisY() {
+  this.axis = 'Y'
 }
 
 function setShipOnDrag(shipInfoObj) {
@@ -157,12 +182,6 @@ function recordHit(x, y) {
     default:
       this.board[x][y] = 'missed'
   }
-}
-
-// GET SHIPS
-
-function getShip(shipName) {
-  return this.fleet.filter((battleship) => battleship.name === shipName)[0]
 }
 
 // ARE ALL SUNK

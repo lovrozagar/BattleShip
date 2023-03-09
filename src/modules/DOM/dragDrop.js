@@ -42,10 +42,19 @@ const DragDrop = (() => {
         console.log(map)
         const x = parseInt(index / 10, 10)
         const y = index % 10
-        const isPlaced = map.placeX(ship(shipOnDrag.name, shipOnDrag.length), [
-          x,
-          y,
-        ])
+        let isPlaced
+
+        if (map.getAxis() === 'X') {
+          isPlaced = map.placeX(ship(shipOnDrag.name, shipOnDrag.length), [
+            x,
+            y,
+          ])
+        } else {
+          isPlaced = map.placeY(ship(shipOnDrag.name, shipOnDrag.length), [
+            x,
+            y,
+          ])
+        }
 
         fleet.loadFleet()
         if (isPlaced) {

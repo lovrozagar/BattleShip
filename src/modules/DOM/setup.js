@@ -1,3 +1,4 @@
+// ASSETS
 import carrier from '../../assets/images/carrierX.svg'
 import battleship from '../../assets/images/battleshipX.svg'
 import cruiser from '../../assets/images/cruiserX.svg'
@@ -5,6 +6,7 @@ import submarine from '../../assets/images/submarineX.svg'
 import destroyer from '../../assets/images/destroyerX.svg'
 import helper from './helper'
 import tip from '../../assets/images/tip.svg'
+// FACTORIES
 import Game from '../factories/game'
 
 const setup = (() => {
@@ -72,6 +74,9 @@ const setup = (() => {
   }
 
   function handleButton(button, oppositeButton) {
+    const map = Game.state.getPlayer().getMap()
+
+    button.id === 'x-button' ? map.setAxisX() : map.setAxisY()
     button.classList.add('selected')
     oppositeButton.classList.remove('selected')
   }
