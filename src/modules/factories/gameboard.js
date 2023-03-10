@@ -18,12 +18,14 @@ const gameboard = () => {
     setAxisX,
     setAxisY,
     setFleetEmpty,
+    setAllShipsNotFound,
     setShipOnDrag,
     addToFleet,
     placeX,
     placeY,
     receiveAttack,
     recordHit,
+    areAllShipsFound,
     isEveryShipSunk,
   }
 }
@@ -63,6 +65,10 @@ function setAxisY() {
 function setShipOnDrag(shipInfoObj) {
   this.shipOnDrag.name = shipInfoObj.name
   this.shipOnDrag.length = shipInfoObj.length
+}
+
+function setAllShipsNotFound() {
+  this.fleet.forEach((ship) => (ship.isFound = false))
 }
 
 // FLEET
@@ -185,6 +191,9 @@ function recordHit(x, y) {
 }
 
 // ARE ALL SUNK
+function areAllShipsFound() {
+  return this.fleet.length === 5
+}
 
 function isEveryShipSunk() {
   const sunk = this.fleet.filter((battleship) => battleship.isSunk === true)
