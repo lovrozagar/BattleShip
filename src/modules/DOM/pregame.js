@@ -2,23 +2,28 @@ const pregame = (() => {
   function loadCard() {
     const app = document.getElementById('app')
 
+    app.appendChild(createPregameCard())
+  }
+
+  function createPregameCard() {
     const card = document.createElement('section')
     card.className = 'pregame-card'
 
-    loadTitle(card)
-    loadNameForm(card)
-    loadPlayNowButton(card)
+    card.appendChild(createTitle())
+    card.appendChild(createNameForm())
+    card.appendChild(createPlayNowButton())
 
-    app.appendChild(card)
+    return card
   }
 
-  function loadTitle(card) {
+  function createTitle() {
     const title = document.createElement('h1')
     title.textContent = 'BATTLESHIP'
-    card.appendChild(title)
+
+    return title
   }
 
-  function loadNameForm(card) {
+  function createNameForm() {
     const nameForm = document.createElement('form')
     nameForm.className = 'name-form'
 
@@ -28,16 +33,20 @@ const pregame = (() => {
     nameInput.className = 'name-input'
     nameInput.placeholder = 'Captain name'
 
+    const caret = document.createElement('span')
+    caret.className = 'caret'
+
     const inputBorder = document.createElement('span')
     inputBorder.className = 'input-border'
 
     nameForm.appendChild(nameInput)
+    nameForm.appendChild(caret)
     nameForm.appendChild(inputBorder)
 
-    card.appendChild(nameForm)
+    return nameForm
   }
 
-  function loadPlayNowButton(card) {
+  function createPlayNowButton() {
     const button = document.createElement('button')
     button.id = 'play-now-button'
     button.className = 'play-now-button'
@@ -48,7 +57,7 @@ const pregame = (() => {
 
     button.appendChild(buttonText)
 
-    card.appendChild(button)
+    return button
   }
 
   return { loadCard }
