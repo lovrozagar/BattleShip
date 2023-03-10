@@ -1,4 +1,5 @@
 import gameboard from './gameboard'
+import ship from './ship'
 
 const player = (name, isCpu = false) => {
   const board = gameboard()
@@ -11,6 +12,7 @@ const player = (name, isCpu = false) => {
     getMap,
     playTurn,
     cpuPlay,
+    autoPlace,
     isEmptyField,
   }
 }
@@ -52,8 +54,40 @@ function cpuPlay() {
   }
 }
 
+function autoPlace() {
+  const fleet = ['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer']
+  const length = [5, 4, 3, 3, 2]
+  const board = this.getMap()
+
+  while (fleet.length) {
+    const axis = randomAxis
+    let placed = false
+
+    const row = randomCoordinate()
+    const col = randomCoordinate()
+
+    if (axis === 'x') {
+      placed = board.placeX(ship(fleet[0], length[0]), [row, col])
+    } else {
+      placed = board.placeY(ship(fleet[0], length[0]), [row, col])
+    }
+
+    if (placed) {
+      fleet.shift()
+      length.shift()
+    }
+  }
+
+  console.log(board)
+}
+
 function randomCoordinate() {
   return Math.floor(Math.random() * (9 + 1))
+}
+
+function randomAxis() {
+  const axis = ['x', 'y']
+  return axis[Math.floor(Math.random() * (1 + 1))]
 }
 
 export default player
