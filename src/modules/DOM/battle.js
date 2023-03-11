@@ -1,6 +1,7 @@
 import helper from './helper'
 import fleet from './fleet'
 import Game from '../factories/game'
+import component from './reusableComponents'
 
 const Battle = (() => {
   function loadBattleContent() {
@@ -10,20 +11,21 @@ const Battle = (() => {
     app.classList = ''
     app.classList.add('app', 'battle')
 
-    app.appendChild(createMapsSection())
+    app.appendChild(createMainSection())
     renderPlayerShips()
     Game.state.getCPU().autoPlace()
     initBoardFields()
   }
 
-  function createMapsSection() {
-    const mapsSection = document.createElement('section')
-    mapsSection.className = 'maps-section'
+  function createMainSection() {
+    const mainSection = document.createElement('section')
+    mainSection.className = 'maps-section'
 
-    mapsSection.appendChild(createPlayerMap())
-    mapsSection.appendChild(createComputerMap())
+    mainSection.appendChild(createPlayerMap())
+    mainSection.appendChild(createComputerMap())
+    mainSection.appendChild(component.createMessageSection('battle'))
 
-    return mapsSection
+    return mainSection
   }
 
   function createPlayerMap() {
@@ -68,23 +70,43 @@ const Battle = (() => {
 
   function handleFieldClick(event) {
     const { target } = event
+    disableField(target)
 
     const index = [...target.parentNode.children].indexOf(target)
     const x = parseInt(index / 10, 10)
     const y = index % 10
 
-    const enemyMap = Game.state.getCPU().getMap().getBoard()
+    const enemyBoard = Game.state.getCPU().getMap().getBoard()
+    const enemyMap = Game.state.getCPU().getMap()
 
-    if (enemyMap[x][y] === 'hit' || enemyMap[x][y] === 'missed') return
+    if (enemyBoard[x][y] === 'hit' || enemyBoard[x][y] === 'missed') return
 
-    if (enemyMap[x][y] === 'x') {
-      console.log('b')
+    if (enemyBoard[x][y] === 'x') {
       target.style.backgroundColor = 'lightblue'
     } else {
-      console.log('r')
+      const shipName = getShipNameFromBoard(enemyBoard[x][y])
+      const battleship = enemyMap.getShip(shipName)
+
+      battleship.hit()
+      displayHitMessage(battleship)
       target.style.backgroundColor = 'red'
-      target.classList.add('hit')
     }
+  }
+
+  function displayHitMessage(ship) {
+    const message = document.getElementById('message-text')
+    if (!ship.isSunk) message.classList.add('hit-1')
+    if (ship.isSunk) message.classList.add('sunk-1')
+  }
+
+  function hitMessage() {}
+
+  function disableField(field) {
+    field.classList.add('disabled')
+  }
+
+  function getShipNameFromBoard(boardElement) {
+    return boardElement.slice(0, boardElement.length - 1)
   }
 
   return { loadBattleContent }
