@@ -50,25 +50,31 @@ const DragDrop = (() => {
 
   function styleFieldsForDrop(parentNode, index) {
     const map = Game.state.getPlayer().getMap()
+    const board = map.getBoard()
     const axis = map.getAxis()
     // const [x, y] = helper.getCoordinatesFromIndex(index)
     const shipOnDrag = map.getShipOnDrag()
     let { length } = shipOnDrag
     emptyFieldQueue()
 
+    let isTaken = false
     if (axis === 'X') {
       for (
         let i = index;
         i < helper.roundNearestTenExceptZero(index + 1);
         i += 1
       ) {
+        const [x, y] = helper.getCoordinatesFromIndex(i)
         // RETURN IF WHOLE SHIPS SHADOW ALREADY ON MAP
         if (length === 0) break
         parentNode.children[i].classList.add('hovering')
         fieldQueue.push(i)
         length -= 1
+        if (board[x][y] !== 'x') {
+          isTaken = true
+        }
       }
-      if (length !== 0)
+      if (isTaken || length !== 0)
         fieldQueue.forEach((field) => {
           parentNode.children[field].classList.add('red')
         })
