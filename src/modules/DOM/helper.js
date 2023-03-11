@@ -1,10 +1,12 @@
 const helper = (() => {
+  // DOM
+
   function deleteAppContent() {
     const app = document.getElementById('app')
     app.replaceChildren('')
   }
 
-  function loadHeader(container, className) {
+  function getHeader(className) {
     const header = document.createElement('header')
     header.classList.add('header', `${className}`)
 
@@ -13,24 +15,24 @@ const helper = (() => {
 
     header.appendChild(title)
 
-    container.appendChild(header)
+    return header
   }
 
   const BOARD_SIZE = 10
 
-  function loadBoard(container, friendlyOrEnemy) {
-    const board = document.createElement('div')
-    board.id = `board-${friendlyOrEnemy}`
-    board.classList.add('board', friendlyOrEnemy)
+  function createMap(description) {
+    const map = document.createElement('div')
+    map.id = `board-${description}`
+    map.classList.add('board', description)
 
-    loadLetters(board)
-    loadNumbers(board)
-    loadFields(board)
+    map.appendChild(createLettersSection())
+    map.appendChild(createNumbersSection())
+    map.appendChild(createBoard())
 
-    container.appendChild(board)
+    return map
   }
 
-  function loadLetters(container) {
+  function createLettersSection() {
     const letterContainer = document.createElement('div')
     letterContainer.classList = 'letter-container'
     const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
@@ -42,10 +44,10 @@ const helper = (() => {
       letterContainer.appendChild(letter)
     })
 
-    container.appendChild(letterContainer)
+    return letterContainer
   }
 
-  function loadNumbers(container) {
+  function createNumbersSection() {
     const numberContainer = document.createElement('div')
     numberContainer.id = 'number-container'
     numberContainer.classList = 'number-container'
@@ -58,26 +60,52 @@ const helper = (() => {
       numberContainer.appendChild(number)
     })
 
-    container.appendChild(numberContainer)
+    return numberContainer
   }
 
-  function loadFields(container) {
-    const fieldContainer = document.createElement('div')
-    fieldContainer.id = 'field-container'
-    fieldContainer.className = 'field-container'
+  function createBoard() {
+    const board = document.createElement('div')
+    board.id = 'field-container'
+    board.className = 'field-container'
 
     for (let i = 0; i < BOARD_SIZE; i += 1) {
       for (let j = 0; j < BOARD_SIZE; j += 1) {
         const field = document.createElement('div')
         field.className = 'field'
-        fieldContainer.appendChild(field)
+        board.appendChild(field)
       }
     }
 
-    container.appendChild(fieldContainer)
+    return board
   }
 
-  return { deleteAppContent, loadHeader, loadBoard }
+  // OTHER
+  function getCoordinatesFromIndex(index) {
+    const x = parseInt(index / BOARD_SIZE, 10)
+    const y = index % BOARD_SIZE
+
+    return [x, y]
+  }
+
+  function getIndexFromCoordinates(x, y) {
+    return x * (BOARD_SIZE - 1) + y
+  }
+
+  function roundNearestTenExceptZero(num) {
+    while (num % 10 !== 0) {
+      num += 1
+    }
+    return num
+  }
+
+  return {
+    deleteAppContent,
+    getHeader,
+    createMap,
+    getCoordinatesFromIndex,
+    getIndexFromCoordinates,
+    roundNearestTenExceptZero,
+  }
 })()
 
 export default helper
