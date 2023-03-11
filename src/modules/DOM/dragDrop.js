@@ -74,11 +74,29 @@ const DragDrop = (() => {
           isTaken = true
         }
       }
-      if (isTaken || length !== 0)
-        fieldQueue.forEach((field) => {
-          parentNode.children[field].classList.add('red')
-        })
     }
+    if (axis === 'Y') {
+      for (
+        let i = index;
+        i < 100;
+        i += 10
+      ) {
+        const [x, y] = helper.getCoordinatesFromIndex(i)
+        // RETURN IF WHOLE SHIPS SHADOW ALREADY ON MAP
+        if (length === 0) break
+        parentNode.children[i].classList.add('hovering')
+        fieldQueue.push(i)
+        length -= 1
+        if (board[x][y] !== 'x') {
+          isTaken = true
+        }
+      }
+    }
+
+    if (isTaken || length !== 0)
+      fieldQueue.forEach((field) => {
+        parentNode.children[field].classList.add('red')
+      })
   }
 
   function dragLeave() {
