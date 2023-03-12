@@ -98,6 +98,10 @@ const helper = (() => {
     return num
   }
 
+  function randomOneToTen() {
+    return Math.floor(Math.random() * 5) + 1
+  }
+
   return {
     deleteAppContent,
     getHeader,
@@ -105,6 +109,7 @@ const helper = (() => {
     getCoordinatesFromIndex,
     getIndexFromCoordinates,
     roundNearestTenExceptZero,
+    randomOneToTen,
   }
 })()
 

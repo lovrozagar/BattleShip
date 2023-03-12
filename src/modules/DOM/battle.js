@@ -82,6 +82,7 @@ const Battle = (() => {
     if (enemyBoard[x][y] === 'hit' || enemyBoard[x][y] === 'missed') return
 
     if (enemyBoard[x][y] === 'x') {
+      displayMissMessage()
       target.style.backgroundColor = 'lightblue'
     } else {
       const shipName = getShipNameFromBoard(enemyBoard[x][y])
@@ -92,11 +93,44 @@ const Battle = (() => {
       target.style.backgroundColor = 'red'
     }
   }
-
+  // TODO: dont allow same class
   function displayHitMessage(ship) {
-    const message = document.getElementById('message-text')
-    if (!ship.isSunk) message.classList.add('hit-1')
-    if (ship.isSunk) message.classList.add('sunk-1')
+    const messageElement = document.getElementById('message-text')
+    const messageCurrentNumber = getMessageNumber(messageElement)
+    let messageNewNumber = messageCurrentNumber
+
+    while (messageCurrentNumber === messageNewNumber) {
+      messageNewNumber = helper.randomOneToTen().toString()
+    }
+
+    if (!ship.isSunk) {
+      messageElement.className = 'message-text'
+      messageElement.classList.add(`hit-${helper.randomOneToTen()}`)
+      messageNewNumber = `hit-${helper.randomOneToTen()}`
+    }
+    if (ship.isSunk) {
+      messageElement.className = 'message-text'
+      messageElement.classList.add(`sunk-${helper.randomOneToTen()}`)
+      messageNewNumber = `hit-${helper.randomOneToTen()}`
+      fleet.loadFleet()
+    }
+  }
+
+  function displayMissMessage() {
+    const messageElement = document.getElementById('message-text')
+    const messageCurrentNumber = getMessageNumber(messageElement)
+    let messageNewNumber = messageCurrentNumber
+
+    while (messageCurrentNumber === messageNewNumber) {
+      messageNewNumber = helper.randomOneToTen().toString()
+    }
+
+    messageElement.className = 'message-text'
+    messageElement.classList.add(`miss-${messageNewNumber}`)
+  }
+
+  function getMessageNumber(node) {
+    return node.className.split('-')[2] // GET MESSAGE NUMBER
   }
 
   function hitMessage() {}
