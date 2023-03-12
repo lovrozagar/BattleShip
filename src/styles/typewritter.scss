@@ -10,74 +10,182 @@
   );
 }
 
-.hit-1 {
-  @include typed(
-    "We've got them on the ropes, captain. But we'll need to keep up the assault.",
-    3,
-    (
-      delay: 0,
-      caret-speed: 2,
-      iterations: 0,
-    )
-  );
-}
+// .hit-1 {
+//   @include typed(
+//     "We've got them on the ropes, captain. But we'll need to keep up the assault.",
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
 
-.hit-2 {
-  @include typed(
-    "We've got the enemy on the defensive, sir. Our firepower is too much for them to handle.",
-    3,
-    (
-      delay: 0,
-      caret-speed: 2,
-      iterations: 0,
-    )
-  );
-}
+// .hit-2 {
+//   @include typed(
+//     "We've got the enemy on the defensive, sir. Our firepower is too much for them to handle.",
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
 
-.hit-3 {
-  @include typed(
-    "Direct hit captain! The enemy ship is in trouble. We'll keep up the assault until they're sunk.",
-    3,
-    (
-      delay: 0,
-      caret-speed: 2,
-      iterations: 0,
-    )
-  );
-}
+// .hit-3 {
+//   @include typed(
+//     "Direct hit captain! The enemy ship is in trouble. We'll keep up the assault until they're sunk.",
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
 
-.hit-4 {
-  @include typed(
-    "That was a satisfying shot, captain. We're making progress against the enemy.",
-    3,
-    (
-      delay: 0,
-      caret-speed: 2,
-      iterations: 0,
-    )
-  );
-}
+// .hit-4 {
+//   @include typed(
+//     "That was a satisfying shot, captain. We're making progress against the enemy.",
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
 
-.hit-5 {
-  @include typed(
-    "The enemy ship is feeling the pressure, sir. They won't hold up much longer.",
-    3,
-    (
-      delay: 0,
-      caret-speed: 2,
-      iterations: 0,
-    )
-  );
-}
+// .hit-5 {
+//   @include typed(
+//     "The enemy ship is feeling the pressure, sir. They won't hold up much longer.",
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
 
-.sunk-1 {
-  @include typed(
-    "Bullseye, captain! That's one less enemy ship to worry about.",
-    3,
-    (
-      delay: 0,
-      caret-speed: 2,
-      iterations: 0,
-    )
-  );
-}
+// .sunk-1 {
+//   @include typed(
+//     "Bullseye, captain! That's one less enemy ship to worry about.",
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
+
+// .sunk-2 {
+//   @include typed(
+//     'Direct hit, captain! The enemy ship has been sent to a watery grave!',
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
+
+// .sunk-3 {
+//   @include typed(
+//     'Target neutralized, captain. The enemy ship is down for good!',
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
+
+// .sunk-4 {
+//   @include typed(
+//     'The enemy ship has been vanquished, captain! Our aim is true!',
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
+
+// .sunk-5 {
+//   @include typed(
+//     "Direct hit, captain! The enemy ship has been sent to Davy Jones' locker.",
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
+
+// .miss-1 {
+//   @include typed(
+//     'No dice on that one. Keep trying!',
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
+
+// .miss-2 {
+//   @include typed(
+//     'Close, but no cigar.',
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
+
+// .miss-3 {
+//   @include typed(
+//     'Negative on that shot, captain.',
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
+
+// .miss-4 {
+//   @include typed(
+//     'Missed by a hair, captain.',
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }
+
+// .miss-5 {
+//   @include typed(
+//     'No hit, captain. Keep fighting.',
+//     3,
+//     (
+//       delay: 0,
+//       caret-speed: 2,
+//       iterations: 0,
+//     )
+//   );
+// }

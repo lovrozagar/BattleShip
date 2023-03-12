@@ -1,11 +1,15 @@
 @import './variables.scss';
+@import './mixins.scss';
+@import './typed.scss';
+@import './battle.scss';
 @import './setup.scss';
 @import './board.scss';
+@import './buttons.scss';
 @import './shipSelect.scss';
 @import './playNowButton.scss';
 @import './pregameCard.scss';
 @import './playerNameForm.scss';
-@import './buttons.scss';
+@import './typewritter.scss';
 
 :root {
   color-scheme: light dark;
@@ -35,44 +39,25 @@ html {
 
 html,
 body {
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
+  @include fullHeightFIllAvailable;
   background-color: $background-color;
 }
 
 body {
   background: url('../assets/images/worldMap.svg') bottom / cover no-repeat;
+  overflow-x: hidden;
 }
 
 .app {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flexRowCenter;
   min-height: 100vh;
   padding: 1rem;
   text-align: center;
+}
 
-  h1 {
-    font-family: 'Big Shoulders Stencil Text', cursive;
-    font-size: min(calc(2.5rem + 2.5vw), 5rem);
-    letter-spacing: 0.1rem;
-  }
-
-  // PREGAME
-  .pregame-card {
-    padding: min(calc(2rem + 3vw), 5rem) min(calc(1rem + 2vw), 3rem);
-    h1 {
-      font-family: 'Big Shoulders Stencil Text', cursive;
-      font-size: min(calc(2.5rem + 2.5vw), 5rem);
-      letter-spacing: 0.1rem;
-    }
-    .name-form {
-      margin-top: 2.75rem;
-    }
-    .play-now-button {
-      margin-top: 1rem;
-    }
-  }
+.app.setup,
+.app.battle {
+  display: block;
 }
 
 @media screen and (max-width: 480px) {
@@ -81,7 +66,7 @@ body {
       .board-fleet-container {
         display: flex;
         flex-direction: column;
-        .fleet-setup{
+        .fleet-setup {
           flex-direction: row;
         }
       }

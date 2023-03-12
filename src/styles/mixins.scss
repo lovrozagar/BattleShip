@@ -1,0 +1,61 @@
+@mixin fullHeightFIllAvailable {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
+
+@mixin flexRowCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flexRowSpaceAround {
+  display: flex;
+  justify-content: space-around;
+}
+
+@mixin flexColumnCenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@mixin flexColumnSpaceAround {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+@mixin gridPlaceItemsCenter {
+  display: grid;
+  place-items: center;
+}
+
+@mixin pseudoOverlay {
+  content: '';
+  position: absolute;
+  z-index: 1;
+}
+
+@mixin pseudoOverlayPlus {
+  content: '';
+  position: absolute;
+  z-index: 2;
+}
+
+@mixin pseudoOverlayPlusPlus {
+  content: '';
+  position: absolute;
+  z-index: 3;
+}
+
+@mixin pseudoUnderlay {
+  content: '';
+  position: absolute;
+  z-index: -1;
+}
+
+@mixin fullSize {
+  height: 100%;
+  width: 100%;
+}

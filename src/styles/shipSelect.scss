@@ -1,28 +1,35 @@
 .fleet-setup {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  @include flexColumnCenter;
   flex-wrap: wrap;
-  // backdrop-filter: blur(10px);
   background-color: rgba(0, 0, 0, 0.5);
-  // box-shadow: 0px 0px 30px 1px #0000004d;
   .ship-card {
     flex: 1;
+    position: relative;
     max-width: 150px;
     min-width: 100px;
-    position: relative;
-    background: transparent;
-    user-select: none;
-    white-space: nowrap;
-    transition: all 0.05s linear, visibility 0.01s linear;
-    font-family: inherit;
-    border: 2px solid white;
     margin: calc(0.25rem + 0.5vw);
     padding: 0.25rem;
+    border: 2px solid white;
+    background: transparent;
+    font-family: inherit;
     color: white;
     background: rgba(0, 0, 0, 1);
-    opacity: 0.75;
-    filter: brightness(0.75);
+    transition: all 0.05s linear, visibility 0.01s linear;
+    filter: brightness(0.6);
+    &:focus {
+      filter: brightness(1);
+      .ship-content {
+        position: relative;
+        z-index: 1;
+        pointer-events: none;
+        .ship-image {
+          position: relative;
+          z-index: 2;
+          filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(8deg)
+            brightness(500%) contrast(104%);
+        }
+      }
+    }
     &.hidden {
       background: rgba(0, 0, 0, 0.5);
       pointer-events: none;
@@ -32,10 +39,6 @@
       &::after {
         background: transparent;
       }
-      &:focus {
-        opacity: 0.5;
-        filter: brightness(0.5);
-      }
       .ship-content {
         visibility: hidden;
       }
@@ -43,7 +46,7 @@
     .ship-content {
       img {
         filter: invert(13%) sepia(15%) saturate(18%) hue-rotate(328deg)
-          brightness(104%) contrast(83%);
+          brightness(140%) contrast(83%);
         pointer-events: none;
         position: relative;
         z-index: 3;
@@ -59,9 +62,7 @@
 
 .ship-card:before,
 .ship-card:after {
-  content: '';
-  z-index: 2;
-  position: absolute;
+  @include pseudoUnderlay;
   background: rgba(0, 0, 0, 1);
   transition: all 0.2s linear, visibility 0.01s linear;
 }
@@ -80,21 +81,6 @@
   left: 8px;
 }
 
-.ship-card:hover {
-  cursor: crosshair;
-}
-
-.ship-card:active {
-  transform: scale(0.95);
-  filter: brightness(100%);
-  opacity: 1;
-}
-
-.ship-card:focus {
-  filter: brightness(100%);
-  opacity: 1;
-}
-
 .ship-card:hover:before,
 .ship-card:focus:before {
   height: calc(100% - 32px);
@@ -105,4 +91,12 @@
 .ship-card:focus:after {
   width: calc(100% - 32px);
   left: 16px;
+}
+
+.ship-card:active {
+  transform: scale(0.95);
+}
+
+.ship-card:hover {
+  cursor: move;
 }

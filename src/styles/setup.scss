@@ -1,50 +1,84 @@
-.app.setup {
-  display: block;
-  min-height: 100vh;
+@import './variables.scss';
+@import './typed.scss';
+
+.header.setup {
+  margin-bottom: 2rem;
+  text-shadow: 3px 3px black;
+}
+.message.setup {
+  @include gridPlaceItemsCenter;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem;
+  max-width: 680px;
+  margin: 0 auto 0.5rem auto;
   padding: 1rem;
-  text-align: center;
-  .header.setup {
-    margin-bottom: 3rem;
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.5);
+  .message-image {
+    height: min(calc(1.25rem + 2vw), 2.5rem);
   }
-  .tip-setup {
-    display: grid;
-    place-items: center;
-    grid-template-columns: auto 1fr;
-    gap: 1rem;
-    max-width: 680px;
-    margin: 0 auto 0.5rem auto;
-    padding: 1rem;
-    backdrop-filter: blur(10px);
-    background-color: rgba(0, 0, 0, 0.5);
-    .tip-image {
-      height: min(calc(1rem + 2vw), 2.5rem);
+  .message-text {
+    width: 100%;
+    text-align: start;
+    font-size: $font-size-normal-responsive;
+    @include typed(
+      'Welcome aboard Captain!',
+      3,
+      (
+        delay: 0,
+        caret-speed: 2,
+        iterations: 1,
+        end-on:
+          'Captain, plan our formation by selecting the axis and dragging and dropping ships on the map.',
+      )
+    );
+    &.reset {
+      @include typed(
+        'Thought of a better formation Captain?',
+        3,
+        (
+          delay: 0,
+          caret-speed: 2,
+          iterations: 0,
+        )
+      );
     }
-    .tip-text {
-      text-align: start;
-      font-size: min(calc(0.75rem + 1vw), 1.25rem);
+    &.take-time {
+      @include typed(
+        '"The two most powerful warriors are patience and time." - Leo Tolstoy',
+        3,
+        (
+          delay: 0,
+          caret-speed: 2,
+          iterations: 0,
+        )
+      );
     }
   }
-  .setup-container {
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 1rem 1rem 2rem 1rem;
-    backdrop-filter: blur(10px);
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  .board-fleet-container {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 0.5rem;
-  }
-  .reset-continue-section {
-    display: flex;
-    justify-content: center;
-    gap: min(10%, 2rem);
-    max-width: 680px;
-    margin: 0.5rem auto;
-    padding: 1rem;
-    backdrop-filter: blur(10px);
-    background-color: rgba(0, 0, 0, 0.5);
-  }
+}
+.setup-container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1rem;
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.board-fleet-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+.reset-continue-section {
+  @include flexRowCenter;
+  gap: min(10%, 2rem);
+  max-width: 680px;
+  margin: 0.5rem auto 0 auto;
+  padding: 1rem;
+  backdrop-filter: blur(10px);
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.red {
+  background-color: red !important;
 }

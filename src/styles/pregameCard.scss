@@ -1,15 +1,25 @@
 .pregame-card {
+  padding: min(calc(2rem + 3vw), 5rem) min(calc(1rem + 2vw), 3rem);
   border: 2px solid transparent;
-  backdrop-filter: blur(10px);
-  background-color: rgba(0, 0, 0, 0.5);
-  box-shadow: 0px 0px 30px 1px $transparent-shadow-color;
   border-radius: 1rem;
+  box-shadow: 0px 0px 30px 1px $transparent-shadow-color;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
   transition: border-color 0.5s;
-  user-select: none;
   cursor: pointer;
-}
-.pregame-card:hover {
-  border: 2px solid $transparent-shadow-color;
+  h1 {
+    font-family: 'Big Shoulders Stencil Text', cursive;
+    font-size: min(calc(1.75rem + 4vw), 5rem);
+    letter-spacing: 0.1rem;
+  }
+  .name-form {
+    margin-top: 2.75rem;
+  }
+  .play-now-button {
+    margin-top: 1rem;
+  }
+  &:hover {
+    border: 2px solid $transparent-shadow-color;
+  }
 }
