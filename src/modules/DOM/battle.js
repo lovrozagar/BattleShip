@@ -56,8 +56,9 @@ const Battle = (() => {
   }
 
   function renderPlayerShips() {
+    const friendlyBoard = document.getElementById('field-container-friendly')
     Game.state.getPlayer().getMap().setAllShipsNotFound()
-    fleet.loadFleet()
+    fleet.loadFleet(friendlyBoard)
   }
 
   function initBoardFields() {
@@ -78,21 +79,43 @@ const Battle = (() => {
 
     const enemyBoard = Game.state.getCPU().getMap().getBoard()
     const enemyMap = Game.state.getCPU().getMap()
+    console.log('ENEMY MAP', enemyMap)
 
     if (enemyBoard[x][y] === 'hit' || enemyBoard[x][y] === 'missed') return
 
     if (enemyBoard[x][y] === 'x') {
       displayMissMessage()
-      target.style.backgroundColor = 'lightblue'
+      target.classList.add('miss')
     } else {
       const shipName = getShipNameFromBoard(enemyBoard[x][y])
       const battleship = enemyMap.getShip(shipName)
 
       battleship.hit()
       displayHitMessage(battleship)
-      target.style.backgroundColor = 'red'
+      const enemyFields = document.getElementById('field-container-enemy')
+      const [i, j] = findOrigin(enemyBoard, enemyBoard[x][y])
+      if (battleship.isSunk) {
+        fleet.loadShipOnBoard(Game.state.getCPU(), {
+          map: enemyMap,
+          board: enemyFields,
+          boardElement: enemyBoard[x][y],
+          i,
+          j,
+        })
+      }
+      target.classList.add('hit')
     }
   }
+
+  function findOrigin(board, element) {
+    for (let i = 0; i < board.length; i += 1) {
+      for (let j = 0; j < board[0].length; j += 1) {
+        if (board[i][j] === element) return [i, j]
+      }
+    }
+    return [0, 0]
+  }
+
   // TODO: dont allow same class
   function displayHitMessage(ship) {
     const messageElement = document.getElementById('message-text')
@@ -112,7 +135,6 @@ const Battle = (() => {
       messageElement.className = 'message-text'
       messageElement.classList.add(`sunk-${helper.randomOneToTen()}`)
       messageNewNumber = `hit-${helper.randomOneToTen()}`
-      fleet.loadFleet()
     }
   }
 
