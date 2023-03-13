@@ -1,13 +1,12 @@
 @import './variables.scss';
-@import './typed.scss';
 
 .header.setup {
   margin-bottom: 2rem;
   text-shadow: 3px 3px black;
 }
 .message.setup {
-  @include gridPlaceItemsCenter;
-  grid-template-columns: auto 1fr;
+  // @include gridPlaceItemsCenter;
+  @include flexRowStartCenter;
   gap: 0.5rem;
   max-width: 680px;
   margin: 0 auto 0.5rem auto;
@@ -17,45 +16,52 @@
   .message-image {
     height: min(calc(1.25rem + 2vw), 2.5rem);
   }
-  .message-text {
-    width: 100%;
+  .message-container {
+    display: inline;
     text-align: start;
-    font-size: $font-size-normal-responsive;
-    @include typed(
-      'Welcome aboard Captain!',
-      3,
-      (
-        delay: 0,
-        caret-speed: 2,
-        iterations: 1,
-        end-on:
-          'Captain, plan our formation by selecting the axis and dragging and dropping ships on the map.',
-      )
-    );
-    &.reset {
-      @include typed(
-        'Thought of a better formation Captain?',
-        3,
-        (
-          delay: 0,
-          caret-speed: 2,
-          iterations: 0,
-        )
-      );
+    .message-text {
+      display: inline;
+      color: rgb(19, 221, 19);
     }
-    &.take-time {
-      @include typed(
-        '"The two most powerful warriors are patience and time." - Leo Tolstoy',
-        3,
-        (
-          delay: 0,
-          caret-speed: 2,
-          iterations: 0,
-        )
-      );
+    .typed-cursor {
+      position: relative;
+      left: 1px;
+      bottom: -3px;
+      display: inline-block;
+      width: 0.5rem !important;
+      height: 1rem !important;
+      font-size: $font-size-normal-responsive;
+      color: transparent;
+      background-color: rgb(19, 221, 19);
+      overflow: hidden;
+      animation-duration: 1.5s;
     }
   }
 }
+
+@keyframes typewriter {
+  0% {
+    max-width: 0;
+    color: $main-color;
+  }
+  100% {
+    max-width: 100%;
+    color: $main-color;
+  }
+}
+
+@keyframes blink {
+  0% {
+    background-color: $main-color;
+  }
+  50% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: $main-color;
+  }
+}
+
 .setup-container {
   max-width: 680px;
   margin: 0 auto;

@@ -9,6 +9,18 @@
   align-items: center;
 }
 
+@mixin flexRowBottom {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+@mixin flexRowStartCenter {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 @mixin flexRowSpaceAround {
   display: flex;
   justify-content: space-around;
