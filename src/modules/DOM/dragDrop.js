@@ -28,7 +28,7 @@ const DragDrop = (() => {
   }
 
   function dragEnter() {
-    const fieldContainer = document.getElementById('field-container')
+    const fieldContainer = document.getElementById('field-container-setup')
 
     fieldContainer.childNodes.forEach((node) => {
       node.addEventListener('dragenter', (event) => {
@@ -38,7 +38,7 @@ const DragDrop = (() => {
   }
 
   function dragOver() {
-    const fieldContainer = document.getElementById('field-container')
+    const fieldContainer = document.getElementById('field-container-setup')
     // PREVENT DEFAULT TO ALLOW DROP
     fieldContainer.childNodes.forEach((node, index) => {
       node.addEventListener('dragover', (event) => {
@@ -46,6 +46,64 @@ const DragDrop = (() => {
         styleFieldsForDrop(fieldContainer, index)
       })
     })
+  }
+
+  function dragLeave() {
+    const fieldContainer = document.getElementById('field-container-setup')
+    // REMOVE DRAGOVER/HOVER CLASS
+    fieldContainer.childNodes.forEach((node) => {
+      node.addEventListener('dragleave', () => {
+        resetFieldStyling()
+      })
+    })
+  }
+
+  function resetFieldStyling() {
+    const fieldContainer = document.getElementById('field-container-setup')
+    for (let i = 0; i < fieldQueue.length; i += 1) {
+      fieldContainer.children[fieldQueue[i]].className = 'field'
+    }
+    emptyFieldQueue()
+  }
+
+  function dragDrop() {
+    const fieldContainer = document.getElementById('field-container-setup')
+
+    fieldContainer.childNodes.forEach((node, index) => {
+      node.addEventListener('drop', () => {
+        const [x, y] = helper.getCoordinatesFromIndex(index)
+        const [isPlaced, shipOnDrag] = dropIfValid(x, y)
+
+        resetFieldStyling()
+
+        fleet.loadFleet(fieldContainer)
+        hideIfPlaced(isPlaced, shipOnDrag)
+      })
+    })
+  }
+
+  function dropIfValid(x, y) {
+    const map = Game.state.getPlayer().getMap()
+    const shipOnDrag = Game.state.getPlayer().getMap().getShipOnDrag()
+
+    // RETURNS [BOOL, SHIP-NAME]
+    if (map.getAxis() === 'X') {
+      return [
+        map.placeX(ship(shipOnDrag.name, shipOnDrag.length), [x, y]),
+        shipOnDrag.name,
+      ]
+    }
+    return [
+      map.placeY(ship(shipOnDrag.name, shipOnDrag.length), [x, y]),
+      shipOnDrag.name,
+    ]
+  }
+
+  function hideIfPlaced(isPlaced, shipOnDrag) {
+    if (!isPlaced) return
+
+    const battleship = document.querySelector(`[data-ship-name=${shipOnDrag}]`)
+    battleship.classList.add('hidden')
   }
 
   function styleFieldsForDrop(parentNode, index) {
@@ -76,11 +134,7 @@ const DragDrop = (() => {
       }
     }
     if (axis === 'Y') {
-      for (
-        let i = index;
-        i < 100;
-        i += 10
-      ) {
+      for (let i = index; i < 100; i += 10) {
         const [x, y] = helper.getCoordinatesFromIndex(i)
         // RETURN IF WHOLE SHIPS SHADOW ALREADY ON MAP
         if (length === 0) break
@@ -97,64 +151,6 @@ const DragDrop = (() => {
       fieldQueue.forEach((field) => {
         parentNode.children[field].classList.add('red')
       })
-  }
-
-  function dragLeave() {
-    const fieldContainer = document.getElementById('field-container')
-    // REMOVE DRAGOVER/HOVER CLASS
-    fieldContainer.childNodes.forEach((node) => {
-      node.addEventListener('dragleave', () => {
-        resetFieldStyling()
-      })
-    })
-  }
-
-  function resetFieldStyling() {
-    const fieldContainer = document.getElementById('field-container')
-    for (let i = 0; i < fieldQueue.length; i += 1) {
-      fieldContainer.children[fieldQueue[i]].className = 'field'
-    }
-    emptyFieldQueue()
-  }
-
-  function dragDrop() {
-    const fieldContainer = document.getElementById('field-container')
-
-    fieldContainer.childNodes.forEach((node, index) => {
-      node.addEventListener('drop', () => {
-        const [x, y] = helper.getCoordinatesFromIndex(index)
-        const [isPlaced, shipOnDrag] = dropIfValid(x, y)
-
-        resetFieldStyling()
-
-        fleet.loadFleet()
-        hideIfPlaced(isPlaced, shipOnDrag)
-      })
-    })
-  }
-
-  function dropIfValid(x, y) {
-    const map = Game.state.getPlayer().getMap()
-    const shipOnDrag = Game.state.getPlayer().getMap().getShipOnDrag()
-
-    // RETURNS [BOOL, SHIP-NAME]
-    if (map.getAxis() === 'X') {
-      return [
-        map.placeX(ship(shipOnDrag.name, shipOnDrag.length), [x, y]),
-        shipOnDrag.name,
-      ]
-    }
-    return [
-      map.placeY(ship(shipOnDrag.name, shipOnDrag.length), [x, y]),
-      shipOnDrag.name,
-    ]
-  }
-
-  function hideIfPlaced(isPlaced, shipOnDrag) {
-    if (!isPlaced) return
-
-    const battleship = document.querySelector(`[data-ship-name=${shipOnDrag}]`)
-    battleship.classList.add('hidden')
   }
 
   function emptyFieldQueue() {

@@ -78,36 +78,59 @@
   }
 
   .message.battle {
-    grid-column: 1/3;
     @include flexRowStartCenter;
     width: 100%;
+    grid-column: 1/3; // @include gridPlaceItemsCenter;
     gap: 0.5rem;
     // max-width: 680px;
     margin: 0 auto 0.5rem auto;
     padding: 1rem;
     backdrop-filter: blur(10px);
     background-color: rgba(0, 0, 0, 0.5);
+    &.agent {
+      .message-container {
+        .message-agent {
+          color: $blue-light-color;
+        }
+        .typed-cursor {
+          background-color: $blue-light-color;
+        }
+      }
+    }
+    &.enemy {
+      justify-content: end;
+      .message-image {
+        order: 2;
+      }
+      .message-container {
+        order: 1;
+        .message-enemy {
+          color: $orange-light-color;
+        }
+        .typed-cursor {
+          background-color: $orange-light-color;
+        }
+      }
+    }
     .message-image {
-      height: min(calc(1.25rem + 2vw), 2.675rem);
+      height: min(calc(1.25rem + 2vw), 2.75rem);
     }
     .message-container {
       display: inline;
       text-align: start;
-      .message-text {
+      .message-agent,
+      .message-enemy {
         display: inline;
-        font-size: $font-size-normal-responsive;
-        color: #13dd13;
       }
       .typed-cursor {
         position: relative;
         left: 1px;
         bottom: -3px;
         display: inline-block;
-        width: 0.5rem !important;
-        height: 1rem !important;
+        width: 0.5rem;
+        height: 1rem;
         font-size: $font-size-normal-responsive;
         color: transparent;
-        background-color: #13dd13;
         overflow: hidden;
         animation-duration: 1.5s;
       }

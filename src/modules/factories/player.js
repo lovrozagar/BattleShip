@@ -60,7 +60,7 @@ function autoPlace() {
   const board = this.getMap()
 
   while (fleet.length) {
-    const axis = randomAxis
+    const axis = randomAxis()
     let placed = false
 
     const row = randomCoordinate()
@@ -87,7 +87,7 @@ function randomCoordinate() {
 
 function randomAxis() {
   const axis = ['x', 'y']
-  return axis[Math.floor(Math.random() * (1 + 1))]
+  return axis[Math.round(Math.random())]
 }
 
 export default player

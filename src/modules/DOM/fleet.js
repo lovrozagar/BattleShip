@@ -8,6 +8,9 @@ import destroyer from '../../assets/images/destroyerX.svg'
 import Game from '../factories/game'
 
 const fleet = (() => {
+  // USED FOR SYNCING SHIP RADAR BEEP ANIMATION
+  let startTime = null
+
   function loadFleet(board) {
     const player = Game.state.getPlayer()
     const map = player.getMap()
@@ -30,7 +33,6 @@ const fleet = (() => {
     }
   }
 
-  let startTime = null
   function getCurrentTime() {
     if (startTime === null) {
       startTime = new Date().getTime()

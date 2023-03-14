@@ -8,11 +8,16 @@ const ship = (name, length) => {
     timesHit,
     isSunk,
     isFound,
+    getLength,
     hit,
     sunk,
     found,
     resetFound,
   }
+}
+
+function getLength() {
+  return this.length
 }
 
 function hit() {

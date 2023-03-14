@@ -4,8 +4,11 @@ const Utils = (() => {
       'Welcome aboard Captain!',
       'Plan our formation by selecting the axis and dragging and dropping ships on the map.',
     ],
-    battleStart: [
-      "Captain, all systems are online and ready for action. The enemy won't know what hit them. Let's give 'em hell!",
+    battleStartPlayer: [
+      "Captain, all systems are online and ready for action. Let's give 'em hell!",
+    ],
+    battleStartEnemy: [
+      "I'll show you no mercy, just like your father showed none to mine.",
     ],
     enemyHit: [
       "They're getting schooner-ed, sir.",
@@ -63,6 +66,14 @@ const Utils = (() => {
     return messages.welcome
   }
 
+  function getBattleStartMessage() {
+    return messages.battleStartPlayer
+  }
+
+  function getNewEnemyBattleStartMessage() {
+    return messages.battleStartEnemy
+  }
+
   function getNewEnemyHitMessage(previousMessage) {
     let newMessage = previousMessage
 
@@ -90,15 +101,22 @@ const Utils = (() => {
     return newMessage
   }
 
+  function getNoCommentMessage() {
+    return messages.noComment
+  }
+
   function randomZeroToNine() {
     return Math.floor(Math.random() * 10)
   }
 
   return {
     getWelcomeMessage,
+    getBattleStartMessage,
+    getNewEnemyBattleStartMessage,
     getNewEnemyHitMessage,
     getNewEnemySunkMessage,
     getNewPlayerMissMessage,
+    getNoCommentMessage,
   }
 })()
 

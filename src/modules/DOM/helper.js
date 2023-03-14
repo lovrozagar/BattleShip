@@ -1,3 +1,7 @@
+/* eslint-disable no-restricted-syntax */
+import Utils from '../utils/utils'
+import Component from './reusableComponents'
+
 const helper = (() => {
   // DOM
 
@@ -27,7 +31,7 @@ const helper = (() => {
 
     map.appendChild(createLettersSection())
     map.appendChild(createNumbersSection())
-    map.appendChild(createBoard())
+    map.appendChild(createBoard(description))
 
     return map
   }
@@ -63,10 +67,10 @@ const helper = (() => {
     return numberContainer
   }
 
-  function createBoard() {
+  function createBoard(description) {
     const board = document.createElement('div')
-    board.id = 'field-container'
-    board.className = 'field-container'
+    board.id = `field-container-${description}`
+    board.className = `field-container`
 
     for (let i = 0; i < BOARD_SIZE; i += 1) {
       for (let j = 0; j < BOARD_SIZE; j += 1) {
@@ -77,6 +81,29 @@ const helper = (() => {
     }
 
     return board
+  }
+
+  function create(type, data) {
+    if (!type) return new Error('wrong arguments')
+
+    const element = document.createElement(type)
+
+    for (const [key, value] of Object.entries(data)) {
+      element.setAttribute(key, value)
+    }
+
+    return element
+  }
+
+  function renderBattleStartMessage(character) {
+    const message = document.getElementById(`message-${character}`)
+    if (character === 'agent')
+      Component.addTypeWriterMessage(message, Utils.getBattleStartMessage())
+    else
+      Component.addTypeWriterMessage(
+        message,
+        Utils.getNewEnemyBattleStartMessage()
+      )
   }
 
   // OTHER
@@ -98,10 +125,6 @@ const helper = (() => {
     return num
   }
 
-  function randomOneToTen() {
-    return Math.floor(Math.random() * 5) + 1
-  }
-
   return {
     deleteAppContent,
     getHeader,
@@ -109,7 +132,7 @@ const helper = (() => {
     getCoordinatesFromIndex,
     getIndexFromCoordinates,
     roundNearestTenExceptZero,
-    randomOneToTen,
+    renderBattleStartMessage,
   }
 })()
 

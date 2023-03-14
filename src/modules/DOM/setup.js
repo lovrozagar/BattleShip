@@ -6,9 +6,12 @@ import cruiser from '../../assets/images/cruiserX.svg'
 import submarine from '../../assets/images/submarineX.svg'
 import destroyer from '../../assets/images/destroyerX.svg'
 import helper from './helper'
-import agent from '../../assets/images/agent.png'
 // FACTORIES
 import Game from '../factories/game'
+// DOM
+import Battle from './battle'
+import Component from './reusableComponents'
+import Utils from '../utils/utils'
 
 const setup = (() => {
   function loadSetupContent() {
@@ -17,30 +20,14 @@ const setup = (() => {
     app.classList.add('app', 'setup')
 
     app.appendChild(helper.getHeader('setup'))
-    app.appendChild(createMessageSection())
+    app.appendChild(Component.createMessageSection(['setup', 'agent']))
     app.appendChild(createMapFleetSection())
     app.appendChild(createResetContinueSection())
 
+    const message = document.getElementById('message-agent')
+    Component.addTypeWriterMessage(message, Utils.getWelcomeMessage())
+
     initButtons()
-  }
-
-  function createMessageSection() {
-    const tipSection = document.createElement('section')
-    tipSection.className = 'tip-setup'
-
-    const tipImage = document.createElement('img')
-    tipImage.className = 'tip-image'
-    tipImage.src = agent
-
-    const text = document.createElement('div')
-    text.id = 'tip-text'
-    text.className = 'tip-text'
-    text.textContent = ''
-
-    tipSection.appendChild(tipImage)
-    tipSection.appendChild(text)
-
-    return tipSection
   }
 
   function createMapFleetSection() {
@@ -209,24 +196,24 @@ const setup = (() => {
   }
 
   function handleReset(board) {
-    const fieldContainer = document.getElementById('field-container')
+    const fieldContainer = document.getElementById('field-container-setup')
 
     resetFleetSelect()
     resetArray(board)
-    resetBackground(fieldContainer)
+    removePlacedShips(fieldContainer)
   }
 
   function resetFleetSelect() {
     const map = Game.state.getPlayer().getMap()
 
-    changeMessage
+    changeMessage()
     map.getFleet().forEach((warship) => warship.resetFound())
     map.setFleetEmpty()
   }
 
   function changeMessage() {
     const fleet = document.getElementById('fleet-setup')
-    const tipText = document.getElementById('tip-text')
+    const tipText = document.getElementById('message-text')
     const isReset = tipText.classList.contains('reset')
     let isEmpty = true
 
@@ -249,13 +236,16 @@ const setup = (() => {
     }
   }
 
-  function resetBackground(node) {
-    node.style.backgroundImage = ''
-    node.style.backgroundSize = ''
-    node.style.backgroundPosition = ''
+  function removePlacedShips(parentNode) {
+    const ships = parentNode.querySelectorAll('.ship-image-container')
+    ships.forEach((ship) => ship.remove())
   }
 
-  function handleContinue() {}
+  function handleContinue() {
+    // IF ALL PLACED, CONTINUE TO BATTLE
+    // if (Game.state.getPlayer().getMap().areAllShipsFound())
+    Battle.loadBattleContent()
+  }
 
   return { loadSetupContent }
 })()
