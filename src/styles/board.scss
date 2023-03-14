@@ -62,9 +62,11 @@
       }
     }
     .ship-image-container {
-      position: relative;
-      padding: 0;
-      animation: fade 0.25s linear forwards;
+      img {
+        position: relative;
+        padding: 0;
+        animation: fade 0.25s linear forwards;
+      }
     }
   }
 }

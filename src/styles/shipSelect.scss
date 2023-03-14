@@ -15,7 +15,7 @@
     color: white;
     background: rgba(0, 0, 0, 1);
     transition: all 0.05s linear, visibility 0.01s linear;
-    filter: brightness(0.6);
+    filter: brightness(0.5);
     &:focus {
       filter: brightness(1);
       .ship-content {
@@ -26,7 +26,7 @@
           position: relative;
           z-index: 2;
           filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(8deg)
-            brightness(500%) contrast(104%);
+            brightness(100%) contrast(104%);
         }
       }
     }
@@ -45,8 +45,8 @@
     }
     .ship-content {
       img {
-        filter: invert(13%) sepia(15%) saturate(18%) hue-rotate(328deg)
-          brightness(140%) contrast(83%);
+        filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
+          brightness(105%) contrast(100%);
         pointer-events: none;
         position: relative;
         z-index: 3;
