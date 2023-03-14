@@ -95,6 +95,7 @@ const Battle = (() => {
 
     if (boardElement === 'x') addMissStyle(target)
     else {
+      console.log(battleship)
       battleship.hit()
 
       const [i, j] = findOrigin(enemyBoard, enemyBoard[x][y])
@@ -106,6 +107,12 @@ const Battle = (() => {
     }
 
     displayPlayerMessage(enemyBoard[x][y], battleship)
+
+    const playerBoard = document.getElementById('field-container-friendly')
+    const [row, col] = cpu.cpuPlay()
+    console.log(row, col)
+    const nodeIndex = helper.getIndexFromCoordinates(row, col)
+    playerBoard.children[nodeIndex].classList.add('hit')
   }
 
   function findOrigin(board, element) {
