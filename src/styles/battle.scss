@@ -118,7 +118,7 @@
 #field-container-enemy {
   .field::before {
     @include pseudoOverlay;
-    transform: translate(-600px, -600px) rotate(-315deg);
+    transform: translate(-600px, -650px) rotate(-315deg);
     height: 30%;
     width: 200px;
     border: 3px solid #fefefe;

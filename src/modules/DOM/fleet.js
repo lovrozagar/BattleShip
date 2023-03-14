@@ -9,7 +9,8 @@ import Game from '../factories/game'
 
 const fleet = (() => {
   function loadFleet(board) {
-    const map = Game.state.getPlayer().getMap()
+    const player = Game.state.getPlayer()
+    const map = player.getMap()
     const boardArray = map.getBoard()
     console.log(boardArray)
 
@@ -17,10 +18,24 @@ const fleet = (() => {
       for (let j = 0; j < boardArray[0].length; j += 1) {
         // IF FIELD IS NOT EMPTY ON MAP LOAD SHIP
         if (boardArray[i][j] !== 'x') {
-          loadShipOnBoard(boardArray[i][j], { map, board, i, j })
+          loadShipOnBoard(player, {
+            map,
+            board,
+            boardElement: boardArray[i][j],
+            i,
+            j,
+          })
         }
       }
     }
+  }
+
+  let startTime = null
+  function getCurrentTime() {
+    if (startTime === null) {
+      startTime = new Date().getTime()
+    }
+    return (new Date().getTime() - startTime) / 1000 // convert to seconds
   }
 
   function loadShipOnBoard(player, data) {
@@ -34,11 +49,16 @@ const fleet = (() => {
     const [height, width] = [`10%`, `${length * 10}%`]
     const [top, left] = [`${data.i * 10}%`, `${data.j * 10}%`]
     const axis = data.boardElement.at(-1)
+
     let rotation = 'rotate(0deg)'
 
     if (axis === 'Y') rotation = 'rotate(90deg) translate(0,-100%)'
 
+    const currentTime = getCurrentTime()
+    console.log(currentTime)
+
     const shipDiv = document.createElement('div')
+    shipDiv.classList.add('ship-image-container', 'blue-bleep')
     shipDiv.style.position = 'absolute'
     shipDiv.style.zIndex = '-1'
     shipDiv.style.top = top
@@ -47,8 +67,13 @@ const fleet = (() => {
     shipDiv.style.height = height
     shipDiv.style.transform = rotation
     shipDiv.style.transformOrigin = 'top left'
+    shipDiv.style.maskImage = carrier
+    shipDiv.style.animationDelay = `${-currentTime}s`
 
     const image = document.createElement('img')
+    image.className =
+      player.isCpu === true ? `${shipName}-cpu` : `${shipName}-player`
+    image.classList.add('placed-ship')
     image.src = loadShipImage(shipName)
     image.style.height = '95%'
     image.style.aspectRatio = `${length}/1`

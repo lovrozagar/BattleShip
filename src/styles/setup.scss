@@ -116,25 +116,11 @@
         brightness(96%) contrast(97%);
       // filter: invert(82%) sepia(9%) saturate(2042%) hue-rotate(166deg)
       //   brightness(97%) contrast(90%);
-      &.blue-bleep {
-        animation: bleep 3.5s infinite linear;
-        animation-delay: -3.5s;
-      }
     }
   }
 }
 
-@keyframes bleep {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.4;
-  }
-  100% {
-    opacity: 1;
-  }
-}
+
 
 @keyframes sweep {
   to {

@@ -56,6 +56,9 @@ body {
 .app.setup,
 .app.battle {
   display: block;
+  & > * {
+    border-radius: $main-border-radius;
+  }
 }
 
 @media screen and (max-width: 480px) {

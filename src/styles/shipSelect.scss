@@ -1,6 +1,7 @@
 .fleet-setup {
   @include flexColumnCenter;
   flex-wrap: wrap;
+  border-radius: $main-border-radius;
   background-color: rgba(0, 0, 0, 0.5);
   .ship-card {
     flex: 1;
@@ -10,6 +11,7 @@
     margin: calc(0.25rem + 0.5vw);
     padding: 0.25rem;
     border: 2px solid white;
+    border-radius: $main-border-radius;
     background: transparent;
     font-family: inherit;
     color: white;
@@ -98,5 +100,5 @@
 }
 
 .ship-card:hover {
-  cursor: move;
+  cursor: grab;
 }

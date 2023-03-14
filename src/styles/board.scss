@@ -62,25 +62,50 @@
       }
     }
     .ship-image-container {
+      pointer-events: none;
+      user-select: none;
+      transform-origin: center;
+      &.blue-bleep {
+        animation: bleep 3.5s infinite linear;
+      }
       img {
         position: relative;
         padding: 0;
-        animation: fade 0.25s linear forwards;
+        user-select: none;
+        pointer-events: none;
+        animation: scaleDrop 0.25s linear forwards;
       }
     }
   }
 }
 
-@keyframes fade {
-  from {
+@keyframes bleep {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleDrop {
+  0% {
     opacity: 0;
     visibility: hidden;
-    transform: translateY(10px);
+    transform: scale(0);
   }
-  to {
+  80% {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
   }
 }
 
