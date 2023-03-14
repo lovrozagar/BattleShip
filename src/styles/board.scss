@@ -33,12 +33,18 @@
     grid-column: 2/3;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
-    gap: 0.1rem;
+    border-collapse: collapse;
+    border-top: 1px solid;
+    border-left: 1px solid;
+    border-color: $white-low;
+    // gap: 0.1rem;
     aspect-ratio: 1/1;
     background-repeat: no-repeat;
     .field {
       position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-right: 1px solid;
+      border-bottom: 1px solid;
+      border-color: $white-low;
       &.no-drop,
       &.no-drop * {
         // OVERRIDE DROP CURSOR
@@ -46,12 +52,33 @@
         pointer-events: none;
       }
       &.hovering {
-        background-color: rgba(255, 255, 255, 0.25);
+        background-color: $blue-light-color-transparent;
+        &.red {
+          background-color: $red-light-color-transparent;
+        }
       }
       &:hover {
         background-color: rgba(255, 255, 255, 0.25);
       }
     }
+    .ship-image-container {
+      position: relative;
+      padding: 0;
+      animation: fade 0.25s linear forwards;
+    }
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
   }
 }
 

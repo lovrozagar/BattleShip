@@ -63,6 +63,10 @@
         position: relative;
         overflow: visible;
         display: inline-block;
+        border: 2px solid #13dd1380;
+        img {
+          filter: grayscale(1);
+        }
         .enemy-ship {
           position: relative;
           z-index: 1;
@@ -84,14 +88,15 @@
     backdrop-filter: blur(10px);
     background-color: rgba(0, 0, 0, 0.5);
     .message-image {
-      height: min(calc(1.25rem + 2vw), 2.5rem);
+      height: min(calc(1.25rem + 2vw), 2.675rem);
     }
     .message-container {
       display: inline;
       text-align: start;
       .message-text {
         display: inline;
-        color: rgb(19, 221, 19);
+        font-size: $font-size-normal-responsive;
+        color: #13dd13;
       }
       .typed-cursor {
         position: relative;
@@ -102,7 +107,7 @@
         height: 1rem !important;
         font-size: $font-size-normal-responsive;
         color: transparent;
-        background-color: rgb(19, 221, 19);
+        background-color: #13dd13;
         overflow: hidden;
         animation-duration: 1.5s;
       }
@@ -131,8 +136,8 @@
   }
 
   .field.hit::before {
-    animation: shot 0.5s 0.2s 1;
-    -webkit-animation: shot 0.5s 0.2s 1;
+    animation: shot 0.35s 0.175s 1;
+    -webkit-animation: shot 0.35s 0.175s 1;
     animation-fill-mode: forwards;
   }
 
@@ -140,14 +145,14 @@
     background-color: rgba(255, 0, 0, 0.5);
     animation: ripple 0.5s 0.2s 1;
     -webkit-animation: ripple 0.5s 0.2s 1;
-    animation-delay: 0.5s;
-    -webkit-animation-delay: 0.5s;
+    animation-delay: 0.35s;
+    -webkit-animation-delay: 0.35s;
     animation-fill-mode: forwards;
   }
 
   .field.miss::before {
-    animation: miss 0.5s 0.2s 1;
-    -webkit-animation: miss 0.5s 0.2s 1;
+    animation: miss 0.35s 0.175s 1;
+    -webkit-animation: miss 0.35s 0.175s 1;
     animation-fill-mode: forwards;
   }
 
@@ -155,8 +160,8 @@
     background-color: rgba(0, 153, 255, 0.5);
     animation: ripple 0.5s 0.2s 1;
     -webkit-animation: ripple 0.5s 0.2s 1;
-    animation-delay: 0.5s;
-    -webkit-animation-delay: 0.5s;
+    animation-delay: 0.35s;
+    -webkit-animation-delay: 0.35s;
     animation-fill-mode: forwards;
   }
 
