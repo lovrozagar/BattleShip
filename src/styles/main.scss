@@ -1,13 +1,14 @@
 @import './variables.scss';
+@import './animations.scss';
 @import './mixins.scss';
-@import './battle.scss';
-@import './setup.scss';
-@import './board.scss';
-@import './buttons.scss';
-@import './shipSelect.scss';
 @import './playNowButton.scss';
-@import './pregameCard.scss';
 @import './playerNameForm.scss';
+@import './pregameCard.scss';
+@import './buttons.scss';
+@import './board.scss';
+@import './shipSelect.scss';
+@import './setup.scss';
+@import './battle.scss';
 
 :root {
   color-scheme: light dark;

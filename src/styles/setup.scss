@@ -39,29 +39,6 @@
   }
 }
 
-@keyframes typewriter {
-  0% {
-    max-width: 0;
-    color: $main-color;
-  }
-  100% {
-    max-width: 100%;
-    color: $main-color;
-  }
-}
-
-@keyframes blink {
-  0% {
-    background-color: $main-color;
-  }
-  50% {
-    background-color: transparent;
-  }
-  100% {
-    background-color: $main-color;
-  }
-}
-
 .setup-container {
   max-width: 680px;
   margin: 0 auto;
@@ -74,56 +51,6 @@
   justify-content: center;
   gap: 1rem;
   margin-top: 0.5rem;
-}
-
-.app.setup {
-  .field-container {
-    position: relative;
-    overflow: hidden;
-    &::before {
-      @include pseudoOverlay;
-      display: block;
-      top: 50%;
-      left: 50%;
-      height: 2.5rem;
-      width: 2.5rem;
-      border-radius: 100%;
-      transform-origin: top left;
-      background: url('../assets/images/cross.svg') center / cover no-repeat;
-      transform: rotate(45deg) translate(-50%, -50%);
-      filter: invert(67%) sepia(88%) saturate(286%) hue-rotate(164deg)
-        brightness(96%) contrast(97%);
-    }
-    &::after {
-      display: block;
-      @include pseudoUnderlay;
-      box-sizing: border-box;
-      inset: unset;
-      top: -50%;
-      left: -50%;
-      margin: 0 auto;
-      border-right: solid 1px #87cfeb50;
-      width: 100%;
-      height: 100%;
-      border-radius: 100% 0 0 0;
-      transform-origin: 100% 100%;
-      background: linear-gradient(50deg, rgba(34, 34, 34, 0) 56%, #70cdf1);
-      animation: sweep 3.5s infinite linear;
-      pointer-events: none;
-    }
-    img {
-      filter: invert(67%) sepia(88%) saturate(286%) hue-rotate(164deg)
-        brightness(96%) contrast(97%);
-      // filter: invert(82%) sepia(9%) saturate(2042%) hue-rotate(166deg)
-      //   brightness(97%) contrast(90%);
-    }
-  }
-}
-
-@keyframes sweep {
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .reset-continue-section {

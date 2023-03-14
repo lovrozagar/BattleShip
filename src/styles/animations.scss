@@ -1,0 +1,103 @@
+@keyframes shot {
+  75% {
+    width: 80px;
+    background-color: #fefefe;
+    border-color: #fefefe;
+  }
+
+  100% {
+    width: 30%;
+    background-color: rgba(255, 0, 0, 0.85);
+    border-color: rgba(255, 0, 0, 0.5);
+    transform: translateX(0px) rotate(-315deg);
+  }
+}
+
+@keyframes miss {
+  75% {
+    width: 80px;
+    background-color: #fefefe;
+    border-color: #fefefe;
+  }
+
+  100% {
+    width: 30%;
+    background-color: rgba(0, 153, 255, 0.85);
+    border-color: rgba(0, 153, 255, 0.5);
+    transform: translateX(0px) rotate(-315deg);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes bleep {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleDrop {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0);
+  }
+  80% {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+  }
+}
+
+@keyframes typewriter {
+  0% {
+    max-width: 0;
+    color: $main-color;
+  }
+  100% {
+    max-width: 100%;
+    color: $main-color;
+  }
+}
+
+@keyframes blink {
+  0% {
+    background-color: $main-color;
+  }
+  50% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: $main-color;
+  }
+}
+
+@keyframes sweep {
+  to {
+    transform: rotate(360deg);
+  }
+}
