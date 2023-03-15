@@ -75,14 +75,20 @@ const Battle = (() => {
     })
   }
 
-  function handleFieldClick(event) {
+  async function handleFieldClick(event) {
     const { target } = event
     disableField(target)
-    playerPlays(target)
-    cpuPlays()
+    await playerPlays(target)
+    await cpuPlays()
   }
 
-  function playerPlays(fieldNode) {
+  async function playerPlays(fieldNode) {
+    const enemyMessage = document.querySelector('.message.battle.enemy')
+    const agentMessage = document.querySelector('.message.battle.agent')
+    enemyMessage.classList.remove('on-turn')
+    agentMessage.classList.add('on-turn')
+    await timeoutShort()
+
     const cpu = Game.state.getCPU()
     const index = [...fieldNode.parentNode.children].indexOf(fieldNode)
     const [row, col] = helper.getCoordinatesFromIndex(index)
@@ -101,10 +107,15 @@ const Battle = (() => {
     }
 
     displayPlayerMessage(boardElement, battleship)
+    await timeoutLong()
   }
 
   async function cpuPlays() {
-    await timeout()
+    const enemyMessage = document.querySelector('.message.battle.enemy')
+    const agentMessage = document.querySelector('.message.battle.agent')
+    agentMessage.classList.remove('on-turn')
+    enemyMessage.classList.add('on-turn')
+    await timeoutShort()
 
     const friendlyBoard = document.getElementById('field-container-friendly')
     const player = Game.state.getPlayer()
@@ -128,6 +139,10 @@ const Battle = (() => {
 
     displayEnemyMessage(boardElement, battleship)
     console.log(player.getMap())
+
+    await timeoutLong()
+    enemyMessage.classList.remove('on-turn')
+    agentMessage.classList.add('on-turn')
   }
 
   function playerHits(data) {
@@ -223,8 +238,12 @@ const Battle = (() => {
     node.classList.add('miss')
   }
 
-  function timeout() {
+  function timeoutLong() {
     return new Promise((resolve) => setTimeout(resolve, 2000))
+  }
+
+  function timeoutShort() {
+    return new Promise((resolve) => setTimeout(resolve, 1000))
   }
 
   return { loadBattleContent }
