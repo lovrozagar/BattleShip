@@ -112,6 +112,8 @@ const Battle = (() => {
     console.log(row, col)
 
     const boardElement = player.getMap().getBoard()[row][col]
+    const shipName = getShipNameFromBoard(boardElement)
+    const battleship = player.getMap().getShip(shipName)
     const index = helper.getIndexFromCoordinates(row, col)
     console.log(boardElement)
     switch (boardElement) {
@@ -124,10 +126,9 @@ const Battle = (() => {
         addHitStyle(friendlyBoard.children[index])
     }
 
+    displayEnemyMessage(boardElement, battleship)
     console.log(player.getMap())
   }
-
-  function cpuShot(player) {}
 
   function playerHits(data) {
     const enemyBoardNode = document.getElementById('field-container-enemy')
@@ -166,11 +167,30 @@ const Battle = (() => {
         displayMessage(agent, Utils.getNewEnemyHitMessage(agent.textContent))
       else if (ship.isSunk)
         displayMessage(agent, Utils.getNewEnemySunkMessage(agent.textContent))
-    } else
+    } else {
       displayMessage(agent, Utils.getNewPlayerMissMessage(agent.textContent))
+    }
 
     if (enemy.textContent !== '...')
       displayMessage(enemy, Utils.getNoCommentMessage()[0])
+  }
+
+  function displayEnemyMessage(boardElement, ship = false) {
+    const agent = document.getElementById('message-agent')
+    const enemy = document.getElementById('message-enemy')
+
+    if (boardElement !== 'x' && boardElement !== 'miss') {
+      if (ship && !ship.isSunk)
+        displayMessage(enemy, Utils.getNewPlayerHitMessage(enemy.textContent))
+      else if (ship.isSunk)
+        displayMessage(enemy, Utils.getNewPlayerSunkMessage(enemy.textContent))
+    } else {
+      console.log('a')
+      displayMessage(enemy, Utils.getNewEnemyMissMessage(enemy.textContent))
+    }
+
+    if (agent.textContent !== '...')
+      displayMessage(agent, Utils.getNoCommentMessage()[0])
   }
 
   function displayMessage(node, message) {

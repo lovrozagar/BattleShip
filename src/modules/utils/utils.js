@@ -46,9 +46,20 @@ const Utils = (() => {
       'Looks like we need to recalibrate our aim, sir.',
       "We're not making much headway, captain. What's the plan?",
     ],
-
+    playerHit: [
+      'Your time is up!',
+      'Hehehe, your luck is running out,',
+      'Brace yourself for the real pain!',
+      "That was just a taste of what's to come.",
+      "You'll be swimming with the fishes soon enough.",
+      "My torpedoes have your number, it's over for you!",
+      "So predictable, you're not even worth the ammunition",
+      'How does it feel to be on the receiving end of my wrath?',
+      "Your luck has run out, and there's nowhere left to hide!",
+      'Looks like I hit a nerve. How about a little retaliation?',
+    ],
     playerSunk: [
-      "Looks like you'll be swimming home. Heheh.",
+      "Looks like you'll be swimming home. Hehehe.",
       'You fought like a coward and died like a dog.',
       'Looks like your ship was no match for our firepower.',
       "Another one bites the dust. It's too easy to crush your kind.",
@@ -58,6 +69,18 @@ const Utils = (() => {
       "The ocean belongs to the strong. Your ship didn't stand a chance.",
       'You made a grave mistake challenging me. Your defeat was certain.',
       'You should have surrendered while you had the chance. Now look at you.',
+    ],
+    enemyMiss: [
+      "I'll get you next time.",
+      'My turn to strike again.',
+      'Missed, but not for long.',
+      "You can run, but you can't hide.",
+      "You can't escape my sight forever.",
+      'Your luck is just prolonging the inevitable.',
+      'My torpedoes will find you, no matter where you hide.',
+      "You may have dodged one, but you can't dodge them all.",
+      'That was just a warning shot, the real attack is coming.',
+      "You're playing with fire, and I have a lot of ammunition.",
     ],
     noComment: ['...'],
   }
@@ -101,6 +124,33 @@ const Utils = (() => {
     return newMessage
   }
 
+  function getNewPlayerHitMessage(previousMessage) {
+    let newMessage = previousMessage
+
+    while (newMessage === previousMessage)
+      newMessage = messages.playerHit[randomZeroToNine()]
+
+    return newMessage
+  }
+
+  function getNewPlayerSunkMessage(previousMessage) {
+    let newMessage = previousMessage
+
+    while (newMessage === previousMessage)
+      newMessage = messages.playerSunk[randomZeroToNine()]
+
+    return newMessage
+  }
+
+  function getNewEnemyMissMessage(previousMessage) {
+    let newMessage = previousMessage
+
+    while (newMessage === previousMessage)
+      newMessage = messages.enemyMiss[randomZeroToNine()]
+
+    return newMessage
+  }
+
   function getNoCommentMessage() {
     return messages.noComment
   }
@@ -116,6 +166,9 @@ const Utils = (() => {
     getNewEnemyHitMessage,
     getNewEnemySunkMessage,
     getNewPlayerMissMessage,
+    getNewPlayerHitMessage,
+    getNewPlayerSunkMessage,
+    getNewEnemyMissMessage,
     getNoCommentMessage,
   }
 })()

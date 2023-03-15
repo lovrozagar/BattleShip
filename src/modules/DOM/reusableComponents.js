@@ -42,7 +42,7 @@ const Component = (() => {
   function addTypeWriterMessage(element, stringArray) {
     const typed = new Typed(element, {
       strings: stringArray,
-      typeSpeed: 15,
+      typeSpeed: 10,
     })
   }
 
