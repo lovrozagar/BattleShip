@@ -78,41 +78,73 @@ const Battle = (() => {
   function handleFieldClick(event) {
     const { target } = event
     disableField(target)
+    playerPlays(target)
+    cpuPlays()
+  }
 
-    const index = [...target.parentNode.children].indexOf(target)
-    const x = parseInt(index / 10, 10)
-    const y = index % 10
-
-    const board = document.getElementById('field-container-enemy')
+  function playerPlays(fieldNode) {
     const cpu = Game.state.getCPU()
-    const map = cpu.getMap()
-    const enemyBoard = map.getBoard()
+    const index = [...fieldNode.parentNode.children].indexOf(fieldNode)
+    const [row, col] = helper.getCoordinatesFromIndex(index)
 
-    const boardElement = enemyBoard[x][y]
-    const shipName = getShipNameFromBoard(enemyBoard[x][y])
-    const battleship = map.getShip(shipName)
-    console.log('ENEMY MAP', map)
+    const boardElement = cpu.getMap().getBoard()[row][col]
+    const shipName = getShipNameFromBoard(boardElement)
+    const battleship = cpu.getMap().getShip(shipName)
 
-    if (boardElement === 'x') addMissStyle(target)
-    else {
-      console.log(battleship)
-      battleship.hit()
-
-      const [i, j] = findOrigin(enemyBoard, enemyBoard[x][y])
-      if (battleship.isSunk) {
-        fleet.loadShipOnBoard(cpu, { map, board, boardElement, i, j })
-      }
-
-      addHitStyle(target)
+    switch (boardElement) {
+      case 'x':
+        addMissStyle(fieldNode)
+        break
+      default:
+        addHitStyle(fieldNode)
+        playerHits({ cpu, battleship, row, col })
     }
 
-    displayPlayerMessage(enemyBoard[x][y], battleship)
+    displayPlayerMessage(boardElement, battleship)
+  }
 
-    const playerBoard = document.getElementById('field-container-friendly')
-    const [row, col] = cpu.cpuPlay()
+  async function cpuPlays() {
+    await timeout()
+
+    const friendlyBoard = document.getElementById('field-container-friendly')
+    const player = Game.state.getPlayer()
+    const [row, col] = player.cpuPlay()
     console.log(row, col)
-    const nodeIndex = helper.getIndexFromCoordinates(row, col)
-    playerBoard.children[nodeIndex].classList.add('hit')
+
+    const boardElement = player.getMap().getBoard()[row][col]
+    const index = helper.getIndexFromCoordinates(row, col)
+    console.log(boardElement)
+    switch (boardElement) {
+      case 'miss':
+        addMissStyle(friendlyBoard.children[index])
+        player.getMap().getBoard()[row][col] = 'miss'
+        break
+      default:
+        player.getMap().getBoard()[row][col] = 'hit'
+        addHitStyle(friendlyBoard.children[index])
+    }
+
+    console.log(player.getMap())
+  }
+
+  function cpuShot(player) {}
+
+  function playerHits(data) {
+    const enemyBoardNode = document.getElementById('field-container-enemy')
+    const map = data.cpu.getMap()
+    const board = map.getBoard()
+    // rename to rowOrigin, colOrigin
+    map.receiveAttack([data.row, data.col])
+    if (data.battleship.isSunk) {
+      const [i, j] = findOrigin(board, board[data.row][data.col])
+      fleet.loadShipOnBoard(data.cpu, {
+        map,
+        board: enemyBoardNode,
+        boardElement: board[data.row][data.col],
+        i,
+        j,
+      })
+    }
   }
 
   function findOrigin(board, element) {
@@ -129,8 +161,6 @@ const Battle = (() => {
     const agent = document.getElementById('message-agent')
     const enemy = document.getElementById('message-enemy')
 
-    console.log(ship, ship.isSunk)
-
     if (boardElement !== 'x') {
       if (ship && !ship.isSunk)
         displayMessage(agent, Utils.getNewEnemyHitMessage(agent.textContent))
@@ -138,7 +168,6 @@ const Battle = (() => {
         displayMessage(agent, Utils.getNewEnemySunkMessage(agent.textContent))
     } else
       displayMessage(agent, Utils.getNewPlayerMissMessage(agent.textContent))
-    console.log([Utils.getNoCommentMessage()])
 
     if (enemy.textContent !== '...')
       displayMessage(enemy, Utils.getNoCommentMessage()[0])
@@ -172,6 +201,10 @@ const Battle = (() => {
 
   function addMissStyle(node) {
     node.classList.add('miss')
+  }
+
+  function timeout() {
+    return new Promise((resolve) => setTimeout(resolve, 2000))
   }
 
   return { loadBattleContent }

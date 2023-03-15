@@ -115,7 +115,7 @@ const helper = (() => {
   }
 
   function getIndexFromCoordinates(x, y) {
-    return x * (BOARD_SIZE - 1) + y
+    return x * (BOARD_SIZE) + y
   }
 
   function roundNearestTenExceptZero(num) {

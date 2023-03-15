@@ -49,6 +49,7 @@ function getShipOnDrag() {
 }
 
 function getShip(shipName) {
+  // const nameFormatted = shipName.slice(0, shipName.length - 1)
   return this.fleet.filter((battleship) => battleship.name === shipName)[0]
 }
 
@@ -165,28 +166,30 @@ function receiveAttack(coords) {
 
 function recordHit(x, y) {
   switch (this.board[x][y]) {
-    case 'carrier':
+    case 'carrierX':
+    case 'carrierY':
       this.getShip('carrier').hit()
-      this.board[x][y] = 'hit'
+      // this.board[x][y] = 'hit'
       break
-    case 'battleship':
+    case 'battleshipX':
+    case 'battleshipY':
       this.getShip('battleship').hit()
-      this.board[x][y] = 'hit'
+      // this.board[x][y] = 'hit'
       break
-    case 'cruiser':
+    case 'cruiserX':
+    case 'cruiserY':
       this.getShip('cruiser').hit()
-      this.board[x][y] = 'hit'
       break
-    case 'submarine':
+    case 'submarineX':
+    case 'submarineY':
       this.getShip('submarine').hit()
-      this.board[x][y] = 'hit'
       break
-    case 'destroyer':
+    case 'destroyerX':
+    case 'destroyerY':
       this.getShip('destroyer').hit()
-      this.board[x][y] = 'hit'
       break
     default:
-      this.board[x][y] = 'missed'
+      this.board[x][y] = 'miss'
   }
 }
 

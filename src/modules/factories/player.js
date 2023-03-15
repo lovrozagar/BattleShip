@@ -34,24 +34,27 @@ function playTurn(coordinate = []) {
 }
 
 function isEmptyField(coordinate) {
-  if (!coordinate.length) return false
-
   const [x, y] = coordinate
-  return this.board.board[x][y] !== 'missed' && this.board.board[x][y] !== 'hit'
+  return this.board.board[x][y] !== 'miss' && this.board.board[x][y] !== 'hit'
 }
 
 function cpuPlay() {
   let invalidCoordinate = true
+  let x
+  let y
 
   while (invalidCoordinate) {
-    const x = randomCoordinate()
-    const y = randomCoordinate()
+    x = randomCoordinate()
+    y = randomCoordinate()
 
     if (this.isEmptyField([x, y])) {
+      console.log('a')
       invalidCoordinate = false
       this.board.receiveAttack([x, y])
     }
   }
+
+  return [x, y]
 }
 
 function autoPlace() {
@@ -77,8 +80,6 @@ function autoPlace() {
       length.shift()
     }
   }
-
-  console.log(board)
 }
 
 function randomCoordinate() {

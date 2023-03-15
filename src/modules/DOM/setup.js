@@ -206,26 +206,21 @@ const setup = (() => {
   function resetFleetSelect() {
     const map = Game.state.getPlayer().getMap()
 
-    changeMessage()
+    resetFleetSelectMenu()
     map.getFleet().forEach((warship) => warship.resetFound())
     map.setFleetEmpty()
   }
 
-  function changeMessage() {
+  function resetFleetSelectMenu() {
     const fleet = document.getElementById('fleet-setup')
-    const tipText = document.getElementById('message-text')
-    const isReset = tipText.classList.contains('reset')
-    let isEmpty = true
+    const message = document.getElementById('message-agent')
 
     fleet.childNodes.forEach((node) => {
       if (node.classList.contains('hidden')) {
         node.classList.remove('hidden')
-        tipText.classList.add('reset')
-        isEmpty = false
+        message.classList.add('reset')
       }
     })
-
-    if (isReset && !isEmpty) tipText.classList.add('take-time')
   }
 
   function resetArray(array) {

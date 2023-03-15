@@ -15,7 +15,6 @@ const fleet = (() => {
     const player = Game.state.getPlayer()
     const map = player.getMap()
     const boardArray = map.getBoard()
-    console.log(boardArray)
 
     for (let i = 0; i < boardArray.length; i += 1) {
       for (let j = 0; j < boardArray[0].length; j += 1) {
@@ -41,7 +40,8 @@ const fleet = (() => {
   }
 
   function loadShipOnBoard(player, data) {
-    const shipName = data.boardElement.slice(0, data.boardElement.length - 1)
+    const shipName = data.boardElement.slice(0, -1)
+    console.log(shipName)
     const ship = player.getMap().getShip(shipName)
 
     if (ship.isFound) return
