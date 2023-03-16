@@ -3,6 +3,7 @@
 body {
   .app-setup,
   .app.battle {
+    position: relative;
     @include flexRowCenter;
     width: 100%;
     max-width: 1200px;

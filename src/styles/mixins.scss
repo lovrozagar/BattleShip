@@ -71,3 +71,22 @@
   height: 100%;
   width: 100%;
 }
+
+// @mixin blui
+@mixin typedCursor {
+  position: relative;
+  left: 1px;
+  bottom: -3px;
+  display: inline-block;
+  width: 0.5rem;
+  height: 1rem;
+  color: transparent;
+  overflow: hidden;
+  -webkit-animation-duration: 1.5s;
+  animation-duration: 1.5s;
+}
+
+@mixin agentColor {
+  font-size: $font-size-normal-responsive;
+  background-color: $blue-light-color;
+}

@@ -16,10 +16,13 @@ const Battle = (() => {
     renderPlayerShips()
     Game.state.getCPU().autoPlace()
 
-    helper.renderBattleStartMessage('agent')
-    helper.renderBattleStartMessage('enemy')
+    helper.displayBattleStartMessage('agent')
+    helper.displayBattleStartMessage('enemy')
 
     initBoardFields()
+
+    const agent = document.querySelector('.message.battle.agent')
+    styleOnTurn(agent)
   }
 
   function createMainSection() {
@@ -61,6 +64,32 @@ const Battle = (() => {
     return titleContainer
   }
 
+  function createWinnerModal() {
+    const winModal = helper.create('section', {
+      id: 'win-modal-container',
+      className: 'win-modal-container',
+    })
+
+    const title = helper.create('h4', {
+      id: 'title-win',
+      className: 'title-win',
+      textContent: 'Enemy fleet defeated!',
+    })
+    const message = Component.createMessageSection(['battle', 'agent-win'])
+
+    const button = helper.create('button', {
+      id: 'new-game-button',
+      className: 'new-game-button',
+      textContent: 'New Battle'
+    })
+
+    winModal.appendChild(title)
+    winModal.appendChild(message)
+    winModal.appendChild(button)
+
+    return winModal
+  }
+
   function renderPlayerShips() {
     const friendlyBoard = document.getElementById('field-container-friendly')
     Game.state.getPlayer().getMap().setAllShipsNotFound()
@@ -85,9 +114,10 @@ const Battle = (() => {
   async function playerPlays(fieldNode) {
     const enemyMessage = document.querySelector('.message.battle.enemy')
     const agentMessage = document.querySelector('.message.battle.agent')
-    enemyMessage.classList.remove('on-turn')
-    agentMessage.classList.add('on-turn')
-    await timeoutShort()
+
+    const app = document.getElementById('app')
+    app.appendChild(createWinnerModal())
+    helper.displayWinMessage('agent-win')
 
     const cpu = Game.state.getCPU()
     const index = [...fieldNode.parentNode.children].indexOf(fieldNode)
@@ -106,27 +136,31 @@ const Battle = (() => {
         playerHits({ cpu, battleship, row, col })
     }
 
+    console.log('is player winner: ', cpu.isLoser())
+    // console.log(cpu.getMap())
+
     displayPlayerMessage(boardElement, battleship)
-    await timeoutLong()
+    // await timeoutTwoAndHalfSeconds()
+    styleOfTurn(agentMessage)
+    styleOnTurn(enemyMessage)
   }
 
   async function cpuPlays() {
     const enemyMessage = document.querySelector('.message.battle.enemy')
     const agentMessage = document.querySelector('.message.battle.agent')
-    agentMessage.classList.remove('on-turn')
-    enemyMessage.classList.add('on-turn')
-    await timeoutShort()
+
+    displayPlayerNoCommentMessage()
+    // await timeoutHalfSecond()
 
     const friendlyBoard = document.getElementById('field-container-friendly')
     const player = Game.state.getPlayer()
     const [row, col] = player.cpuPlay()
-    console.log(row, col)
 
     const boardElement = player.getMap().getBoard()[row][col]
     const shipName = getShipNameFromBoard(boardElement)
     const battleship = player.getMap().getShip(shipName)
     const index = helper.getIndexFromCoordinates(row, col)
-    console.log(boardElement)
+
     switch (boardElement) {
       case 'miss':
         addMissStyle(friendlyBoard.children[index])
@@ -137,12 +171,14 @@ const Battle = (() => {
         addHitStyle(friendlyBoard.children[index])
     }
 
-    displayEnemyMessage(boardElement, battleship)
-    console.log(player.getMap())
+    console.log('is cpu winner: ', player.isLoser())
 
-    await timeoutLong()
-    enemyMessage.classList.remove('on-turn')
-    agentMessage.classList.add('on-turn')
+    displayEnemyMessage(boardElement, battleship)
+    // console.log(player.getMap())
+
+    // await timeoutTwoAndHalfSeconds()
+    styleOfTurn(enemyMessage)
+    styleOnTurn(agentMessage)
   }
 
   function playerHits(data) {
@@ -191,7 +227,6 @@ const Battle = (() => {
   }
 
   function displayEnemyMessage(boardElement, ship = false) {
-    const agent = document.getElementById('message-agent')
     const enemy = document.getElementById('message-enemy')
 
     if (boardElement !== 'x' && boardElement !== 'miss') {
@@ -200,12 +235,14 @@ const Battle = (() => {
       else if (ship.isSunk)
         displayMessage(enemy, Utils.getNewPlayerSunkMessage(enemy.textContent))
     } else {
-      console.log('a')
       displayMessage(enemy, Utils.getNewEnemyMissMessage(enemy.textContent))
     }
+  }
 
-    if (agent.textContent !== '...')
-      displayMessage(agent, Utils.getNoCommentMessage()[0])
+  function displayPlayerNoCommentMessage() {
+    const agent = document.getElementById('message-agent')
+
+    displayMessage(agent, Utils.getNoCommentMessage()[0])
   }
 
   function displayMessage(node, message) {
@@ -238,12 +275,24 @@ const Battle = (() => {
     node.classList.add('miss')
   }
 
-  function timeoutLong() {
-    return new Promise((resolve) => setTimeout(resolve, 2000))
+  function styleOnTurn(node) {
+    node.classList.add('on-turn')
   }
 
-  function timeoutShort() {
+  function styleOfTurn(node) {
+    node.classList.remove('on-turn')
+  }
+
+  function timeoutTwoAndHalfSeconds() {
+    return new Promise((resolve) => setTimeout(resolve, 2500))
+  }
+
+  function timeoutSecond() {
     return new Promise((resolve) => setTimeout(resolve, 1000))
+  }
+
+  function timeoutHalfSecond() {
+    return new Promise((resolve) => setTimeout(resolve, 500))
   }
 
   return { loadBattleContent }

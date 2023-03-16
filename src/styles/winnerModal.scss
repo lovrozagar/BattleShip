@@ -1,0 +1,57 @@
+.win-modal-container {
+  @include flexColumnCenter;
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  width: 500px;
+  aspect-ratio: 1/1;
+  gap: 1rem;
+  padding: 5rem;
+  background-color: black;
+  transform: translate(-50%, -50%);
+  .title-win {
+    font-size: 1.25rem;
+    font-weight: 400;
+    text-align: start;
+    color: $blue-light-color;
+  }
+  .message.battle.agent-win {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    img {
+      height: 3rem;
+      margin-bottom: 1rem;
+    }
+    .message-container {
+      text-align: start;
+      .message-agent-win {
+        display: inline;
+        width: 100%;
+        color: $blue-light-color;
+      }
+      .typed-cursor {
+        @include typedCursor;
+        @include agentColor;
+      }
+    }
+  }
+  transform-origin: top left;
+  animation: pop 0.5s 1 forwards;
+}
+
+@keyframes pop {
+  0% {
+    opacity: 0.25;
+    transform: scale(0) translate(-50%, -50%);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1.1) translate(-50%, -50%);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translate(-50%, -50%);
+  }
+}
