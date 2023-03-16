@@ -22,12 +22,6 @@ const view = (() => {
     DragDrop.initDraggableFields()
   }
 
-  // function loadBattle() {
-  //   helper.deleteAppContent()
-  //   battle.loadBoardsSection()
-  //   loadFleet()
-  // }
-
   return { loadContent }
 })()
 

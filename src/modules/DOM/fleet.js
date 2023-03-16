@@ -6,6 +6,7 @@ import submarine from '../../assets/images/submarineX.svg'
 import destroyer from '../../assets/images/destroyerX.svg'
 // FACTORIES
 import Game from '../factories/game'
+import helper from './helper'
 
 const fleet = (() => {
   // USED FOR SYNCING SHIP RADAR BEEP ANIMATION
@@ -16,17 +17,12 @@ const fleet = (() => {
     const map = player.getMap()
     const boardArray = map.getBoard()
 
-    for (let i = 0; i < boardArray.length; i += 1) {
-      for (let j = 0; j < boardArray[0].length; j += 1) {
+    for (let row = 0; row < boardArray.length; row += 1) {
+      for (let col = 0; col < boardArray[0].length; col += 1) {
         // IF FIELD IS NOT EMPTY ON MAP LOAD SHIP
-        if (boardArray[i][j] !== 'x') {
-          loadShipOnBoard(player, {
-            map,
-            board,
-            boardElement: boardArray[i][j],
-            i,
-            j,
-          })
+        if (boardArray[row][col] !== 'x') {
+          const element = boardArray[row][col]
+          loadShipOnBoard(player, { map, board, element, row, col })
         }
       }
     }
@@ -40,7 +36,7 @@ const fleet = (() => {
   }
 
   function loadShipOnBoard(player, data) {
-    const shipName = data.boardElement.slice(0, -1)
+    const shipName = data.element.slice(0, -1)
     const ship = player.getMap().getShip(shipName)
 
     if (ship.isFound) return
@@ -48,8 +44,8 @@ const fleet = (() => {
 
     const length = ship.getLength()
     const [height, width] = [`10%`, `${length * 10}%`]
-    const [top, left] = [`${data.i * 10}%`, `${data.j * 10}%`]
-    const axis = data.boardElement.at(-1)
+    const [top, left] = [`${data.row * 10}%`, `${data.col * 10}%`]
+    const axis = data.element.at(-1)
 
     let rotation = 'rotate(0deg)'
 
@@ -57,29 +53,32 @@ const fleet = (() => {
 
     const currentTime = getCurrentTime()
 
-    const shipDiv = document.createElement('div')
-    shipDiv.classList.add('ship-image-container', 'blue-bleep')
-    shipDiv.style.position = 'absolute'
-    shipDiv.style.zIndex = '-1'
-    shipDiv.style.top = top
-    shipDiv.style.left = left
-    shipDiv.style.width = width
-    shipDiv.style.height = height
-    shipDiv.style.transform = rotation
-    shipDiv.style.transformOrigin = 'top left'
-    shipDiv.style.maskImage = carrier
-    shipDiv.style.animationDelay = `${-currentTime}s`
+    const container = helper.create('div', {
+      className: 'ship-image-container',
+    })
 
-    const image = document.createElement('img')
-    image.className =
-      player.isCpu === true ? `${shipName}-cpu` : `${shipName}-player`
-    image.classList.add('placed-ship')
+    container.classList.add('bleep')
+    container.style.position = 'absolute'
+    container.style.zIndex = '-1'
+    container.style.top = top
+    container.style.left = left
+    container.style.width = width
+    container.style.height = height
+    container.style.transform = rotation
+    container.style.transformOrigin = 'top left'
+    container.style.maskImage = carrier
+    container.style.animationDelay = `${-currentTime}s`
+
+    const image = helper.create('img', {
+      className:
+        player.isCpu === true ? `${shipName}-cpu` : `${shipName}-player`,
+    })
     image.src = loadShipImage(shipName)
     image.style.height = '95%'
     image.style.aspectRatio = `${length}/1`
 
-    shipDiv.appendChild(image)
-    data.board.appendChild(shipDiv)
+    container.appendChild(image)
+    data.board.appendChild(container)
   }
 
   // THIS IS FOR WEBPACK IMAGE LOADING

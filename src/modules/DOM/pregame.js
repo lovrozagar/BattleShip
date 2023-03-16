@@ -1,61 +1,59 @@
+import helper from './helper'
+
 const pregame = (() => {
   function loadCard() {
     const app = document.getElementById('app')
+    app.classList.add('pregame')
 
     app.appendChild(createPregameCard())
   }
 
   function createPregameCard() {
-    const card = document.createElement('section')
-    card.className = 'pregame-card'
+    const section = helper.create('section', { className: 'pregame-card' })
 
-    card.appendChild(createTitle())
-    card.appendChild(createNameForm())
-    card.appendChild(createPlayNowButton())
+    helper.appendAll(section, [
+      createTitle(),
+      createNameForm(),
+      createPlayNowButton(),
+    ])
 
-    return card
+    return section
   }
 
   function createTitle() {
-    const title = document.createElement('h1')
-    title.textContent = 'BATTLESHIP'
-
+    const title = helper.create('h1', { textContent: 'BATTLESHIP' })
     return title
   }
 
   function createNameForm() {
-    const nameForm = document.createElement('form')
-    nameForm.className = 'name-form'
+    const form = helper.create('form', { className: 'name-form' })
 
-    const nameInput = document.createElement('input')
-    nameInput.type = 'text'
-    nameInput.id = 'name-input'
-    nameInput.className = 'name-input'
-    nameInput.placeholder = 'Captain name'
+    const input = helper.create('input', {
+      type: 'text',
+      id: 'name-input',
+      className: 'name-input',
+      placeholder: 'Captain name',
+    })
 
-    const caret = document.createElement('span')
-    caret.className = 'caret'
+    const border = helper.create('span', { className: 'input-border' })
 
-    const inputBorder = document.createElement('span')
-    inputBorder.className = 'input-border'
+    helper.appendAll(form, [input, border])
 
-    nameForm.appendChild(nameInput)
-    nameForm.appendChild(caret)
-    nameForm.appendChild(inputBorder)
-
-    return nameForm
+    return form
   }
 
   function createPlayNowButton() {
-    const button = document.createElement('button')
-    button.id = 'play-now-button'
-    button.className = 'play-now-button'
+    const button = helper.create('button', {
+      id: 'play-now-button',
+      className: 'play-now-button',
+    })
 
-    const buttonText = document.createElement('span')
-    buttonText.className = 'text-play-button'
-    buttonText.textContent = 'ENTER COMBAT'
+    const text = helper.create('span', {
+      className: 'text-play-button',
+      textContent: 'ENTER COMBAT',
+    })
 
-    button.appendChild(buttonText)
+    button.appendChild(text)
 
     return button
   }

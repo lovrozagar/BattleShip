@@ -11,133 +11,139 @@ import Game from '../factories/game'
 // DOM
 import Battle from './battle'
 import Component from './reusableComponents'
-import Utils from '../utils/utils'
+import Message from '../utils/message'
 
 const setup = (() => {
   function loadSetupContent() {
     const app = document.getElementById('app')
-    app.classList = ''
-    app.classList.add('app', 'setup')
+    app.classList.replace('pregame', 'setup')
 
-    app.appendChild(helper.getHeader('setup'))
-    app.appendChild(Component.createMessageSection(['setup', 'agent']))
-    app.appendChild(createMapFleetSection())
-    app.appendChild(createResetContinueSection())
+    app.appendChild(createSetupWrapper())
 
-    const message = document.getElementById('message-agent')
-    Component.addTypeWriterMessage(message, Utils.getWelcomeMessage())
-
+    displayWelcomeMessage()
     initButtons()
   }
 
+  function createSetupWrapper() {
+    const wrapper = helper.create('div', { className: 'setup-wrapper' })
+
+    helper.appendAll(wrapper, [
+      Component.createMessageSection(['setup', 'agent']),
+      createMapFleetSection(),
+      createResetContinueSection(),
+    ])
+
+    return wrapper
+  }
+
   function createMapFleetSection() {
-    const setupContainer = document.createElement('section')
-    setupContainer.id = 'setup-container'
-    setupContainer.className = 'setup-container'
+    const section = helper.create('section', {
+      id: 'setup-container',
+      className: 'setup-container',
+    })
 
-    setupContainer.appendChild(createMapFleet())
+    section.appendChild(createMapFleet())
 
-    return setupContainer
+    return section
   }
 
   function createMapFleet() {
-    const boardAndFleet = document.createElement('div')
-    boardAndFleet.className = 'board-fleet-container'
+    const container = helper.create('div', {
+      className: 'board-fleet-container',
+    })
 
-    boardAndFleet.appendChild(helper.createMap('setup'))
-    boardAndFleet.appendChild(createFleetSelectSection())
+    helper.appendAll(container, [
+      helper.createMap('setup'),
+      createFleetSelectSection(),
+    ])
 
-    const boardContainer = boardAndFleet.querySelector('#board-setup')
-    boardContainer.appendChild(createAxisButtons())
+    container.querySelector('#board-setup').appendChild(createAxisButtons())
 
-    return boardAndFleet
+    return container
   }
 
   function createAxisButtons() {
-    const buttonContainer = document.createElement('div')
-    buttonContainer.id = 'axis-button-container'
-    buttonContainer.className = 'axis-button-container'
+    const container = helper.create('div', {
+      id: 'axis-button-container',
+      className: 'axis-button-container',
+    })
 
-    const buttonX = document.createElement('button')
-    buttonX.id = 'x-button'
-    // DEFAULT SELECTED BUTTON
-    buttonX.classList.add('axis-button', 'selected')
-    buttonX.textContent = 'X axis'
+    const buttonX = helper.create('button', {
+      id: 'x-button',
+      className: 'axis-button',
+      textContent: 'X axis',
+    })
+    const buttonY = helper.create('button', {
+      id: 'y-button',
+      className: 'axis-button',
+      textContent: 'Y axis',
+    })
 
-    const buttonY = document.createElement('button')
-    buttonY.id = 'y-button'
-    buttonY.className = 'axis-button'
-    buttonY.textContent = 'Y axis'
+    buttonX.classList.add('selected')
 
-    buttonContainer.appendChild(buttonX)
-    buttonContainer.appendChild(buttonY)
+    helper.appendAll(container, [buttonX, buttonY])
 
-    return buttonContainer
+    return container
   }
 
   function createFleetSelectSection() {
-    const fleetSection = document.createElement('section')
-    fleetSection.id = 'fleet-setup'
-    fleetSection.className = 'fleet-setup'
+    const section = helper.create('section', {
+      id: 'fleet-setup',
+      className: 'fleet-setup',
+    })
 
     const fleet = ['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer']
 
     fleet.forEach((ship) => {
       const shipCard = createShipCard(ship)
       shipCard.draggable = 'true'
-      fleetSection.appendChild(shipCard)
+      section.appendChild(shipCard)
     })
 
-    return fleetSection
+    return section
   }
 
   function createShipCard(shipName) {
-    const card = document.createElement('button')
-    const content = document.createElement('div')
-    const image = document.createElement('img')
-    const name = document.createElement('p')
-
-    card.className = 'ship-card'
-    content.className = 'ship-content'
-    image.className = 'ship-image'
-    name.className = 'ship-name'
+    const card = helper.create('button', { className: 'ship-card' })
+    const content = helper.create('div', { className: 'ship-content' })
+    const image = helper.create('img', { className: 'ship-image' })
+    const name = helper.create('p', { className: 'ship-name' })
 
     switch (shipName) {
       case 'carrier':
         card.dataset.shipName = 'carrier'
         card.dataset.shipLength = 5
         image.src = carrier
-        name.textContent = 'Carrier'
+        name.textContent = 'Carrier (5f)'
         break
       case 'battleship':
         card.dataset.shipName = 'battleship'
         card.dataset.shipLength = 4
         image.src = battleship
-        name.textContent = 'Battleship'
+        name.textContent = 'Battleship (4f)'
         break
       case 'cruiser':
         card.dataset.shipName = 'cruiser'
         card.dataset.shipLength = 3
         image.src = cruiser
-        name.textContent = 'Cruiser'
+        name.textContent = 'Cruiser (3f)'
         break
       case 'submarine':
         card.dataset.shipName = 'submarine'
         card.dataset.shipLength = 3
         image.src = submarine
-        name.textContent = 'Submarine'
+        name.textContent = 'Submarine (3f)'
         break
       case 'destroyer':
         card.dataset.shipName = 'destroyer'
         card.dataset.shipLength = 2
         image.src = destroyer
-        name.textContent = 'Destroyer'
+        name.textContent = 'Destroyer (2f)'
         break
       default:
     }
 
-    content.appendChild(image)
-    content.appendChild(name)
+    helper.appendAll(content, [image, name])
 
     card.appendChild(content)
 
@@ -145,24 +151,32 @@ const setup = (() => {
   }
 
   function createResetContinueSection() {
-    const buttonContainer = document.createElement('section')
-    buttonContainer.id = 'reset-continue-section'
-    buttonContainer.className = 'reset-continue-section'
+    const container = helper.create('section', {
+      id: 'reset-continue-section',
+      className: 'reset-continue-section',
+    })
 
-    const resetButton = document.createElement('button')
-    resetButton.id = 'reset-button'
-    resetButton.className = 'reset-button'
-    resetButton.textContent = 'Reset'
+    const resetButton = helper.create('button', {
+      id: 'reset-button',
+      className: 'reset-button',
+      textContent: 'Reset',
+    })
 
-    const continueButton = document.createElement('button')
-    continueButton.id = 'continue-button'
-    continueButton.className = 'continue-button'
-    continueButton.textContent = 'Confirm'
+    const continueButton = helper.create('button', {
+      id: 'continue-button',
+      className: 'continue-button',
+      textContent: 'Confirm',
+    })
 
-    buttonContainer.appendChild(resetButton)
-    buttonContainer.appendChild(continueButton)
+    helper.appendAll(container, [resetButton, continueButton])
 
-    return buttonContainer
+    return container
+  }
+
+  function displayWelcomeMessage() {
+    const message = document.getElementById('message-agent')
+
+    Component.addTypeWriterMessage(message, Message.getWelcomeMessage())
   }
 
   function initButtons() {

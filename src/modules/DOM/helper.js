@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import Utils from '../utils/utils'
+import Utils from '../utils/message'
 import Component from './reusableComponents'
 
 const helper = (() => {
@@ -133,8 +133,13 @@ const helper = (() => {
     return num
   }
 
+  function appendAll(container, nodeArray) {
+    nodeArray.forEach((node) => container.appendChild(node))
+  }
+
   return {
     create,
+    appendAll,
     deleteAppContent,
     getHeader,
     createMap,

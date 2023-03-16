@@ -14,6 +14,7 @@ const player = (name, isCpu = false) => {
     cpuPlay,
     autoPlace,
     isEmptyField,
+    isLoser,
   }
 }
 
@@ -80,6 +81,12 @@ function autoPlace() {
       length.shift()
     }
   }
+}
+
+function isLoser() {
+  return this.getMap()
+    .getFleet()
+    .every((battleship) => battleship.isSunk)
 }
 
 function randomCoordinate() {

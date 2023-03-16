@@ -2,47 +2,48 @@ import Typed from 'typed.js'
 // ASSETS
 import agent from '../../assets/images/agent.png'
 import enemy from '../../assets/images/evilCaptain.png'
+import helper from './helper'
 
 const Component = (() => {
   // FOR WEBPACK IMAGES LOADING
   const images = { agent, enemy }
 
   function createMessageSection(classNamesArray) {
-    const messageSection = document.createElement('section')
-    messageSection.className = 'message'
+    const section = helper.create('section', { className: 'message' })
     // SET ALL PASSED CLASSES
-    classNamesArray.forEach((el) => messageSection.classList.add(el))
+    classNamesArray.forEach((el) => section.classList.add(el))
     const character = classNamesArray[1]
 
-    const messageImage = document.createElement('img')
-    messageImage.className = 'message-image'
+    const image = helper.create('img', { className: 'message-image' })
     const imageName =
       classNamesArray[1] === 'agent' || classNamesArray[1] === 'agent-win'
         ? 'agent'
         : 'enemy'
-    messageImage.src = images[imageName]
+    image.src = images[imageName]
 
-    messageSection.appendChild(messageImage)
-    messageSection.appendChild(createMessage(character))
+    section.appendChild(image)
+    section.appendChild(createMessage(character))
 
-    return messageSection
+    return section
   }
 
   function createMessage(character) {
-    const messageContainer = document.createElement('div')
-    messageContainer.id = 'message-container'
-    messageContainer.className = 'message-container'
+    const container = helper.create('div', {
+      id: 'message-container',
+      className: 'message-container',
+    })
 
-    const text = document.createElement('div')
-    text.id = `message-${character}`
-    text.className = `message-${character}`
-    text.textContent = ''
+    const text = helper.create('div', {
+      id: `message-${character}`,
+      className: `message-${character}`,
+    })
 
-    messageContainer.appendChild(text)
+    container.appendChild(text)
 
-    return messageContainer
+    return container
   }
 
+  // TYPEWRITER IGNORE NOT USED ERROR
   function addTypeWriterMessage(element, stringArray) {
     const typed = new Typed(element, {
       strings: stringArray,

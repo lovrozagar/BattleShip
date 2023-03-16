@@ -2,17 +2,16 @@ import helper from './helper'
 import fleet from './fleet'
 import Game from '../factories/game'
 import Component from './reusableComponents'
-import Utils from '../utils/utils'
+import Message from '../utils/message'
 
 const Battle = (() => {
   function loadBattleContent() {
     helper.deleteAppContent()
 
     const app = document.getElementById('app')
-    app.classList = ''
-    app.classList.add('app', 'battle')
+    app.classList.replace('setup', 'battle')
 
-    app.appendChild(createMainSection())
+    app.appendChild(createBattleWrapper())
     renderPlayerShips()
     Game.state.getCPU().autoPlace()
 
@@ -21,24 +20,25 @@ const Battle = (() => {
 
     initBoardFields()
 
-    const agent = document.querySelector('.message.battle.agent')
-    styleOnTurn(agent)
+    styleOnTurn(document.querySelector('.message.battle.agent'))
   }
 
-  function createMainSection() {
-    const mainSection = document.createElement('section')
-    mainSection.className = 'maps-section'
+  function createBattleWrapper() {
+    const wrapper = helper.create('div', { className: 'battle-wrapper' })
 
-    mainSection.appendChild(createPlayerMap())
-    mainSection.appendChild(createComputerMap())
-    mainSection.appendChild(Component.createMessageSection(['battle', 'agent']))
-    mainSection.appendChild(Component.createMessageSection(['battle', 'enemy']))
+    helper.appendAll(wrapper, [
+      createPlayerMap(),
+      createComputerMap(),
+      Component.createMessageSection(['battle', 'agent']),
+      Component.createMessageSection(['battle', 'enemy']),
+    ])
 
-    return mainSection
+    return wrapper
   }
 
   function createPlayerMap() {
     const map = helper.createMap('friendly')
+
     map.appendChild(createMapTitle('FRIENDLY WATERS'))
 
     return map
@@ -46,22 +46,23 @@ const Battle = (() => {
 
   function createComputerMap() {
     const map = helper.createMap('enemy')
+
     map.appendChild(createMapTitle('ENEMY WATERS'))
 
     return map
   }
 
   function createMapTitle(titleText) {
-    const titleContainer = document.createElement('div')
-    titleContainer.className = 'map-title-container'
+    const container = helper.create('div', { className: 'map-title-container' })
 
-    const title = document.createElement('h3')
-    title.className = 'map-title'
-    title.textContent = titleText
+    const title = helper.create('h3', {
+      className: 'map-title',
+      textContent: titleText,
+    })
 
-    titleContainer.appendChild(title)
+    container.appendChild(title)
 
-    return titleContainer
+    return container
   }
 
   function createWinnerModal(data) {
@@ -83,9 +84,7 @@ const Battle = (() => {
       textContent: 'New Battle',
     })
 
-    winModal.appendChild(title)
-    winModal.appendChild(message)
-    winModal.appendChild(button)
+    helper.appendAll(winModal, [title, message, button])
 
     return winModal
   }
@@ -237,15 +236,15 @@ const Battle = (() => {
 
     if (boardElement !== 'x') {
       if (ship && !ship.isSunk)
-        displayMessage(agent, Utils.getNewEnemyHitMessage(agent.textContent))
+        displayMessage(agent, Message.getNewEnemyHitMessage(agent.textContent))
       else if (ship.isSunk)
-        displayMessage(agent, Utils.getNewEnemySunkMessage(agent.textContent))
+        displayMessage(agent, Message.getNewEnemySunkMessage(agent.textContent))
     } else {
-      displayMessage(agent, Utils.getNewPlayerMissMessage(agent.textContent))
+      displayMessage(agent, Message.getNewPlayerMissMessage(agent.textContent))
     }
 
     if (enemy.textContent !== '...')
-      displayMessage(enemy, Utils.getNoCommentMessage()[0])
+      displayMessage(enemy, Message.getNoCommentMessage()[0])
   }
 
   function displayEnemyMessage(boardElement, ship = false) {
@@ -253,18 +252,18 @@ const Battle = (() => {
 
     if (boardElement !== 'x' && boardElement !== 'miss') {
       if (ship && !ship.isSunk)
-        displayMessage(enemy, Utils.getNewPlayerHitMessage(enemy.textContent))
+        displayMessage(enemy, Message.getNewPlayerHitMessage(enemy.textContent))
       else if (ship.isSunk)
-        displayMessage(enemy, Utils.getNewPlayerSunkMessage(enemy.textContent))
+        displayMessage(enemy, Message.getNewPlayerSunkMessage(enemy.textContent))
     } else {
-      displayMessage(enemy, Utils.getNewEnemyMissMessage(enemy.textContent))
+      displayMessage(enemy, Message.getNewEnemyMissMessage(enemy.textContent))
     }
   }
 
   function displayPlayerNoCommentMessage() {
     const agent = document.getElementById('message-agent')
 
-    displayMessage(agent, Utils.getNoCommentMessage()[0])
+    displayMessage(agent, Message.getNoCommentMessage()[0])
   }
 
   function displayMessage(node, message) {

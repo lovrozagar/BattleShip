@@ -1,4 +1,4 @@
-const Utils = (() => {
+const Message = (() => {
   const messages = {
     welcome: [
       'Welcome aboard Captain!',
@@ -83,6 +83,12 @@ const Utils = (() => {
       "You're playing with fire, and I have a lot of ammunition.",
     ],
     noComment: ['...'],
+    playerWin: [
+      'Mission accomplished, Captain! You truly are the master of the seas.',
+    ],
+    enemyWin: [
+      'You were no match for me scum. Consider it payback for what your father did to mine.',
+    ],
   }
 
   function getWelcomeMessage() {
@@ -155,6 +161,14 @@ const Utils = (() => {
     return messages.noComment
   }
 
+  function getPlayerWinMessage() {
+    return messages.playerWin
+  }
+
+  function getEnemyWinMessage() {
+    return messages.enemyWin
+  }
+
   function randomZeroToNine() {
     return Math.floor(Math.random() * 10)
   }
@@ -170,7 +184,9 @@ const Utils = (() => {
     getNewPlayerSunkMessage,
     getNewEnemyMissMessage,
     getNoCommentMessage,
+    getPlayerWinMessage,
+    getEnemyWinMessage,
   }
 })()
 
-export default Utils
+export default Message
