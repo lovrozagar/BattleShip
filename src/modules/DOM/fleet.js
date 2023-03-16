@@ -41,7 +41,6 @@ const fleet = (() => {
 
   function loadShipOnBoard(player, data) {
     const shipName = data.boardElement.slice(0, -1)
-    console.log(shipName)
     const ship = player.getMap().getShip(shipName)
 
     if (ship.isFound) return
@@ -57,7 +56,6 @@ const fleet = (() => {
     if (axis === 'Y') rotation = 'rotate(90deg) translate(0,-100%)'
 
     const currentTime = getCurrentTime()
-    console.log(currentTime)
 
     const shipDiv = document.createElement('div')
     shipDiv.classList.add('ship-image-container', 'blue-bleep')

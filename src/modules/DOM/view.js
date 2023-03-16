@@ -6,6 +6,7 @@ import DragDrop from './dragDrop'
 
 const view = (() => {
   function loadContent() {
+    helper.deleteAppContent()
     pregame.loadCard()
     initPlayButton()
   }

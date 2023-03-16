@@ -16,7 +16,11 @@ const Component = (() => {
 
     const messageImage = document.createElement('img')
     messageImage.className = 'message-image'
-    messageImage.src = images[classNamesArray[1]]
+    const imageName =
+      classNamesArray[1] === 'agent' || classNamesArray[1] === 'agent-win'
+        ? 'agent'
+        : 'enemy'
+    messageImage.src = images[imageName]
 
     messageSection.appendChild(messageImage)
     messageSection.appendChild(createMessage(character))

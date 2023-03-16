@@ -89,13 +89,13 @@ const helper = (() => {
     const element = document.createElement(type)
 
     for (const [key, value] of Object.entries(data)) {
-      element.setAttribute(key, value)
+      element[key] = value
     }
 
     return element
   }
 
-  function renderBattleStartMessage(character) {
+  function displayBattleStartMessage(character) {
     const message = document.getElementById(`message-${character}`)
     if (character === 'agent')
       Component.addTypeWriterMessage(message, Utils.getBattleStartMessage())
@@ -104,6 +104,14 @@ const helper = (() => {
         message,
         Utils.getNewEnemyBattleStartMessage()
       )
+  }
+
+  function displayWinMessage(character) {
+    const message = document.getElementById(`message-${character}`)
+    if (character === 'agent-win')
+      Component.addTypeWriterMessage(message, Utils.getPlayerWinMessage())
+    if (character === 'enemy-win')
+      Component.addTypeWriterMessage(message, Utils.getEnemyWinMessage())
   }
 
   // OTHER
@@ -115,7 +123,7 @@ const helper = (() => {
   }
 
   function getIndexFromCoordinates(x, y) {
-    return x * (BOARD_SIZE) + y
+    return x * BOARD_SIZE + y
   }
 
   function roundNearestTenExceptZero(num) {
@@ -126,13 +134,15 @@ const helper = (() => {
   }
 
   return {
+    create,
     deleteAppContent,
     getHeader,
     createMap,
     getCoordinatesFromIndex,
     getIndexFromCoordinates,
     roundNearestTenExceptZero,
-    renderBattleStartMessage,
+    displayBattleStartMessage,
+    displayWinMessage,
   }
 })()
 

@@ -64,23 +64,23 @@ const Battle = (() => {
     return titleContainer
   }
 
-  function createWinnerModal() {
+  function createWinnerModal(data) {
     const winModal = helper.create('section', {
       id: 'win-modal-container',
       className: 'win-modal-container',
     })
 
     const title = helper.create('h4', {
-      id: 'title-win',
-      className: 'title-win',
-      textContent: 'Enemy fleet defeated!',
+      id: `title-${data.id}`,
+      className: `title-${data.id}`,
+      textContent: data.title,
     })
-    const message = Component.createMessageSection(['battle', 'agent-win'])
+    const message = Component.createMessageSection(['battle', data.id])
 
     const button = helper.create('button', {
       id: 'new-game-button',
       className: 'new-game-button',
-      textContent: 'New Battle'
+      textContent: 'New Battle',
     })
 
     winModal.appendChild(title)
@@ -88,6 +88,11 @@ const Battle = (() => {
     winModal.appendChild(button)
 
     return winModal
+  }
+
+  function initNewGameButton() {
+    const button = document.getElementById('new-game-button')
+    button.addEventListener('click', () => window.location.reload())
   }
 
   function renderPlayerShips() {
@@ -115,13 +120,11 @@ const Battle = (() => {
     const enemyMessage = document.querySelector('.message.battle.enemy')
     const agentMessage = document.querySelector('.message.battle.agent')
 
-    const app = document.getElementById('app')
-    app.appendChild(createWinnerModal())
-    helper.displayWinMessage('agent-win')
-
     const cpu = Game.state.getCPU()
     const index = [...fieldNode.parentNode.children].indexOf(fieldNode)
     const [row, col] = helper.getCoordinatesFromIndex(index)
+
+    if (cpu.isLoser()) showPlayerWinModal()
 
     const boardElement = cpu.getMap().getBoard()[row][col]
     const shipName = getShipNameFromBoard(boardElement)
@@ -145,16 +148,35 @@ const Battle = (() => {
     styleOnTurn(enemyMessage)
   }
 
+  function showPlayerWinModal() {
+    const app = document.getElementById('app')
+    app.appendChild(
+      createWinnerModal({ title: 'Enemy fleet defeated!', id: 'agent-win' })
+    )
+    helper.displayWinMessage('agent-win')
+    initNewGameButton()
+  }
+
+  function showEnemyWinModal() {
+    const app = document.getElementById('app')
+    app.appendChild(
+      createWinnerModal({ title: 'Your fleet is gone!', id: 'enemy-win' })
+    )
+    helper.displayWinMessage('enemy-win')
+    initNewGameButton()
+  }
+
   async function cpuPlays() {
     const enemyMessage = document.querySelector('.message.battle.enemy')
     const agentMessage = document.querySelector('.message.battle.agent')
 
     displayPlayerNoCommentMessage()
-    // await timeoutHalfSecond()
 
     const friendlyBoard = document.getElementById('field-container-friendly')
     const player = Game.state.getPlayer()
     const [row, col] = player.cpuPlay()
+
+    if (player.isLoser()) showEnemyWinModal()
 
     const boardElement = player.getMap().getBoard()[row][col]
     const shipName = getShipNameFromBoard(boardElement)
