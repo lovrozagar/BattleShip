@@ -17,8 +17,10 @@
     color: white;
     background: rgba(0, 0, 0, 1);
     transition: all 0.05s linear, visibility 0.01s linear;
+    -webkit-filter: brightness(0.5);
     filter: brightness(0.5);
     &:focus {
+      -webkit-filter: brightness(1);
       filter: brightness(1);
       .ship-content {
         position: relative;
@@ -27,6 +29,8 @@
         .ship-image {
           position: relative;
           z-index: 2;
+          -webkit-filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(8deg)
+            brightness(100%) contrast(104%);
           filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(8deg)
             brightness(100%) contrast(104%);
         }
@@ -36,6 +40,7 @@
       background: rgba(0, 0, 0, 0.5);
       pointer-events: none;
       opacity: 0.5;
+      -webkit-filter: brightness(0.5);
       filter: brightness(0.5);
       &::before,
       &::after {
@@ -47,6 +52,8 @@
     }
     .ship-content {
       img {
+        -webkit-filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
+          brightness(105%) contrast(100%);
         filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
           brightness(105%) contrast(100%);
         pointer-events: none;
@@ -100,5 +107,6 @@
 }
 
 .ship-card:hover {
+  cursor: -webkit-grab;
   cursor: grab;
 }

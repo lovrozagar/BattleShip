@@ -54,12 +54,13 @@
     grid-column: 2/3;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    aspect-ratio: 1/1;
     border-collapse: collapse;
     border-top: 1px solid;
     border-left: 1px solid;
     border-color: $white-low;
     background-repeat: no-repeat;
-    aspect-ratio: 1/1;
     overflow: hidden;
     background: rgb(2, 0, 36);
     background: radial-gradient(
@@ -69,6 +70,12 @@
       rgba(112, 205, 241, 0.2497373949579832) 85%,
       rgba(112, 205, 241, 0.40379901960784315) 100%
     );
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    isolation: isolate;
     &::before {
       @include pseudoOverlay;
       display: block;
@@ -80,6 +87,8 @@
       transform-origin: top left;
       background: url('../assets/images/cross.svg') center / cover no-repeat;
       transform: rotate(45deg) translate(-50%, -50%);
+      -webkit-filter: invert(67%) sepia(88%) saturate(286%) hue-rotate(164deg)
+        brightness(96%) contrast(97%);
       filter: invert(67%) sepia(88%) saturate(286%) hue-rotate(164deg)
         brightness(96%) contrast(97%);
     }
@@ -97,18 +106,20 @@
       border-radius: 100% 0 0 0;
       transform-origin: 100% 100%;
       background: linear-gradient(50deg, rgba(34, 34, 34, 0) 56%, #70cdf1);
+      -webkit-animation: sweep 3.5s infinite linear;
       animation: sweep 3.5s infinite linear;
       pointer-events: none;
     }
     img {
+      -webkit-filter: invert(67%) sepia(88%) saturate(286%) hue-rotate(164deg)
+        brightness(96%) contrast(97%);
       filter: invert(67%) sepia(88%) saturate(286%) hue-rotate(164deg)
         brightness(96%) contrast(97%);
-      // filter: invert(82%) sepia(9%) saturate(2042%) hue-rotate(166deg)
-      //   brightness(97%) contrast(90%);
     }
 
     .field {
       @include flexRowCenter;
+      aspect-ratio: 1/1;
       position: relative;
       border-right: 1px solid;
       border-bottom: 1px solid;
@@ -129,17 +140,25 @@
     }
     .ship-image-container {
       pointer-events: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
       user-select: none;
       transform-origin: center;
       &.blue-bleep {
         animation: bleep 3.5s infinite linear;
+        -webkit-animation: bleep 3.5s infinite linear;
       }
       img {
         position: relative;
         padding: 0;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
         user-select: none;
         pointer-events: none;
         animation: scaleDrop 0.25s linear forwards;
+        -webkit-animation: scaleDrop 0.25s linear forwards;
       }
     }
   }

@@ -14,6 +14,18 @@
     font-size: min(calc(0.6rem + 0.6vw), 1rem);
     color: $main-color;
     background-color: transparent;
+    &::-webkit-input-placeholder {
+      color: $transparent-low-grey-color;
+    }
+    &::-moz-placeholder {
+      color: $transparent-low-grey-color;
+    }
+    &:-ms-input-placeholder {
+      color: $transparent-low-grey-color;
+    }
+    &::-ms-input-placeholder {
+      color: $transparent-low-grey-color;
+    }
     &::placeholder {
       color: $transparent-low-grey-color;
     }
