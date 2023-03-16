@@ -3,6 +3,7 @@ import fleet from './fleet'
 import Game from '../factories/game'
 import Component from './reusableComponents'
 import Message from '../utils/message'
+import Sound from '../utils/sound'
 
 const Battle = (() => {
   function loadBattleContent() {
@@ -119,30 +120,42 @@ const Battle = (() => {
     const enemyMessage = document.querySelector('.message.battle.enemy')
     const agentMessage = document.querySelector('.message.battle.agent')
 
+    Sound.shot()
+    await timeoutHalfSecond()
+    // Sound.miss()
+
     const cpu = Game.state.getCPU()
     const index = [...fieldNode.parentNode.children].indexOf(fieldNode)
     const [row, col] = helper.getCoordinatesFromIndex(index)
-
-    if (cpu.isLoser()) showPlayerWinModal()
 
     const boardElement = cpu.getMap().getBoard()[row][col]
     const shipName = getShipNameFromBoard(boardElement)
     const battleship = cpu.getMap().getShip(shipName)
 
+    console.log(cpu.getMap().getBoard())
+
     switch (boardElement) {
       case 'x':
         addMissStyle(fieldNode)
+        await timeoutMissileLength()
+        Sound.miss()
         break
       default:
         addHitStyle(fieldNode)
         playerHits({ cpu, battleship, row, col })
+        await timeoutMissileLength()
+        Sound.hit()
     }
 
     console.log('is player winner: ', cpu.isLoser())
     // console.log(cpu.getMap())
 
     displayPlayerMessage(boardElement, battleship)
-    // await timeoutTwoAndHalfSeconds()
+
+    await timeoutOneSecond()
+    if (cpu.isLoser()) showPlayerWinModal()
+    await timeoutOneAndHalfSecond()
+
     styleOfTurn(agentMessage)
     styleOnTurn(enemyMessage)
   }
@@ -171,11 +184,12 @@ const Battle = (() => {
 
     displayPlayerNoCommentMessage()
 
+    Sound.shot()
+    await timeoutHalfSecond()
+
     const friendlyBoard = document.getElementById('field-container-friendly')
     const player = Game.state.getPlayer()
     const [row, col] = player.cpuPlay()
-
-    if (player.isLoser()) showEnemyWinModal()
 
     const boardElement = player.getMap().getBoard()[row][col]
     const shipName = getShipNameFromBoard(boardElement)
@@ -186,37 +200,38 @@ const Battle = (() => {
       case 'miss':
         addMissStyle(friendlyBoard.children[index])
         player.getMap().getBoard()[row][col] = 'miss'
+        await timeoutMissileLength()
+        Sound.miss()
         break
       default:
-        player.getMap().getBoard()[row][col] = 'hit'
         addHitStyle(friendlyBoard.children[index])
+        player.getMap().getBoard()[row][col] = 'hit'
+        await timeoutMissileLength()
+        Sound.hit()
     }
 
     console.log('is cpu winner: ', player.isLoser())
 
     displayEnemyMessage(boardElement, battleship)
-    // console.log(player.getMap())
 
-    // await timeoutTwoAndHalfSeconds()
+    await timeoutOneSecond()
+    if (player.isLoser()) showEnemyWinModal()
+    await timeoutOneAndHalfSecond()
+
     styleOfTurn(enemyMessage)
     styleOnTurn(agentMessage)
   }
 
   function playerHits(data) {
-    const enemyBoardNode = document.getElementById('field-container-enemy')
+    const board = document.getElementById('field-container-enemy')
     const map = data.cpu.getMap()
-    const board = map.getBoard()
-    // rename to rowOrigin, colOrigin
+    const boardArray = map.getBoard()
+
     map.receiveAttack([data.row, data.col])
     if (data.battleship.isSunk) {
-      const [i, j] = findOrigin(board, board[data.row][data.col])
-      fleet.loadShipOnBoard(data.cpu, {
-        map,
-        board: enemyBoardNode,
-        boardElement: board[data.row][data.col],
-        i,
-        j,
-      })
+      const element = boardArray[data.row][data.col]
+      const [row, col] = findOrigin(boardArray, boardArray[data.row][data.col])
+      fleet.loadShipOnBoard(data.cpu, { map, board, element, row, col })
     }
   }
 
@@ -254,7 +269,10 @@ const Battle = (() => {
       if (ship && !ship.isSunk)
         displayMessage(enemy, Message.getNewPlayerHitMessage(enemy.textContent))
       else if (ship.isSunk)
-        displayMessage(enemy, Message.getNewPlayerSunkMessage(enemy.textContent))
+        displayMessage(
+          enemy,
+          Message.getNewPlayerSunkMessage(enemy.textContent)
+        )
     } else {
       displayMessage(enemy, Message.getNewEnemyMissMessage(enemy.textContent))
     }
@@ -304,16 +322,20 @@ const Battle = (() => {
     node.classList.remove('on-turn')
   }
 
-  function timeoutTwoAndHalfSeconds() {
-    return new Promise((resolve) => setTimeout(resolve, 2500))
+  function timeoutOneAndHalfSecond() {
+    return new Promise((resolve) => setTimeout(resolve, 1500))
   }
 
-  function timeoutSecond() {
+  function timeoutOneSecond() {
     return new Promise((resolve) => setTimeout(resolve, 1000))
   }
 
   function timeoutHalfSecond() {
     return new Promise((resolve) => setTimeout(resolve, 500))
+  }
+
+  function timeoutMissileLength() {
+    return new Promise((resolve) => setTimeout(resolve, 400))
   }
 
   return { loadBattleContent }
