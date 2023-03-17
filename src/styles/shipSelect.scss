@@ -52,6 +52,8 @@
     }
     .ship-content {
       img {
+        // width: 100%;
+        
         -webkit-filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
           brightness(105%) contrast(100%);
         filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
@@ -65,6 +67,36 @@
         position: relative;
         z-index: 3;
       }
+    }
+  }
+  .ship-card[data-ship-name='carrier'] {
+    img {
+      // width: 100%;
+      aspect-ratio: 4/1;
+    }
+  }
+  .ship-card[data-ship-name='battleship'] {
+    img {
+      // width: 90%;
+      aspect-ratio: 3.5/1;
+    }
+  }
+  .ship-card[data-ship-name='submarine'] {
+    img {
+      // width: 80%;
+      aspect-ratio: 3/1;
+    }
+  }
+  .ship-card[data-ship-name='cruiser'] {
+    img {
+      // width: 80%;
+      aspect-ratio: 3/1;
+    }
+  }
+  .ship-card[data-ship-name='destroyer'] {
+    img {
+      // width: 65%;
+      aspect-ratio: 2/1;
     }
   }
 }

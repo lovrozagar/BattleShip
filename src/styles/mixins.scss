@@ -90,3 +90,8 @@
   font-size: $font-size-normal-responsive;
   background-color: $blue-light-color;
 }
+
+@mixin enemyColor {
+  font-size: $font-size-normal-responsive;
+  background-color: $orange-light-color;
+}

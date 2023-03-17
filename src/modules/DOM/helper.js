@@ -1,7 +1,4 @@
 /* eslint-disable no-restricted-syntax */
-import Utils from '../utils/message'
-import Component from './reusableComponents'
-
 const helper = (() => {
   // DOM
 
@@ -84,7 +81,7 @@ const helper = (() => {
   }
 
   function create(type, data) {
-    if (!type) return new Error('wrong arguments')
+    if (!type) console.log('missing type')
 
     const element = document.createElement(type)
 
@@ -93,25 +90,6 @@ const helper = (() => {
     }
 
     return element
-  }
-
-  function displayBattleStartMessage(character) {
-    const message = document.getElementById(`message-${character}`)
-    if (character === 'agent')
-      Component.addTypeWriterMessage(message, Utils.getBattleStartMessage())
-    else
-      Component.addTypeWriterMessage(
-        message,
-        Utils.getNewEnemyBattleStartMessage()
-      )
-  }
-
-  function displayWinMessage(character) {
-    const message = document.getElementById(`message-${character}`)
-    if (character === 'agent-win')
-      Component.addTypeWriterMessage(message, Utils.getPlayerWinMessage())
-    if (character === 'enemy-win')
-      Component.addTypeWriterMessage(message, Utils.getEnemyWinMessage())
   }
 
   // OTHER
@@ -146,8 +124,6 @@ const helper = (() => {
     getCoordinatesFromIndex,
     getIndexFromCoordinates,
     roundNearestTenExceptZero,
-    displayBattleStartMessage,
-    displayWinMessage,
   }
 })()
 

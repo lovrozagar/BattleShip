@@ -13,11 +13,11 @@ const Battle = (() => {
     app.classList.replace('setup', 'battle')
 
     app.appendChild(createBattleWrapper())
-    renderPlayerShips()
+    displayPlayerShips()
     Game.state.getCPU().autoPlace()
 
-    helper.displayBattleStartMessage('agent')
-    helper.displayBattleStartMessage('enemy')
+    displayBattleStartMessage('agent')
+    displayBattleStartMessage('enemy')
 
     initBoardFields()
 
@@ -95,18 +95,10 @@ const Battle = (() => {
     button.addEventListener('click', () => window.location.reload())
   }
 
-  function renderPlayerShips() {
+  function displayPlayerShips() {
     const friendlyBoard = document.getElementById('field-container-friendly')
     Game.state.getPlayer().getMap().setAllShipsNotFound()
     fleet.loadFleet(friendlyBoard)
-  }
-
-  function initBoardFields() {
-    const enemyMap = document.getElementById('board-enemy')
-    const enemyBoard = enemyMap.querySelector('.field-container')
-    enemyBoard.childNodes.forEach((field) => {
-      field.addEventListener('click', handleFieldClick)
-    })
   }
 
   async function handleFieldClick(event) {
@@ -117,12 +109,13 @@ const Battle = (() => {
   }
 
   async function playerPlays(fieldNode) {
+    unInitBoardFields()
+
     const enemyMessage = document.querySelector('.message.battle.enemy')
     const agentMessage = document.querySelector('.message.battle.agent')
 
     Sound.shot()
     await timeoutHalfSecond()
-    // Sound.miss()
 
     const cpu = Game.state.getCPU()
     const index = [...fieldNode.parentNode.children].indexOf(fieldNode)
@@ -148,7 +141,7 @@ const Battle = (() => {
     }
 
     console.log('is player winner: ', cpu.isLoser())
-    // console.log(cpu.getMap())
+    console.log(cpu.getMap())
 
     displayPlayerMessage(boardElement, battleship)
 
@@ -156,26 +149,28 @@ const Battle = (() => {
     if (cpu.isLoser()) showPlayerWinModal()
     await timeoutOneAndHalfSecond()
 
-    styleOfTurn(agentMessage)
+    styleOffTurn(agentMessage)
     styleOnTurn(enemyMessage)
+    resizePlayerOffTurn()
   }
 
-  function showPlayerWinModal() {
-    const app = document.getElementById('app')
-    app.appendChild(
-      createWinnerModal({ title: 'Enemy fleet defeated!', id: 'agent-win' })
-    )
-    helper.displayWinMessage('agent-win')
-    initNewGameButton()
+  function displayBattleStartMessage(character) {
+    const message = document.getElementById(`message-${character}`)
+    if (character === 'agent')
+      Component.addTypeWriterMessage(message, Message.getBattleStartMessage())
+    else
+      Component.addTypeWriterMessage(
+        message,
+        Message.getNewEnemyBattleStartMessage()
+      )
   }
 
-  function showEnemyWinModal() {
-    const app = document.getElementById('app')
-    app.appendChild(
-      createWinnerModal({ title: 'Your fleet is gone!', id: 'enemy-win' })
-    )
-    helper.displayWinMessage('enemy-win')
-    initNewGameButton()
+  function displayWinMessage(character) {
+    const message = document.getElementById(`message-${character}`)
+    if (character === 'agent-win')
+      Component.addTypeWriterMessage(message, Message.getPlayerWinMessage())
+    if (character === 'enemy-win')
+      Component.addTypeWriterMessage(message, Message.getEnemyWinMessage())
   }
 
   async function cpuPlays() {
@@ -184,6 +179,7 @@ const Battle = (() => {
 
     displayPlayerNoCommentMessage()
 
+    await timeoutOneSecond()
     Sound.shot()
     await timeoutHalfSecond()
 
@@ -218,30 +214,28 @@ const Battle = (() => {
     if (player.isLoser()) showEnemyWinModal()
     await timeoutOneAndHalfSecond()
 
-    styleOfTurn(enemyMessage)
+    styleOffTurn(enemyMessage)
     styleOnTurn(agentMessage)
+    resizePlayerOnTurn()
+    initBoardFields()
   }
 
-  function playerHits(data) {
-    const board = document.getElementById('field-container-enemy')
-    const map = data.cpu.getMap()
-    const boardArray = map.getBoard()
-
-    map.receiveAttack([data.row, data.col])
-    if (data.battleship.isSunk) {
-      const element = boardArray[data.row][data.col]
-      const [row, col] = findOrigin(boardArray, boardArray[data.row][data.col])
-      fleet.loadShipOnBoard(data.cpu, { map, board, element, row, col })
-    }
+  function showPlayerWinModal() {
+    const app = document.getElementById('app')
+    app.appendChild(
+      createWinnerModal({ title: 'Enemy fleet defeated!', id: 'agent-win' })
+    )
+    displayWinMessage('agent-win')
+    initNewGameButton()
   }
 
-  function findOrigin(board, element) {
-    for (let i = 0; i < board.length; i += 1) {
-      for (let j = 0; j < board[0].length; j += 1) {
-        if (board[i][j] === element) return [i, j]
-      }
-    }
-    return [0, 0]
+  function showEnemyWinModal() {
+    const app = document.getElementById('app')
+    app.appendChild(
+      createWinnerModal({ title: 'Your fleet is gone!', id: 'enemy-win' })
+    )
+    displayWinMessage('enemy-win')
+    initNewGameButton()
   }
 
   // TODO: dont allow same class
@@ -278,6 +272,49 @@ const Battle = (() => {
     }
   }
 
+  function playerHits(data) {
+    const board = document.getElementById('field-container-enemy')
+    const map = data.cpu.getMap()
+    const boardArray = map.getBoard()
+
+    map.receiveAttack([data.row, data.col])
+    if (data.battleship.isSunk) {
+      const element = boardArray[data.row][data.col]
+      const [row, col] = findOrigin(boardArray, boardArray[data.row][data.col])
+      fleet.loadShipOnBoard(data.cpu, { map, board, element, row, col })
+    }
+  }
+
+  function findOrigin(board, element) {
+    for (let i = 0; i < board.length; i += 1) {
+      for (let j = 0; j < board[0].length; j += 1) {
+        if (board[i][j] === element) return [i, j]
+      }
+    }
+    return [0, 0]
+  }
+
+  // INITS / UnINITS
+
+  function initBoardFields() {
+    const enemyMap = document.getElementById('board-enemy')
+    const enemyBoard = enemyMap.querySelector('.field-container')
+    enemyBoard.childNodes.forEach((field) => {
+      field.addEventListener('click', handleFieldClick)
+    })
+    addFieldHoverWhenOnTurn()
+  }
+
+  function unInitBoardFields() {
+    const fields = document.querySelectorAll('.field')
+    fields.forEach((field) =>
+      field.removeEventListener('click', handleFieldClick)
+    )
+    removeFieldHoverWhenOffTurn()
+  }
+
+  // MESSAGES
+
   function displayPlayerNoCommentMessage() {
     const agent = document.getElementById('message-agent')
 
@@ -298,12 +335,36 @@ const Battle = (() => {
     }
   }
 
-  function disableField(field) {
-    field.classList.add('disabled')
-  }
-
   function getShipNameFromBoard(boardElement) {
     return boardElement.slice(0, boardElement.length - 1)
+  }
+
+  function removeFieldHoverWhenOffTurn() {
+    const container = document.getElementById('field-container-enemy')
+    disableField(container)
+  }
+
+  function resizePlayerOnTurn() {
+    styleOffTurn(document.getElementById('board-enemy'))
+    styleOnTurn(document.getElementById('board-friendly'))
+  }
+
+  function resizePlayerOffTurn() {
+    styleOffTurn(document.getElementById('board-friendly'))
+    styleOnTurn(document.getElementById('board-enemy'))
+  }
+
+  function addFieldHoverWhenOnTurn() {
+    const container = document.getElementById('field-container-enemy')
+    enableField(container)
+  }
+
+  function enableField(field) {
+    field.classList.remove('disabled')
+  }
+
+  function disableField(field) {
+    field.classList.add('disabled')
   }
 
   function addHitStyle(node) {
@@ -315,12 +376,16 @@ const Battle = (() => {
   }
 
   function styleOnTurn(node) {
+    node.classList.remove('off-turn')
     node.classList.add('on-turn')
   }
 
-  function styleOfTurn(node) {
+  function styleOffTurn(node) {
     node.classList.remove('on-turn')
+    node.classList.add('off-turn')
   }
+
+  // TIMEOUTS
 
   function timeoutOneAndHalfSecond() {
     return new Promise((resolve) => setTimeout(resolve, 1500))
@@ -335,7 +400,7 @@ const Battle = (() => {
   }
 
   function timeoutMissileLength() {
-    return new Promise((resolve) => setTimeout(resolve, 400))
+    return new Promise((resolve) => setTimeout(resolve, 300))
   }
 
   return { loadBattleContent }

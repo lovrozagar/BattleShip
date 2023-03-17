@@ -57,9 +57,7 @@
     grid-template-rows: repeat(10, 1fr);
     aspect-ratio: 1/1;
     border-collapse: collapse;
-    border-top: 1px solid;
-    border-left: 1px solid;
-    border-color: $white-low;
+    border: 1px solid $white-low;
     background-repeat: no-repeat;
     overflow: hidden;
     background: rgb(2, 0, 36);
@@ -70,12 +68,6 @@
       rgba(112, 205, 241, 0.2497373949579832) 85%,
       rgba(112, 205, 241, 0.40379901960784315) 100%
     );
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
-    isolation: isolate;
     &::before {
       @include pseudoOverlay;
       display: block;
@@ -121,9 +113,7 @@
       @include flexRowCenter;
       aspect-ratio: 1/1;
       position: relative;
-      border-right: 1px solid;
-      border-bottom: 1px solid;
-      border-color: $white-low;
+      border: 1px solid $white-low;
       &.no-drop,
       &.no-drop * {
         pointer-events: none;
@@ -145,7 +135,7 @@
       -ms-user-select: none;
       user-select: none;
       transform-origin: center;
-      &.blue-bleep {
+      &.bleep {
         animation: bleep 3.5s infinite linear;
         -webkit-animation: bleep 3.5s infinite linear;
       }

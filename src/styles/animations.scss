@@ -269,3 +269,39 @@
     transform: translateX(0%);
   }
 }
+
+@-webkit-keyframes grow {
+  0% {
+    width: 200px;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes grow {
+  0% {
+    width: 200px;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@-webkit-keyframes shrink {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 200px;
+  }
+}
+
+@keyframes shrink {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 200px;
+  }
+}

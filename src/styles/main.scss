@@ -59,7 +59,6 @@ body {
 
 .app.setup,
 .app.battle {
-  display: block;
   & > * {
     border-radius: $main-border-radius;
   }

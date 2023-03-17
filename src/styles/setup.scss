@@ -1,11 +1,18 @@
 @import './variables.scss';
 
-.header.setup {
-  margin-bottom: 2rem;
-  text-shadow: 3px 3px black;
+// .header.setup {
+//   margin-bottom: 2rem;
+//   text-shadow: 3px 3px black;
+// }
+
+.setup-wrapper {
+  width: 100%;
+  & > * {
+    border-radius: $main-border-radius;
+  }
 }
+
 .message.setup {
-  // @include gridPlaceItemsCenter;
   @include flexRowStartCenter;
   gap: 0.5rem;
   max-width: 680px;

@@ -10,22 +10,28 @@
   padding: 5rem;
   background-color: black;
   transform: translate(-50%, -50%);
-  .title-win {
+  .title-agent-win {
     font-size: 1.25rem;
     font-weight: 400;
-    text-align: start;
+    text-align: center;
     color: $blue-light-color;
+  }
+  .title-enemy-win {
+    font-size: 1.25rem;
+    font-weight: 400;
+    text-align: center;
+    color: $orange-light-color;
   }
   .message.battle.agent-win {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     img {
       height: 3rem;
       margin-bottom: 1rem;
     }
     .message-container {
-      text-align: start;
+      text-align: center;
       .message-agent-win {
         display: inline;
         width: 100%;
@@ -37,8 +43,45 @@
       }
     }
   }
+  .message.battle.enemy-win {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    img {
+      height: 3rem;
+      margin-bottom: 1rem;
+    }
+    .message-container {
+      text-align: center;
+      .message-enemy-win {
+        display: inline;
+        width: 100%;
+        color: $orange-light-color;
+      }
+      .typed-cursor {
+        @include typedCursor;
+        @include enemyColor;
+      }
+    }
+  }
   transform-origin: top left;
+  -webkit-animation: pop 0.5s 1 forwards;
   animation: pop 0.5s 1 forwards;
+}
+
+@-webkit-keyframes pop {
+  0% {
+    opacity: 0.25;
+    transform: scale(0) translate(-50%, -50%);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1.1) translate(-50%, -50%);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translate(-50%, -50%);
+  }
 }
 
 @keyframes pop {
