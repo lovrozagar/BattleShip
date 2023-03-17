@@ -1,6 +1,6 @@
 @-webkit-keyframes shot {
   75% {
-    width: 80px;
+    width: 5rem;
     background-color: #fefefe;
     border-color: #fefefe;
   }
@@ -9,13 +9,13 @@
     width: 30%;
     background-color: rgba(255, 0, 0, 0.85);
     border-color: rgba(255, 0, 0, 0.5);
-    transform: translateX(0px) rotate(-315deg);
+    transform: translateX(0) rotate(-315deg);
   }
 }
 
 @keyframes shot {
   75% {
-    width: 80px;
+    width: 5rem;
     background-color: #fefefe;
     border-color: #fefefe;
   }
@@ -24,13 +24,13 @@
     width: 30%;
     background-color: rgba(255, 0, 0, 0.85);
     border-color: rgba(255, 0, 0, 0.5);
-    transform: translateX(0px) rotate(-315deg);
+    transform: translateX(0) rotate(-315deg);
   }
 }
 
 @-webkit-keyframes miss {
   75% {
-    width: 80px;
+    width: 5rem;
     background-color: #fefefe;
     border-color: #fefefe;
   }
@@ -39,13 +39,13 @@
     width: 30%;
     background-color: rgba(0, 153, 255, 0.85);
     border-color: rgba(0, 153, 255, 0.5);
-    transform: translateX(0px) rotate(-315deg);
+    transform: translateX(0) rotate(-315deg);
   }
 }
 
 @keyframes miss {
   75% {
-    width: 80px;
+    width: 5rem;
     background-color: #fefefe;
     border-color: #fefefe;
   }
@@ -54,7 +54,7 @@
     width: 30%;
     background-color: rgba(0, 153, 255, 0.85);
     border-color: rgba(0, 153, 255, 0.5);
-    transform: translateX(0px) rotate(-315deg);
+    transform: translateX(0) rotate(-315deg);
   }
 }
 
@@ -270,9 +270,39 @@
   }
 }
 
+@-webkit-keyframes pop {
+  0% {
+    opacity: 0.25;
+    transform: scale(0) translate(-50%, -50%);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1.1) translate(-50%, -50%);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translate(-50%, -50%);
+  }
+}
+
+@keyframes pop {
+  0% {
+    opacity: 0.25;
+    transform: scale(0) translate(-50%, -50%);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1.1) translate(-50%, -50%);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translate(-50%, -50%);
+  }
+}
+
 @-webkit-keyframes grow {
   0% {
-    width: 200px;
+    width: 12.5rem;
   }
   100% {
     width: 100%;
@@ -281,7 +311,7 @@
 
 @keyframes grow {
   0% {
-    width: 200px;
+    width: 12.5rem;
   }
   100% {
     width: 100%;
@@ -293,7 +323,7 @@
     width: 100%;
   }
   100% {
-    width: 200px;
+    width: 12.5rem;
   }
 }
 
@@ -302,6 +332,15 @@
     width: 100%;
   }
   100% {
-    width: 200px;
+    width: 12.5rem;
+  }
+}
+
+@keyframes opacityShow {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }

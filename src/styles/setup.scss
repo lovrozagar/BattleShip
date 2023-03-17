@@ -1,10 +1,5 @@
 @import './variables.scss';
 
-// .header.setup {
-//   margin-bottom: 2rem;
-//   text-shadow: 3px 3px black;
-// }
-
 .setup-wrapper {
   width: 100%;
   & > * {
@@ -12,15 +7,18 @@
   }
 }
 
+.message.setup,
+.reset-continue-section {
+  @include blackBlurBackground;
+}
+
 .message.setup {
   @include flexRowStartCenter;
   gap: 0.5rem;
-  max-width: 680px;
+  max-width: $setup-max-width;
   margin: 0 auto 0.5rem auto;
   padding: 1rem;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  background-color: rgba(0, 0, 0, 0.5);
+  font-size: $font-size-normal-responsive;
   .message-image {
     height: min(calc(1.25rem + 2vw), 2.75rem);
   }
@@ -33,12 +31,11 @@
     }
     .typed-cursor {
       position: relative;
-      left: 1px;
-      bottom: -3px;
+      left: 0.0625rem;
+      bottom: -0.1875rem;
       display: inline-block;
       width: 0.5rem !important;
       height: 1rem !important;
-      font-size: $font-size-normal-responsive;
       color: transparent;
       background-color: #70cdf1;
       overflow: hidden;
@@ -49,12 +46,10 @@
 }
 
 .setup-container {
-  max-width: 680px;
+  @include blackBlurBackground;
+  max-width: $setup-max-width;
   margin: 0 auto;
   padding: 1rem;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  background-color: rgba(0, 0, 0, 0.5);
 }
 .board-fleet-container {
   display: flex;
@@ -66,10 +61,21 @@
 .reset-continue-section {
   @include flexRowCenter;
   gap: min(10%, 2rem);
-  max-width: 680px;
+  max-width: $setup-max-width;
   margin: 0.5rem auto 0 auto;
   padding: 1rem;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  background-color: rgba(0, 0, 0, 0.5);
+}
+
+@media screen and (max-width: 30rem) {
+  .app.setup {
+    .setup-container {
+      .board-fleet-container {
+        display: flex;
+        flex-direction: column;
+        .fleet-setup {
+          flex-direction: row;
+        }
+      }
+    }
+  }
 }

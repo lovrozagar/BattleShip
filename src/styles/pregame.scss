@@ -1,12 +1,10 @@
 .pregame-card {
+  @include blackBlurBackground;
   padding: min(calc(2rem + 3vw), 5rem) min(calc(1rem + 2vw), 3rem);
-  border: 2px solid transparent;
+  border: 0.125rem solid transparent;
   border-radius: 1rem;
-  box-shadow: 0px 0px 30px 1px $transparent-shadow-color;
+  box-shadow: 0px 0px 30px 0.0625rem $transparent-shadow-color;
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
   transition: border-color 0.5s;
   cursor: pointer;
   h1 {

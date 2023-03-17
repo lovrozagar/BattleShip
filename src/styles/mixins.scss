@@ -72,7 +72,6 @@
   width: 100%;
 }
 
-// @mixin blui
 @mixin typedCursor {
   position: relative;
   left: 1px;
@@ -94,4 +93,16 @@
 @mixin enemyColor {
   font-size: $font-size-normal-responsive;
   background-color: $orange-light-color;
+}
+
+@mixin blackBlurBackground {
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+@mixin blackBlurBackgroundDark {
+  background-color: rgba(0, 0, 0, 0.7);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }

@@ -3,7 +3,7 @@
 @import './mixins.scss';
 @import './playNowButton.scss';
 @import './playerNameForm.scss';
-@import './pregameCard.scss';
+@import './pregame.scss';
 @import './buttons.scss';
 @import './board.scss';
 @import './shipSelect.scss';
@@ -53,27 +53,16 @@ body {
 .app {
   @include flexRowCenter;
   min-height: 100vh;
-  padding: 1rem;
   text-align: center;
+  padding: 1rem;
 }
 
-.app.setup,
+.app-setup,
 .app.battle {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
   & > * {
     border-radius: $main-border-radius;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .app.setup {
-    .setup-container {
-      .board-fleet-container {
-        display: flex;
-        flex-direction: column;
-        .fleet-setup {
-          flex-direction: row;
-        }
-      }
-    }
   }
 }
