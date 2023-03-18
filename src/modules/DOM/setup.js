@@ -164,7 +164,7 @@ const setup = (() => {
 
     const continueButton = helper.create('button', {
       id: 'continue-button',
-      className: 'continue-button',
+      className: 'continue-button disabled',
       textContent: 'Confirm',
     })
 
@@ -193,7 +193,7 @@ const setup = (() => {
   }
 
   function handleButton(button, oppositeButton) {
-    const map = Game.state.getPlayer().getMap()
+    const map = Game.getState().getPlayer().getMap()
 
     button.id === 'x-button' ? map.setAxisX() : map.setAxisY()
     button.classList.add('selected')
@@ -203,7 +203,7 @@ const setup = (() => {
   function initResetContinueButtons() {
     const resetButton = document.getElementById('reset-button')
     const continueButton = document.getElementById('continue-button')
-    const board = Game.state.getPlayer().getMap().getBoard()
+    const board = Game.getState().getPlayer().getMap().getBoard()
 
     resetButton.addEventListener('click', () => handleReset(board))
     continueButton.addEventListener('click', handleContinue)
@@ -215,10 +215,11 @@ const setup = (() => {
     resetFleetSelect()
     resetArray(board)
     removePlacedShips(fieldContainer)
+    disableContinueButton()
   }
 
   function resetFleetSelect() {
-    const map = Game.state.getPlayer().getMap()
+    const map = Game.getState().getPlayer().getMap()
 
     resetFleetSelectMenu()
     map.getFleet().forEach((warship) => warship.resetFound())
@@ -256,7 +257,13 @@ const setup = (() => {
     Battle.loadBattleContent()
   }
 
+  function disableContinueButton() {
+    document.getElementById('continue-button').classList.add('disabled')
+  }
+
   return { loadSetupContent }
 })()
 
 export default setup
+
+//

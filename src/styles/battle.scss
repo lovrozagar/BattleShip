@@ -193,6 +193,7 @@
     }
     .field {
       position: relative;
+      cursor: crosshair;
       &::before {
         @include pseudoOverlay;
         transform: translate(-600px, -650px) rotate(-315deg);

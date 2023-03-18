@@ -26,24 +26,27 @@ const pregame = (() => {
   }
 
   function createNameForm() {
-    const form = helper.create('form', { className: 'name-form' })
+    const container = helper.create('div', { className: 'name-form' })
 
     const input = helper.create('input', {
       type: 'text',
       id: 'name-input',
       className: 'name-input',
       placeholder: 'Captain name',
+      minLength: 0,
+      maxLength: 15,
     })
 
     const border = helper.create('span', { className: 'input-border' })
 
-    helper.appendAll(form, [input, border])
+    helper.appendAll(container, [input, border])
 
-    return form
+    return container
   }
 
   function createPlayNowButton() {
     const button = helper.create('button', {
+      type: 'button',
       id: 'play-now-button',
       className: 'play-now-button',
     })

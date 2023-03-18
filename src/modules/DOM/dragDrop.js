@@ -18,11 +18,13 @@ const DragDrop = (() => {
     const fleetContainer = document.getElementById('fleet-setup')
     // SET CURRENT DRAG OBJECT
     fleetContainer.childNodes.forEach((node) => {
-      node.addEventListener('dragstart', () => {
-        Game.state.getPlayer().getMap().setShipOnDrag({
+      node.addEventListener('dragstart', (event) => {
+        Game.getState().getPlayer().getMap().setShipOnDrag({
           name: node.dataset.shipName,
           length: node.dataset.shipLength,
         })
+        // STOP PROPAGATION TO NOT DRAG THE WHOLE CONTAINER IF DRAGGING BY THE VERY EDGE
+        event.stopPropagation()
       })
     })
   }
@@ -58,14 +60,6 @@ const DragDrop = (() => {
     })
   }
 
-  function resetFieldStyling() {
-    const fieldContainer = document.getElementById('field-container-setup')
-    for (let i = 0; i < fieldQueue.length; i += 1) {
-      fieldContainer.children[fieldQueue[i]].className = 'field'
-    }
-    emptyFieldQueue()
-  }
-
   function dragDrop() {
     const fieldContainer = document.getElementById('field-container-setup')
 
@@ -83,8 +77,8 @@ const DragDrop = (() => {
   }
 
   function dropIfValid(x, y) {
-    const map = Game.state.getPlayer().getMap()
-    const shipOnDrag = Game.state.getPlayer().getMap().getShipOnDrag()
+    const map = Game.getState().getPlayer().getMap()
+    const shipOnDrag = Game.getState().getPlayer().getMap().getShipOnDrag()
 
     // RETURNS [BOOL, SHIP-NAME]
     if (map.getAxis() === 'X') {
@@ -104,10 +98,27 @@ const DragDrop = (() => {
 
     const battleship = document.querySelector(`[data-ship-name=${shipOnDrag}]`)
     battleship.classList.add('hidden')
+
+    enableContinueButtonIfAllPlaced()
+  }
+
+  function enableContinueButtonIfAllPlaced() {
+    const ships = document.querySelectorAll('.ship-image-container')
+    if (ships.length !== 5) return
+
+   document.getElementById('continue-button').classList.remove('disabled')
+  }
+
+  function resetFieldStyling() {
+    const fieldContainer = document.getElementById('field-container-setup')
+    for (let i = 0; i < fieldQueue.length; i += 1) {
+      fieldContainer.children[fieldQueue[i]].className = 'field'
+    }
+    emptyFieldQueue()
   }
 
   function styleFieldsForDrop(parentNode, index) {
-    const map = Game.state.getPlayer().getMap()
+    const map = Game.getState().getPlayer().getMap()
     const board = map.getBoard()
     const axis = map.getAxis()
     // const [x, y] = helper.getCoordinatesFromIndex(index)

@@ -13,8 +13,9 @@
   transform: translate(-50%, -50%);
   .title-agent-win,
   .title-enemy-win {
-    font-size: $font-size-large-responsive;
-    font-weight: bold;
+    font-size: 2rem;
+    font-style: italic;
+    font-weight: 400;
     text-align: center;
   }
   .title-agent-win {
@@ -29,45 +30,40 @@
     max-width: 300px;
   }
 
+  .message.battle.enemy-win,
   .message.battle.agent-win {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     img {
       height: 3rem;
       margin-bottom: 1rem;
     }
-    .message-container {
-      text-align: center;
-      .message-agent-win {
-        display: inline;
-        width: 100%;
-        color: $blue-light-color;
-      }
-      .typed-cursor {
-        @include typedCursor;
-        @include agentColor;
-      }
+    .typed-cursor {
+      @include typedCursor;
     }
   }
-  .message.battle.enemy-win {
+
+  .message.battle {
     display: flex;
     flex-direction: column;
     align-items: center;
-    img {
-      height: 3rem;
-      margin-bottom: 1rem;
-    }
     .message-container {
       text-align: center;
+      .message-agent-win,
       .message-enemy-win {
         display: inline;
         width: 100%;
         font-size: $font-size-normal-large-responsive;
         color: $orange-light-color;
       }
-      .typed-cursor {
-        @include typedCursor;
+      .message-agent-win {
+        color: $blue-light-color;
+      }
+      .message-agent-win + .typed-cursor {
+        @include agentColor;
+      }
+      .message-enemy-win {
+        color: $orange-light-color;
+      }
+      .message-enemy-win + .typed-cursor {
         @include enemyColor;
       }
     }

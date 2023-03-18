@@ -52,6 +52,8 @@
     }
     .ship-content {
       img {
+        height: min(calc(1rem + 1.5vw), 2rem);
+        max-width: 100%;
         -webkit-filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
           brightness(105%) contrast(100%);
         filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
@@ -59,7 +61,6 @@
         pointer-events: none;
         position: relative;
         z-index: 3;
-        height: min(calc(1rem + 1.5vw), 2rem);
       }
       p {
         position: relative;

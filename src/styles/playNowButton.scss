@@ -7,7 +7,7 @@
   margin: 0 auto;
   border: none;
   background-color: transparent;
-  cursor: pointer;
+  cursor: crosshair;
   mask: url('../assets/images/battleshipX.svg') no-repeat 50% 50%;
   -webkit-mask: url('../assets/images/battleshipX.svg') no-repeat 50% 50%;
   mask-size: 100%;
@@ -32,11 +32,14 @@
   bottom: 0;
   width: 100%;
   font-size: min(calc(0.5rem + 0.5vw), 0.95rem);
+  line-height: 2;
   letter-spacing: 3px;
   text-align: center;
   color: white;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%);
   transition: color 0.8s ease;
+  padding: 0;
+  margin: 0;
 }
 .play-now-button:hover .text-play-button,
 .play-now-button:focus .text-play-button {

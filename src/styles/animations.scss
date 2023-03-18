@@ -196,13 +196,13 @@
 
 @-webkit-keyframes sweep {
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg) translate3d(0, 0, 0);
   }
 }
 
 @keyframes sweep {
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg) translate3d(0, 0, 0);
   }
 }
 
@@ -333,6 +333,15 @@
   }
   100% {
     width: 12.5rem;
+  }
+}
+
+@-webkit-keyframes opacityShow {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 
