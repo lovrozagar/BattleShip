@@ -10,6 +10,8 @@ const player = (name, isCpu = false) => {
     board,
     turn,
     getMap,
+    getName,
+    setName,
     playTurn,
     cpuPlay,
     autoPlace,
@@ -20,6 +22,14 @@ const player = (name, isCpu = false) => {
 
 function getMap() {
   return this.board
+}
+
+function getName() {
+  return this.name
+}
+
+function setName(name) {
+  this.name = name
 }
 
 function playTurn(coordinate = []) {

@@ -1,11 +1,13 @@
+import Game from '../factories/game'
+
 const Message = (() => {
   const messages = {
     welcome: [
-      'Welcome aboard Captain!',
+      'Welcome aboard',
       'Plan our formation by selecting the axis and dragging and dropping ships on the map.',
     ],
     battleStartPlayer: [
-      "Captain, all systems are online and ready for action. Let's give 'em hell!",
+      "all systems are online and ready for action. Let's give 'em hell!",
     ],
     battleStartEnemy: [
       "I'll show you no mercy, just like your father showed none to mine.",
@@ -92,11 +94,16 @@ const Message = (() => {
   }
 
   function getWelcomeMessage() {
+    messages.welcome[0] += ` ${Game.getState().getPlayer().getName()}!`
     return messages.welcome
   }
 
   function getBattleStartMessage() {
-    return messages.battleStartPlayer
+    return [
+      `${Game.getState().getPlayer().getName()} ${
+        messages.battleStartPlayer[0]
+      }`,
+    ]
   }
 
   function getNewEnemyBattleStartMessage() {

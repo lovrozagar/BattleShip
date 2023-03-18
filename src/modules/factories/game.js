@@ -12,6 +12,10 @@ const Game = (() => {
 
   // GETTERS
 
+  function getState() {
+    return this.state
+  }
+
   function getPlayer() {
     return this.combatant
   }
@@ -20,7 +24,11 @@ const Game = (() => {
     return this.cpu
   }
 
-  return { state }
+  function setPlayerName(name = 'Captain') {
+    getState().getPlayer().setName(name)
+  }
+
+  return { state, getState, setPlayerName }
 })()
 
 export default Game
