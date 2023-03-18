@@ -14,7 +14,7 @@ const Battle = (() => {
 
     app.appendChild(createBattleWrapper())
     displayPlayerShips()
-    Game.state.getCPU().autoPlace()
+    Game.getState().getCPU().autoPlace()
 
     displayBattleStartMessage('agent')
     displayBattleStartMessage('enemy')
@@ -72,6 +72,8 @@ const Battle = (() => {
       className: 'win-modal-container',
     })
 
+    winModal.classList.add(data.className)
+
     const title = helper.create('h4', {
       id: `title-${data.id}`,
       className: `title-${data.id}`,
@@ -90,6 +92,12 @@ const Battle = (() => {
     return winModal
   }
 
+  function createWinOverlay() {
+    const overlay = helper.create('div', { className: 'win-overlay' })
+
+    return overlay
+  }
+
   function initNewGameButton() {
     const button = document.getElementById('new-game-button')
     button.addEventListener('click', () => window.location.reload())
@@ -97,14 +105,18 @@ const Battle = (() => {
 
   function displayPlayerShips() {
     const friendlyBoard = document.getElementById('field-container-friendly')
-    Game.state.getPlayer().getMap().setAllShipsNotFound()
+    Game.getState().getPlayer().getMap().setAllShipsNotFound()
     fleet.loadFleet(friendlyBoard)
   }
 
   async function handleFieldClick(event) {
     const { target } = event
     disableField(target)
-    await playerPlays(target)
+
+    // END GAME IF PLAYER WIN BEFORE CPU FIRES AUTOMATICALLY
+    const playerIsWinner = await playerPlays(target)
+    if (playerIsWinner) return
+
     await cpuPlays()
   }
 
@@ -117,7 +129,7 @@ const Battle = (() => {
     Sound.shot()
     await timeoutHalfSecond()
 
-    const cpu = Game.state.getCPU()
+    const cpu = Game.getState().getCPU()
     const index = [...fieldNode.parentNode.children].indexOf(fieldNode)
     const [row, col] = helper.getCoordinatesFromIndex(index)
 
@@ -146,31 +158,17 @@ const Battle = (() => {
     displayPlayerMessage(boardElement, battleship)
 
     await timeoutOneSecond()
-    if (cpu.isLoser()) showPlayerWinModal()
+    if (cpu.isLoser()) {
+      showPlayerWinModal()
+      return true
+    }
     await timeoutOneAndHalfSecond()
 
     styleOffTurn(agentMessage)
     styleOnTurn(enemyMessage)
     resizePlayerOffTurn()
-  }
 
-  function displayBattleStartMessage(character) {
-    const message = document.getElementById(`message-${character}`)
-    if (character === 'agent')
-      Component.addTypeWriterMessage(message, Message.getBattleStartMessage())
-    else
-      Component.addTypeWriterMessage(
-        message,
-        Message.getNewEnemyBattleStartMessage()
-      )
-  }
-
-  function displayWinMessage(character) {
-    const message = document.getElementById(`message-${character}`)
-    if (character === 'agent-win')
-      Component.addTypeWriterMessage(message, Message.getPlayerWinMessage())
-    if (character === 'enemy-win')
-      Component.addTypeWriterMessage(message, Message.getEnemyWinMessage())
+    return false
   }
 
   async function cpuPlays() {
@@ -184,7 +182,7 @@ const Battle = (() => {
     await timeoutHalfSecond()
 
     const friendlyBoard = document.getElementById('field-container-friendly')
-    const player = Game.state.getPlayer()
+    const player = Game.getState().getPlayer()
     const [row, col] = player.cpuPlay()
 
     const boardElement = player.getMap().getBoard()[row][col]
@@ -211,7 +209,10 @@ const Battle = (() => {
     displayEnemyMessage(boardElement, battleship)
 
     await timeoutOneSecond()
-    if (player.isLoser()) showEnemyWinModal()
+    if (player.isLoser()) {
+      showEnemyWinModal()
+      return
+    }
     await timeoutOneAndHalfSecond()
 
     styleOffTurn(enemyMessage)
@@ -220,20 +221,58 @@ const Battle = (() => {
     initBoardFields()
   }
 
+  function displayBattleStartMessage(character) {
+    const message = document.getElementById(`message-${character}`)
+    if (character === 'agent')
+      Component.addTypeWriterMessage(message, Message.getBattleStartMessage())
+    else
+      Component.addTypeWriterMessage(
+        message,
+        Message.getNewEnemyBattleStartMessage()
+      )
+  }
+
+  function displayWinMessage(character) {
+    const message = document.getElementById(`message-${character}`)
+    if (character === 'agent-win')
+      Component.addTypeWriterMessage(message, Message.getPlayerWinMessage())
+    if (character === 'enemy-win')
+      Component.addTypeWriterMessage(message, Message.getEnemyWinMessage())
+  }
+
   function showPlayerWinModal() {
     const app = document.getElementById('app')
-    app.appendChild(
-      createWinnerModal({ title: 'Enemy fleet defeated!', id: 'agent-win' })
-    )
+
+    app.classList.add('of-focus')
+
+    helper.appendAll(app, [
+      createWinnerModal({
+        title: 'YOU WIN!',
+        id: 'agent-win',
+        className: 'player',
+      }),
+      createWinOverlay(),
+    ])
+
     displayWinMessage('agent-win')
     initNewGameButton()
+    unInitBoardFields()
   }
 
   function showEnemyWinModal() {
     const app = document.getElementById('app')
-    app.appendChild(
-      createWinnerModal({ title: 'Your fleet is gone!', id: 'enemy-win' })
-    )
+
+    app.classList.add('of-focus')
+
+    helper.appendAll(app, [
+      createWinnerModal({
+        title: 'YOU LOSE!',
+        id: 'enemy-win',
+        className: 'enemy',
+      }),
+      createWinOverlay(),
+    ])
+
     displayWinMessage('enemy-win')
     initNewGameButton()
   }

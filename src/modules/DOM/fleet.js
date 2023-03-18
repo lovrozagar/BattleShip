@@ -13,7 +13,7 @@ const fleet = (() => {
   let startTime = null
 
   function loadFleet(board) {
-    const player = Game.state.getPlayer()
+    const player = Game.getState().getPlayer()
     const map = player.getMap()
     const boardArray = map.getBoard()
 

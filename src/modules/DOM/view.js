@@ -28,7 +28,7 @@ const view = (() => {
   }
 
   function setPlayerName() {
-    const name = document.getElementById('name-input').value.toString()
+    const name = document.getElementById('name-input').value.toString().trim()
     if (name) Game.getState().getPlayer().setName(`Captain ${name}`)
     console.log(name)
   }
