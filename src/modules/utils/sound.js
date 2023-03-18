@@ -1,6 +1,8 @@
+// ASSETS
 import shotSound from '../../assets/sounds/shot.mp3'
 import hitSound from '../../assets/sounds/hit.mp3'
 import missSound from '../../assets/sounds/miss.mp3'
+import secondOfSilence from '../../assets/sounds/secondOfSilence.mp3'
 
 const Sound = (() => {
   // Play audio with Web Audio API to avoid delay
@@ -33,7 +35,12 @@ const Sound = (() => {
     playSound(missSound)
   }
 
-  return { shot, hit, miss }
+  function unMuteIOS() {
+    const audio = new Audio(secondOfSilence)
+    audio.play()
+  }
+
+  return { shot, hit, miss, unMuteIOS }
 })()
 
 export default Sound
