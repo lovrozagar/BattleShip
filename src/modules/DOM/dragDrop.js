@@ -17,14 +17,18 @@ const DragDrop = (() => {
   let fieldQueue = []
   let touchMove = false
 
+  function emptyFieldQueue() {
+    fieldQueue = []
+  }
+
+  // LISTENERS
+
   function dragStart() {
     const fleetContainer = document.getElementById('fleet-setup')
-    // SET CURRENT DRAG OBJECT
+
     fleetContainer.childNodes.forEach((node) => {
       node.addEventListener('dragstart', (event) => {
-        addShipOnDragStart(node)
-        // STOP PROPAGATION TO NOT DRAG THE WHOLE CONTAINER IF DRAGGING BY THE VERY EDGE
-        event.stopPropagation()
+        dragStartHandler(event, node)
       })
     })
   }
@@ -33,9 +37,7 @@ const DragDrop = (() => {
     const fieldContainer = document.getElementById('field-container-setup')
 
     fieldContainer.childNodes.forEach((node) => {
-      node.addEventListener('dragenter', (event) => {
-        event.preventDefault()
-      })
+      node.addEventListener('dragenter', dragEnterHandler)
     })
   }
 
@@ -44,8 +46,7 @@ const DragDrop = (() => {
     // PREVENT DEFAULT TO ALLOW DROP
     fieldContainer.childNodes.forEach((node, index) => {
       node.addEventListener('dragover', (event) => {
-        event.preventDefault()
-        styleFieldsForDrop(fieldContainer, index)
+        dragOverHandler(event, fieldContainer, index)
       })
     })
   }
@@ -54,9 +55,7 @@ const DragDrop = (() => {
     const fieldContainer = document.getElementById('field-container-setup')
     // REMOVE DRAGOVER/HOVER CLASS
     fieldContainer.childNodes.forEach((node) => {
-      node.addEventListener('dragleave', () => {
-        resetFieldStyling()
-      })
+      node.addEventListener('dragleave', dragLeaveHandler)
     })
   }
 
@@ -65,15 +64,75 @@ const DragDrop = (() => {
 
     fieldContainer.childNodes.forEach((node, index) => {
       node.addEventListener('drop', () => {
-        const [x, y] = helper.getCoordinatesFromIndex(index)
-        const [isPlaced, shipOnDrag] = dropIfValid(x, y)
-
-        resetFieldStyling()
-
-        fleet.loadFleet(fieldContainer)
-        hideIfPlaced(isPlaced, shipOnDrag)
+        dragDropHandler(fieldContainer, index)
       })
     })
+  }
+
+  function mobileDrag() {
+    const fleetContainer = document.getElementById('fleet-setup')
+    const fieldContainer = document.getElementById('field-container-setup')
+    const app = document.getElementById('app')
+    const hoveredElement = [null] // USED FOR CHECKING THE ELEMENT ON HOVER IN HANDLER
+
+    fleetContainer.childNodes.forEach((node) => {
+      node.addEventListener(
+        'touchmove',
+        (
+          event // USING A CALLBACK THAT WILL ALSO BE ADDED AS HANDLER TO THE COPY ELEMENT
+        ) =>
+          touchMoveHandler(
+            event,
+            node,
+            fieldContainer,
+            fleetContainer,
+            app,
+            hoveredElement
+          ),
+        { passive: false }
+      )
+    })
+  }
+
+  function mobileDrop() {
+    const fleetContainer = document.getElementById('fleet-setup')
+
+    fleetContainer.childNodes.forEach((node) => {
+      node.addEventListener('touchend', (event) => {
+        touchEndHandler(event, node)
+      })
+    })
+  }
+
+  // HANDLERS
+
+  function dragStartHandler(event, node) {
+    addShipOnDragStart(node)
+    // STOP PROPAGATION TO NOT DRAG THE WHOLE CONTAINER IF DRAGGING BY THE VERY EDGE
+    event.stopPropagation()
+  }
+
+  function dragEnterHandler(event) {
+    event.preventDefault()
+  }
+
+  function dragOverHandler(event, fieldContainer, index) {
+    event.preventDefault()
+    styleFieldsForDrop(fieldContainer, index)
+  }
+
+  function dragLeaveHandler() {
+    resetFieldStyling()
+  }
+
+  function dragDropHandler(fieldContainer, index) {
+    const [x, y] = helper.getCoordinatesFromIndex(index)
+    const [isPlaced, shipOnDrag] = dropIfValid(x, y)
+
+    resetFieldStyling()
+
+    fleet.loadFleet(fieldContainer)
+    hideIfPlaced(isPlaced, shipOnDrag)
   }
 
   function dropIfValid(x, y) {
@@ -93,32 +152,7 @@ const DragDrop = (() => {
     ]
   }
 
-  function mobileDrag() {
-    const fleetContainer = document.getElementById('fleet-setup')
-    const fieldContainer = document.getElementById('field-container-setup')
-    const app = document.getElementById('app')
-    const hoveredElement = [null] // USED FOR CHECKING THE ELEMENT ON HOVER IN HANDLER
-
-    fleetContainer.childNodes.forEach((node) => {
-      node.addEventListener(
-        'touchmove',
-        (
-          event // USING A CALLBACK THAT WILL ALSO BE ADDED AS HANDLER TO THE COPY ELEMENT
-        ) =>
-          handleTouchMove(
-            event,
-            node,
-            fieldContainer,
-            fleetContainer,
-            app,
-            hoveredElement
-          ),
-        { passive: false }
-      )
-    })
-  }
-
-  function handleTouchMove(
+  function touchMoveHandler(
     event,
     node,
     fieldContainer,
@@ -152,36 +186,7 @@ const DragDrop = (() => {
     }
   }
 
-  function reInsertShipIfMissing(isTouchActive, fleetContainer, shipOnDrag) {
-    if (isTouchActive && fleetContainer.childNodes.length < 5) {
-      const copy = helper.createShipCard(shipOnDrag.name)
-      fleetContainer.appendChild(copy)
-      copy.classList.add('hidden')
-    }
-  }
-
-  function positionNodeOnScreen(node, x, y) {
-    node.style.position = 'fixed'
-    node.style.zIndex = '5'
-    node.style.left = `${x}px`
-    node.style.top = `${y}px`
-  }
-
-  function getNodeIndex(node) {
-    return [...node.parentNode.children].indexOf(node)
-  }
-
-  function mobileDrop() {
-    const fleetContainer = document.getElementById('fleet-setup')
-
-    fleetContainer.childNodes.forEach((node) => {
-      node.addEventListener('touchend', (event) => {
-        handleTouchEnd(event, node)
-      })
-    })
-  }
-
-  function handleTouchEnd(event, node) {
+  function touchEndHandler(event, node) {
     if (!touchMove) return // PREVENT SCREEN TAP TRIGGERING TOUCHEND HANDLER
 
     const touchX = event.changedTouches[0].clientX
@@ -210,18 +215,23 @@ const DragDrop = (() => {
     resetListenersForCopyNode(copy)
   }
 
+  // HANDLER HELPERS
+
   function resetListenersForCopyNode(node) {
     const fleetContainer = document.getElementById('fleet-setup')
     const fieldContainer = document.getElementById('field-container-setup')
     const app = document.getElementById('app')
     const hoveredElement = [null] // USED FOR CHECKING THE ELEMENT ON HOVER IN HANDLER
 
+    node.addEventListener('dragstart', (event) => {
+      dragStartHandler(event, node)
+    })
     node.addEventListener(
       'touchmove',
       (
         event // USING A CALLBACK THAT WILL ALSO BE ADDED AS HANDLER TO THE COPY ELEMENT
       ) =>
-        handleTouchMove(
+        touchMoveHandler(
           event,
           node,
           fieldContainer,
@@ -231,7 +241,26 @@ const DragDrop = (() => {
         ),
       { passive: false }
     )
-    node.addEventListener('touchend', (event) => handleTouchEnd(event, node))
+    node.addEventListener('touchend', (event) => touchEndHandler(event, node))
+  }
+
+  function reInsertShipIfMissing(isTouchActive, fleetContainer, shipOnDrag) {
+    if (isTouchActive && fleetContainer.childNodes.length < 5) {
+      const copy = helper.createShipCard(shipOnDrag.name)
+      fleetContainer.appendChild(copy)
+      copy.classList.add('hidden')
+    }
+  }
+
+  function positionNodeOnScreen(node, x, y) {
+    node.style.position = 'fixed'
+    node.style.zIndex = '5'
+    node.style.left = `${x}px`
+    node.style.top = `${y}px`
+  }
+
+  function getNodeIndex(node) {
+    return [...node.parentNode.children].indexOf(node)
   }
 
   function addShipOnDragStart(node) {
@@ -241,6 +270,14 @@ const DragDrop = (() => {
     })
   }
 
+  function resetFieldStyling() {
+    const fieldContainer = document.getElementById('field-container-setup')
+    for (let i = 0; i < fieldQueue.length; i += 1) {
+      fieldContainer.children[fieldQueue[i]].className = 'field'
+    }
+    emptyFieldQueue()
+  }
+
   function hideIfPlaced(isPlaced, shipOnDrag) {
     if (!isPlaced) return
 
@@ -248,21 +285,6 @@ const DragDrop = (() => {
     battleship.classList.add('hidden')
 
     enableContinueButtonIfAllPlaced()
-  }
-
-  function enableContinueButtonIfAllPlaced() {
-    const ships = document.querySelectorAll('.ship-image-container')
-    if (ships.length !== 5) return
-
-    document.getElementById('continue-button').classList.remove('disabled')
-  }
-
-  function resetFieldStyling() {
-    const fieldContainer = document.getElementById('field-container-setup')
-    for (let i = 0; i < fieldQueue.length; i += 1) {
-      fieldContainer.children[fieldQueue[i]].className = 'field'
-    }
-    emptyFieldQueue()
   }
 
   function styleFieldsForDrop(parentNode, index) {
@@ -312,8 +334,11 @@ const DragDrop = (() => {
       })
   }
 
-  function emptyFieldQueue() {
-    fieldQueue = []
+  function enableContinueButtonIfAllPlaced() {
+    const ships = document.querySelectorAll('.ship-image-container')
+    if (ships.length !== 5) return
+
+    document.getElementById('continue-button').classList.remove('disabled')
   }
 
   return { initDraggableFields }
