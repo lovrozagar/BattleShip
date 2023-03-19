@@ -128,6 +128,7 @@ const DragDrop = (() => {
   ) {
     touchMove = true
 
+    event.stopPropagation()
     event.preventDefault()
     app.appendChild(node)
     addShipOnDragStart(node)
@@ -172,33 +173,41 @@ const DragDrop = (() => {
 
   function mobileDrop() {
     const fleetContainer = document.getElementById('fleet-setup')
-    const fieldContainer = document.getElementById('field-container-setup')
 
     fleetContainer.childNodes.forEach((node) => {
       node.addEventListener('touchend', (event) => {
-        const data = node.dataset.shipName // WILL BE USED TO TARGET COPY ELEMENT
-        const touchX = event.changedTouches[0].clientX
-        const touchY = event.changedTouches[0].clientY
-        const hoveredElement = document.elementFromPoint(touchX, touchY)
-        const copy = document.querySelector(`[data-ship-name="${data}"]`)
-
-        if (hoveredElement.classList.contains('field')) {
-          const index = getNodeIndex(hoveredElement)
-          const [x, y] = helper.getCoordinatesFromIndex(index)
-          const [isPlaced, shipOnDrag] = dropIfValid(x, y)
-
-          fleet.loadFleet(fieldContainer)
-          resetFieldStyling()
-          hideIfPlaced(isPlaced, shipOnDrag)
-        } else {
-          copy.classList.remove('hidden')
-        }
-
-        touchMove = false
-        node.remove()
-        resetListenersForCopyNode(copy)
+        handleTouchEnd(event, node)
       })
     })
+  }
+
+  function handleTouchEnd(event, node) {
+    if (!touchMove) return // PREVENT SCREEN TAP TRIGGERING TOUCHEND HANDLER
+
+    const touchX = event.changedTouches[0].clientX
+    const touchY = event.changedTouches[0].clientY
+    const data = node.dataset.shipName // WILL BE USED TO TARGET COPY ELEMENT
+    const fieldContainer = document.getElementById('field-container-setup')
+    const hoveredElement = document.elementFromPoint(touchX, touchY)
+    const copy = document.querySelector(`[data-ship-name="${data}"]`)
+
+    if (hoveredElement.classList.contains('field')) {
+      const index = getNodeIndex(hoveredElement)
+      const [x, y] = helper.getCoordinatesFromIndex(index)
+      const [isPlaced, shipOnDrag] = dropIfValid(x, y)
+
+      fleet.loadFleet(fieldContainer)
+      resetFieldStyling()
+      hideIfPlaced(isPlaced, shipOnDrag)
+
+      if (!isPlaced) copy.classList.remove('hidden')
+    } else {
+      copy.classList.remove('hidden')
+    }
+
+    touchMove = false
+    node.remove()
+    resetListenersForCopyNode(copy)
   }
 
   function resetListenersForCopyNode(node) {
@@ -222,6 +231,7 @@ const DragDrop = (() => {
         ),
       { passive: false }
     )
+    node.addEventListener('touchend', (event) => handleTouchEnd(event, node))
   }
 
   function addShipOnDragStart(node) {
