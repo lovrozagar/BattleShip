@@ -3,8 +3,8 @@ button {
 }
 
 button:focus {
-  outline: 2px solid $blue-light-color;
-  outline-offset: 1px;
+  outline: 0.125rem solid $blue-light-color;
+  outline-offset: 0.125rem;
 }
 
 // SHOW OUTLINE ON TABS ONLY
@@ -33,7 +33,7 @@ button:focus:not(:focus-visible) {
   min-width: 0;
   margin: 0;
   padding: 0.75em 3em;
-  border: 1px solid #ffffff;
+  border: 0.0625rem solid #ffffff;
   border-radius: $main-border-radius;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -76,4 +76,67 @@ button:focus:not(:focus-visible) {
 
 .new-game-button {
   margin-top: 0.5rem;
+}
+
+.github-button {
+  @include flexColumnCenter;
+  @include mainBackground;
+  position: relative;
+  z-index: 1;
+  padding: 0.625em 1.5em;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 0.625em;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: white;
+  overflow: hidden;
+  text-decoration: none;
+  -webkit-text-decoration-line: none;
+  text-decoration-line: none;
+  transition: color 0.5s;
+  cursor: pointer;
+}
+
+.github-button:hover {
+  color: transparent;
+}
+
+.github-button:before {
+  content: '';
+  background: white url('../assets/images/github.svg') no-repeat center;
+  position: absolute;
+  z-index: 2;
+  left: -20%;
+  right: -20%;
+  top: 0;
+  bottom: 0;
+  transform: scale(0, 0);
+  transition: all 0.5s;
+}
+
+.github-button:after {
+  content: '';
+  background: white;
+  position: absolute;
+  z-index: -1;
+  left: -20%;
+  right: -20%;
+  top: 0;
+  bottom: 0;
+  transform: skewX(-45deg) scale(0, 1);
+  transition: all 0.5s;
+}
+
+.github-button:hover::before,
+.github-button:hover:after {
+  transition: all 0.5s;
+}
+
+.github-button:hover::before {
+  transform: scale(0.8, 0.6);
+}
+
+.github-button:hover:after {
+  transform: skewX(-45deg) scale(1, 1);
 }

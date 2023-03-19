@@ -50,11 +50,26 @@ body {
   overflow-x: hidden;
 }
 
+h1,
+button,
+a,
+img {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .app {
   @include flexRowCenter;
+  position: relative;
   min-height: 100vh;
   text-align: center;
   padding: 1rem;
+}
+
+.app.pregame {
+  @include flexColumnCenter;
 }
 
 .app-setup,

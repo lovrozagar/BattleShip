@@ -1,5 +1,5 @@
 .pregame-card {
-  @include blackBlurBackground;
+  @include mainBackground;
   padding: min(calc(2rem + 3vw), 5rem) min(calc(1rem + 2vw), 3rem);
   border: 0.125rem solid transparent;
   border-radius: 1rem;

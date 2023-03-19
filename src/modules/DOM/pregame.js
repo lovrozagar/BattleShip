@@ -1,11 +1,12 @@
 import helper from './helper'
+import Component from './reusableComponents'
 
 const pregame = (() => {
   function loadCard() {
     const app = document.getElementById('app')
     app.classList.add('pregame')
 
-    app.appendChild(createPregameCard())
+    helper.appendAll(app, [createPregameCard(), Component.createGitHubButton()])
   }
 
   function createPregameCard() {
