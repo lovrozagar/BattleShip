@@ -15,6 +15,7 @@ const DragDrop = (() => {
   }
 
   let fieldQueue = []
+  let touchMove = false
 
   function dragStart() {
     const fleetContainer = document.getElementById('fleet-setup')
@@ -96,38 +97,77 @@ const DragDrop = (() => {
     const fleetContainer = document.getElementById('fleet-setup')
     const fieldContainer = document.getElementById('field-container-setup')
     const app = document.getElementById('app')
-    let hoveredElement = null
+    const hoveredElement = [null] // USED FOR CHECKING THE ELEMENT ON HOVER IN HANDLER
 
     fleetContainer.childNodes.forEach((node) => {
-      node.addEventListener('touchmove', (event) => {
-        addShipOnDragStart(node)
-        // event.stopPropagation()
-        app.appendChild(node)
-        const touchLocation = event.targetTouches[0]
-        // console.log(event)
-        node.style.position = 'fixed'
-        node.style.zIndex = '5'
-        node.style.left = `${touchLocation.clientX}px`
-        node.style.top = `${touchLocation.clientY}px`
-        // console.log(touchLocation.clientY)
-        // node.style.transform = `translate(-100%, -100%)`
-        const touchX = event.touches[0].clientX
-        const touchY = event.touches[0].clientY
-        const newHoveredElement = document.elementFromPoint(touchX, touchY)
-        if (hoveredElement !== newHoveredElement) {
-          resetFieldStyling()
-        }
-        hoveredElement = newHoveredElement
-        // console.log(hoveredElement)
-        if (hoveredElement.classList.contains('field')) {
-          const index = [...hoveredElement.parentNode.children].indexOf(
+      node.addEventListener(
+        'touchmove',
+        (
+          event // USING A CALLBACK THAT WILL ALSO BE ADDED AS HANDLER TO THE COPY ELEMENT
+        ) =>
+          handleTouchMove(
+            event,
+            node,
+            fieldContainer,
+            fleetContainer,
+            app,
             hoveredElement
-          )
-          console.log(index)
-          styleFieldsForDrop(fieldContainer, index)
-        }
-      })
+          ),
+        { passive: false }
+      )
     })
+  }
+
+  function handleTouchMove(
+    event,
+    node,
+    fieldContainer,
+    fleetContainer,
+    app,
+    hoveredElement
+  ) {
+    touchMove = true
+
+    event.preventDefault()
+    app.appendChild(node)
+    addShipOnDragStart(node)
+
+    const shipOnDrag = Game.getState().getPlayer().getMap().getShipOnDrag()
+    const touchLocation = event.targetTouches[0]
+    const touchX = event.touches[0].clientX
+    const touchY = event.touches[0].clientY
+
+    reInsertShipIfMissing(touchMove, fleetContainer, shipOnDrag)
+    positionNodeOnScreen(node, touchLocation.clientX, touchLocation.clientY)
+
+    const newHoveredElement = document.elementFromPoint(touchX, touchY)
+    if (hoveredElement[0] !== newHoveredElement) {
+      resetFieldStyling()
+    }
+
+    hoveredElement[0] = newHoveredElement
+    if (hoveredElement[0].classList.contains('field')) {
+      styleFieldsForDrop(fieldContainer, getNodeIndex(hoveredElement[0]))
+    }
+  }
+
+  function reInsertShipIfMissing(isTouchActive, fleetContainer, shipOnDrag) {
+    if (isTouchActive && fleetContainer.childNodes.length < 5) {
+      const copy = helper.createShipCard(shipOnDrag.name)
+      fleetContainer.appendChild(copy)
+      copy.classList.add('hidden')
+    }
+  }
+
+  function positionNodeOnScreen(node, x, y) {
+    node.style.position = 'fixed'
+    node.style.zIndex = '5'
+    node.style.left = `${x}px`
+    node.style.top = `${y}px`
+  }
+
+  function getNodeIndex(node) {
+    return [...node.parentNode.children].indexOf(node)
   }
 
   function mobileDrop() {
@@ -136,26 +176,52 @@ const DragDrop = (() => {
 
     fleetContainer.childNodes.forEach((node) => {
       node.addEventListener('touchend', (event) => {
+        const data = node.dataset.shipName // WILL BE USED TO TARGET COPY ELEMENT
         const touchX = event.changedTouches[0].clientX
         const touchY = event.changedTouches[0].clientY
         const hoveredElement = document.elementFromPoint(touchX, touchY)
-        console.log(hoveredElement)
+        const copy = document.querySelector(`[data-ship-name="${data}"]`)
+
         if (hoveredElement.classList.contains('field')) {
-          const index = [...hoveredElement.parentNode.children].indexOf(
-            hoveredElement
-          )
-          console.log(index)
-          styleFieldsForDrop(fieldContainer, index)
+          const index = getNodeIndex(hoveredElement)
           const [x, y] = helper.getCoordinatesFromIndex(index)
           const [isPlaced, shipOnDrag] = dropIfValid(x, y)
 
-          resetFieldStyling()
-
           fleet.loadFleet(fieldContainer)
+          resetFieldStyling()
           hideIfPlaced(isPlaced, shipOnDrag)
+        } else {
+          copy.classList.remove('hidden')
         }
+
+        touchMove = false
+        node.remove()
+        resetListenersForCopyNode(copy)
       })
     })
+  }
+
+  function resetListenersForCopyNode(node) {
+    const fleetContainer = document.getElementById('fleet-setup')
+    const fieldContainer = document.getElementById('field-container-setup')
+    const app = document.getElementById('app')
+    const hoveredElement = [null] // USED FOR CHECKING THE ELEMENT ON HOVER IN HANDLER
+
+    node.addEventListener(
+      'touchmove',
+      (
+        event // USING A CALLBACK THAT WILL ALSO BE ADDED AS HANDLER TO THE COPY ELEMENT
+      ) =>
+        handleTouchMove(
+          event,
+          node,
+          fieldContainer,
+          fleetContainer,
+          app,
+          hoveredElement
+        ),
+      { passive: false }
+    )
   }
 
   function addShipOnDragStart(node) {

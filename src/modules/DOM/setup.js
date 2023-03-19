@@ -1,10 +1,4 @@
 /* eslint-disable no-unused-expressions */
-// ASSETS
-import carrier from '../../assets/images/carrierX.svg'
-import battleship from '../../assets/images/battleshipX.svg'
-import cruiser from '../../assets/images/cruiserX.svg'
-import submarine from '../../assets/images/submarineX.svg'
-import destroyer from '../../assets/images/destroyerX.svg'
 import helper from './helper'
 // FACTORIES
 import Game from '../factories/game'
@@ -95,59 +89,11 @@ const setup = (() => {
     const fleet = ['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer']
 
     fleet.forEach((ship) => {
-      const shipCard = createShipCard(ship)
-      shipCard.draggable = 'true'
+      const shipCard = helper.createShipCard(ship)
       section.appendChild(shipCard)
     })
 
     return section
-  }
-
-  function createShipCard(shipName) {
-    const card = helper.create('button', { className: 'ship-card' })
-    const content = helper.create('div', { className: 'ship-content' })
-    const image = helper.create('img', { className: 'ship-image' })
-    const name = helper.create('p', { className: 'ship-name' })
-
-    switch (shipName) {
-      case 'carrier':
-        card.dataset.shipName = 'carrier'
-        card.dataset.shipLength = 5
-        image.src = carrier
-        name.textContent = 'Carrier (5f)'
-        break
-      case 'battleship':
-        card.dataset.shipName = 'battleship'
-        card.dataset.shipLength = 4
-        image.src = battleship
-        name.textContent = 'Battleship (4f)'
-        break
-      case 'cruiser':
-        card.dataset.shipName = 'cruiser'
-        card.dataset.shipLength = 3
-        image.src = cruiser
-        name.textContent = 'Cruiser (3f)'
-        break
-      case 'submarine':
-        card.dataset.shipName = 'submarine'
-        card.dataset.shipLength = 3
-        image.src = submarine
-        name.textContent = 'Submarine (3f)'
-        break
-      case 'destroyer':
-        card.dataset.shipName = 'destroyer'
-        card.dataset.shipLength = 2
-        image.src = destroyer
-        name.textContent = 'Destroyer (2f)'
-        break
-      default:
-    }
-
-    helper.appendAll(content, [image, name])
-
-    card.appendChild(content)
-
-    return card
   }
 
   function createResetContinueSection() {
