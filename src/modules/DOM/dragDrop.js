@@ -2,6 +2,7 @@ import ship from '../factories/ship'
 import fleet from './fleet'
 import Game from '../factories/game'
 import helper from './helper'
+import Component from './reusableComponents'
 
 const DragDrop = (() => {
   function initDraggableFields() {
@@ -129,10 +130,15 @@ const DragDrop = (() => {
     const [x, y] = helper.getCoordinatesFromIndex(index)
     const [isPlaced, shipOnDrag] = dropIfValid(x, y)
 
-    resetFieldStyling()
-
     fleet.loadFleet(fieldContainer)
     hideIfPlaced(isPlaced, shipOnDrag)
+    resetFieldStyling()
+    removePlacedShipsTabIndex()
+  }
+
+  function removePlacedShipsTabIndex() {
+    const shipCards = document.querySelectorAll('.ship-card.hidden')
+    shipCards.forEach((shipCard) => shipCard.setAttribute('tabindex', '-1'))
   }
 
   function dropIfValid(x, y) {
@@ -246,7 +252,7 @@ const DragDrop = (() => {
 
   function reInsertShipIfMissing(isTouchActive, fleetContainer, shipOnDrag) {
     if (isTouchActive && fleetContainer.childNodes.length < 5) {
-      const copy = helper.createShipCard(shipOnDrag.name)
+      const copy = Component.createShipCard(shipOnDrag.name)
       fleetContainer.appendChild(copy)
       copy.classList.add('hidden')
     }
@@ -336,12 +342,20 @@ const DragDrop = (() => {
 
   function enableContinueButtonIfAllPlaced() {
     const ships = document.querySelectorAll('.ship-image-container')
+    const button = document.getElementById('continue-button')
+
     if (ships.length !== 5) return
 
-    document.getElementById('continue-button').classList.remove('disabled')
+    button.classList.remove('disabled')
+    button.removeEventListener('keydown', preventEnterDefault)
+    // button.
   }
 
-  return { initDraggableFields }
+  function preventEnterDefault(event) {
+    if (event.key === 'Enter') event.preventDefault()
+  }
+
+  return { initDraggableFields, preventEnterDefault }
 })()
 
 export default DragDrop

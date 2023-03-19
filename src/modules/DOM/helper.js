@@ -1,10 +1,3 @@
-// ASSETS
-import carrier from '../../assets/images/carrierX.svg'
-import battleship from '../../assets/images/battleshipX.svg'
-import cruiser from '../../assets/images/cruiserX.svg'
-import submarine from '../../assets/images/submarineX.svg'
-import destroyer from '../../assets/images/destroyerX.svg'
-/* eslint-disable no-restricted-syntax */
 const helper = (() => {
   // DOM
 
@@ -98,56 +91,6 @@ const helper = (() => {
     return element
   }
 
-  function createShipCard(shipName) {
-    const card = helper.create('button', {
-      className: 'ship-card',
-      draggable: 'true',
-    })
-    const content = helper.create('div', { className: 'ship-content' })
-    const image = helper.create('img', { className: 'ship-image' })
-    const name = helper.create('p', { className: 'ship-name' })
-
-    switch (shipName) {
-      case 'carrier':
-        card.dataset.shipName = 'carrier'
-        card.dataset.shipLength = 5
-        image.src = carrier
-        name.textContent = 'Carrier (5f)'
-        break
-      case 'battleship':
-        card.dataset.shipName = 'battleship'
-        card.dataset.shipLength = 4
-        image.src = battleship
-        name.textContent = 'Battleship (4f)'
-        break
-      case 'cruiser':
-        card.dataset.shipName = 'cruiser'
-        card.dataset.shipLength = 3
-        image.src = cruiser
-        name.textContent = 'Cruiser (3f)'
-        break
-      case 'submarine':
-        card.dataset.shipName = 'submarine'
-        card.dataset.shipLength = 3
-        image.src = submarine
-        name.textContent = 'Submarine (3f)'
-        break
-      case 'destroyer':
-        card.dataset.shipName = 'destroyer'
-        card.dataset.shipLength = 2
-        image.src = destroyer
-        name.textContent = 'Destroyer (2f)'
-        break
-      default:
-    }
-
-    appendAll(content, [image, name])
-
-    card.appendChild(content)
-
-    return card
-  }
-
   // OTHER
   function getCoordinatesFromIndex(index) {
     const x = parseInt(index / BOARD_SIZE, 10)
@@ -173,7 +116,6 @@ const helper = (() => {
 
   return {
     create,
-    createShipCard,
     appendAll,
     deleteAppContent,
     getHeader,

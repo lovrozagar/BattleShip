@@ -6,6 +6,7 @@ import Game from '../factories/game'
 import Battle from './battle'
 import Component from './reusableComponents'
 import Message from '../utils/message'
+import DragDrop from './dragDrop'
 
 const setup = (() => {
   function loadSetupContent() {
@@ -89,7 +90,7 @@ const setup = (() => {
     const fleet = ['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer']
 
     fleet.forEach((ship) => {
-      const shipCard = helper.createShipCard(ship)
+      const shipCard = Component.createShipCard(ship)
       section.appendChild(shipCard)
     })
 
@@ -110,7 +111,7 @@ const setup = (() => {
 
     const continueButton = helper.create('button', {
       id: 'continue-button',
-      className: 'continue-button disabled',
+      className: 'continue-button',
       textContent: 'Confirm',
     })
 
@@ -128,6 +129,8 @@ const setup = (() => {
   function initButtons() {
     initAxisButtons()
     initResetContinueButtons()
+    disableContinueButton()
+    setTabIndex()
   }
 
   function initAxisButtons() {
@@ -162,6 +165,7 @@ const setup = (() => {
     resetArray(board)
     removePlacedShips(fieldContainer)
     disableContinueButton()
+    setTabIndex()
   }
 
   function resetFleetSelect() {
@@ -184,6 +188,11 @@ const setup = (() => {
     })
   }
 
+  function setTabIndex() {
+    const shipCards = document.querySelectorAll('.ship-card')
+    shipCards.forEach((shipCard) => shipCard.setAttribute('tabindex', 0))
+  }
+
   function resetArray(array) {
     for (let i = 0; i < array.length; i += 1) {
       for (let j = 0; j < array[0].length; j += 1) {
@@ -199,12 +208,15 @@ const setup = (() => {
 
   function handleContinue() {
     // IF ALL PLACED, CONTINUE TO BATTLE
-    // if (Game.state.getPlayer().getMap().areAllShipsFound())
-    Battle.loadBattleContent()
+    if (Game.state.getPlayer().getMap().areAllShipsFound())
+      Battle.loadBattleContent()
   }
 
   function disableContinueButton() {
-    document.getElementById('continue-button').classList.add('disabled')
+    const button = document.getElementById('continue-button')
+
+    button.classList.add('disabled')
+    button.addEventListener('keydown', DragDrop.preventEnterDefault)
   }
 
   return { loadSetupContent }
