@@ -2,103 +2,113 @@
   @include flexColumnCenter;
   flex-wrap: wrap;
   border-radius: $main-border-radius;
-  background-color: rgba(0, 0, 0, 0.5);
-  .ship-card {
-    flex: 1;
-    position: relative;
-    max-width: 9.375rem;
-    min-width: 6.25rem;
-    margin: calc(0.25rem + 0.5vw);
-    padding: 0.25rem;
-    border: 0.125rem solid white;
-    border-radius: $main-border-radius;
-    background: transparent;
-    font-family: inherit;
-    color: white;
-    background: rgba(0, 0, 0, 1);
-    transition: all 0.05s linear, visibility 0.01s linear;
+}
+
+.ship-card {
+  @include flexRowCenter;
+  flex: 1;
+  position: relative;
+  max-width: 9.375rem;
+  min-width: 6.25rem;
+  margin: calc(0.25rem + 0.5vw);
+  padding: 0.25rem;
+  border: 0.125rem solid white;
+  border-radius: $main-border-radius;
+  background: transparent;
+  font-family: inherit;
+  color: $main-color;
+  background: $main-opposite-color;
+  box-shadow: $blue-light-color 0px 0px 10px 0px;
+  transition: all 0.05s linear, visibility 0.01s linear;
+  -webkit-filter: brightness(0.5);
+  filter: brightness(0.5);
+  &:focus {
+    box-shadow: none;
+    -webkit-filter: brightness(1);
+    filter: brightness(1);
+    .ship-content {
+      position: relative;
+      z-index: 1;
+      pointer-events: none;
+      .ship-image {
+        position: relative;
+        z-index: 2;
+        -webkit-filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(8deg)
+          brightness(100%) contrast(104%);
+        filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(8deg)
+          brightness(100%) contrast(104%);
+      }
+    }
+  }
+  &.hidden {
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: none;
+    pointer-events: none;
+    opacity: 0.5;
     -webkit-filter: brightness(0.5);
     filter: brightness(0.5);
-    &:focus {
-      -webkit-filter: brightness(1);
-      filter: brightness(1);
-      .ship-content {
-        position: relative;
-        z-index: 1;
-        pointer-events: none;
-        .ship-image {
-          position: relative;
-          z-index: 2;
-          -webkit-filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(8deg)
-            brightness(100%) contrast(104%);
-          filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(8deg)
-            brightness(100%) contrast(104%);
-        }
-      }
-    }
-    &.hidden {
-      background: rgba(0, 0, 0, 0.5);
-      pointer-events: none;
-      opacity: 0.5;
-      -webkit-filter: brightness(0.5);
-      filter: brightness(0.5);
-      &::before,
-      &::after {
-        background: transparent;
-      }
-      .ship-content {
-        visibility: hidden;
-      }
+    &::before,
+    &::after {
+      background: transparent;
     }
     .ship-content {
-      img {
-        height: min(calc(1rem + 1.5vw), 2rem);
-        max-width: 100%;
-        -webkit-filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
-          brightness(105%) contrast(100%);
-        filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
-          brightness(105%) contrast(100%);
-        pointer-events: none;
-        position: relative;
-        z-index: 3;
-      }
-      p {
-        position: relative;
-        z-index: 3;
-      }
+      visibility: hidden;
     }
   }
-  .ship-card[data-ship-name='carrier'] {
+  .ship-content {
     img {
-      aspect-ratio: 4/1;
+      height: min(calc(1rem + 1.5vw), 2rem);
+      max-width: 100%;
+      -webkit-filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
+        brightness(105%) contrast(100%);
+      filter: invert(100%) sepia(8%) saturate(37%) hue-rotate(328deg)
+        brightness(105%) contrast(100%);
+      pointer-events: none;
+      position: relative;
+      z-index: 3;
+    }
+    .ship-name {
+      position: relative;
+      z-index: 3;
+      font-size: $font-size-ship-card;
     }
   }
-  .ship-card[data-ship-name='battleship'] {
-    img {
-      aspect-ratio: 3.5/1;
-    }
+}
+.ship-card[data-ship-name='carrier'] {
+  order: 1;
+  img {
+    aspect-ratio: 4/1;
   }
-  .ship-card[data-ship-name='submarine'] {
-    img {
-      aspect-ratio: 3/1;
-    }
+}
+.ship-card[data-ship-name='battleship'] {
+  order: 2;
+  img {
+    aspect-ratio: 3.5/1;
   }
-  .ship-card[data-ship-name='cruiser'] {
-    img {
-      aspect-ratio: 3/1;
-    }
+}
+.ship-card[data-ship-name='cruiser'] {
+  order: 3;
+  img {
+    aspect-ratio: 3/1;
   }
-  .ship-card[data-ship-name='destroyer'] {
-    img {
-      aspect-ratio: 2/1;
-    }
+}
+.ship-card[data-ship-name='submarine'] {
+  order: 4;
+  img {
+    aspect-ratio: 3/1;
+  }
+}
+.ship-card[data-ship-name='destroyer'] {
+  order: 5;
+  img {
+    aspect-ratio: 2/1;
   }
 }
 
 .ship-card:before,
 .ship-card:after {
   @include pseudoUnderlay;
-  background: rgba(0, 0, 0, 1);
+  background: rgb(0, 0, 0);
   transition: all 0.2s linear, visibility 0.01s linear;
 }
 
@@ -135,4 +145,22 @@
 .ship-card:hover {
   cursor: -webkit-grab;
   cursor: grab;
+}
+
+@media screen and (max-width: 30rem) {
+  .ship-card[data-ship-name='carrier'] {
+    order: 5;
+  }
+  .ship-card[data-ship-name='battleship'] {
+    order: 4;
+  }
+  .ship-card[data-ship-name='cruiser'] {
+    order: 3;
+  }
+  .ship-card[data-ship-name='submarine'] {
+    order: 2;
+  }
+  .ship-card[data-ship-name='destroyer'] {
+    order: 1;
+  }
 }

@@ -58,7 +58,7 @@ const Component = (() => {
   }
 
   function createShipCard(shipName) {
-    const card = helper.create('button', {
+    const card = helper.create('div', {
       className: 'ship-card',
       draggable: 'true',
     })
@@ -107,27 +107,10 @@ const Component = (() => {
     return card
   }
 
-  function createGitHubButton() {
-    const container = helper.create('div', { className: 'button-container' })
-
-    const button = helper.create('a', {
-      id: 'github-button',
-      className: 'github-button',
-      textContent: 'GitHub',
-      href: 'https://github.com/lovrozagar',
-      target: 'blank',
-    })
-
-    container.appendChild(button)
-
-    return container
-  }
-
   return {
     createMessageSection,
     addTypeWriterMessage,
     createShipCard,
-    createGitHubButton,
   }
 })()
 
