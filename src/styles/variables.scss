@@ -1,20 +1,37 @@
+// COLORS
 $main-color: #ffffff;
-$white-low: rgba(255, 255, 255, 0.6);
+$white-low: #ffffff99;
 $main-opposite-color: #000000;
 $background-color: #03254c;
 $transparent-low-grey-color: #ffffffa6;
 $input-background-color: #00000033;
 $transparent-shadow-color: #0000004d;
-$font-size-medium-low-responsive: min(calc(0.2rem + 1.25vw), 0.85rem);
-$font-size-normal-responsive: min(calc(0.5rem + 1vw), 1rem);
-$font-size-large-responsive: min(calc(0.5rem + 1vw), 1.25rem);
-$font-size-normal-large-responsive: min(calc(0.5rem + 1vw), 1.125rem);
-$font-size-extra-large-responsive: min(calc(1rem + 1vw), 2.25rem);
 $blue-light-color: #87ceeb;
 $orange-light-color: #f3a640;
 $red-light-color: #cf4040;
 $orange-light-color-transparent: #f3a54080;
 $blue-light-color-transparent: #87cfeb80;
 $red-light-color-transparent: #cf404080;
-$main-border-radius: 0.5rem;
+
+// WIDTHS
 $setup-max-width: 46.875rem;
+$battle-max-width: 75rem;
+$board-max-width: 600px;
+
+// FONTS
+$font-size-medium-low-responsive: min(calc(0.2rem + 1.25vw), 0.85rem);
+$font-size-normal-responsive: min(calc(0.5rem + 1vw), 1rem);
+$font-size-large-responsive: min(calc(0.5rem + 1vw), 1.25rem);
+$font-size-normal-large-responsive: min(calc(0.5rem + 1vw), 1.125rem);
+$font-size-extra-large-responsive: min(calc(1rem + 1vw), 2.25rem);
+$font-size-ship-card: 0.85rem;
+
+// OTHER
+$main-border-radius: 0.5rem;
+$pregame-card-padding: min(calc(10%), 3rem) min(calc(10%), 3rem);
+$title-font-size: min(calc(1.75rem + 5vw), 5rem);
+$button-box-shadow: rgba(0, 0, 0, 0.25) 0 0.5rem 0.9375rem;
+$play-now-button-box-shadow: 0px 1.25rem 0.9375rem 1.375rem #0000004d;
+$caps-button-font-size: min(calc(0.5rem + 0.5vw), 0.95rem);
+$caps-button-letter-spacing: 0.1875rem;
+$image-height: min(calc(1.25rem + 2vw), 2.75rem);

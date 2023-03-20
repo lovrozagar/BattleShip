@@ -1,7 +1,7 @@
 @import './variables.scss';
 @import './animations.scss';
 @import './mixins.scss';
-@import './playNowButton.scss';
+@import './capsButtons.scss';
 @import './playerNameForm.scss';
 @import './pregame.scss';
 @import './buttons.scss';
@@ -20,6 +20,10 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
 }
 
 *,
@@ -31,9 +35,6 @@
 }
 
 html {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font-size: 16px;
   min-height: 100vh;
   height: -webkit-fill-available;
 }
@@ -54,22 +55,24 @@ h1,
 button,
 a,
 img {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  @include noUserSelect;
+  text-decoration: none;
+  -webkit-text-decoration-line: none;
+  text-decoration-line: none;
 }
 
 .app {
   @include flexRowCenter;
   position: relative;
   min-height: 100vh;
+  height: -webkit-fill-available;
   text-align: center;
   padding: 1rem;
 }
 
 .app.pregame {
   @include flexColumnCenter;
+  padding: 2rem;
 }
 
 .app-setup,

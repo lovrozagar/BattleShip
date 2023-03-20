@@ -9,7 +9,7 @@
 
 .message.setup,
 .reset-continue-section {
-  @include blackBlurBackground;
+  @include mainBackground;
 }
 
 .message.setup {
@@ -20,24 +20,24 @@
   padding: 1rem;
   font-size: $font-size-normal-responsive;
   .message-image {
-    height: min(calc(1.25rem + 2vw), 2.75rem);
+    height: $image-height;
   }
   .message-container {
     display: inline;
     text-align: start;
     .message-agent {
       display: inline;
-      color: #70cdf1;
+      color: $blue-light-color;
     }
     .typed-cursor {
       position: relative;
       left: 0.0625rem;
       bottom: -0.1875rem;
       display: inline-block;
-      width: 0.5rem !important;
-      height: 1rem !important;
+      width: 0.5rem;
+      height: 1rem;
       color: transparent;
-      background-color: #70cdf1;
+      background-color: $blue-light-color;
       overflow: hidden;
       -webkit-animation-duration: 1.5s;
       animation-duration: 1.5s;
@@ -46,7 +46,7 @@
 }
 
 .setup-container {
-  @include blackBlurBackground;
+  @include mainBackground;
   max-width: $setup-max-width;
   margin: 0 auto;
   padding: 1rem;

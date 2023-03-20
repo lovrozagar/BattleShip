@@ -1,6 +1,6 @@
 .win-modal-container {
   @include flexColumnCenter;
-  @include blackBlurBackgroundDark;
+  @include blurBackground;
   position: absolute;
   z-index: 10;
   top: 50%;
@@ -27,7 +27,7 @@
 
   .message.battle.enemy-win,
   .message.battle.agent-win {
-    max-width: 300px;
+    max-width: 18.75rem;
   }
 
   .message.battle.enemy-win,
@@ -75,18 +75,18 @@
 }
 
 .win-modal-container.enemy {
-  box-shadow: $orange-light-color 0px 0px 2rem;
+  box-shadow: $orange-light-color 0 0 2rem;
 }
 
 .win-modal-container.player {
-  box-shadow: $blue-light-color 0px 0px 2rem;
+  box-shadow: $blue-light-color 0 0 2rem;
 }
 
 .win-overlay {
   @include fullSize;
+  @include mainBackground;
   position: absolute;
   z-index: 5;
-  background-color: rgba(0, 0, 0, 0.7);
   -webkit-animation: opacityShow 0.5s 1 forwards;
   animation: opacityShow 0.5s 1 forwards;
 }

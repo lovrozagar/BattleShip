@@ -2,13 +2,15 @@ button {
   outline: none;
 }
 
-button:focus {
+button:focus,
+.ship-card:focus {
   outline: 0.125rem solid $blue-light-color;
   outline-offset: 0.125rem;
 }
 
 // SHOW OUTLINE ON TABS ONLY
-button:focus:not(:focus-visible) {
+button:focus:not(:focus-visible),
+.ship-card:focus:not(:focus-visible) {
   outline: none;
 }
 
@@ -26,21 +28,16 @@ button:focus:not(:focus-visible) {
 .reset-button,
 .continue-button,
 .new-game-button {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  display: inline-block;
+  @include appearanceNone;
   min-width: 0;
   margin: 0;
   padding: 0.75em 3em;
-  border: 0.0625rem solid #ffffff;
+  border: 0.0625rem solid $main-color;
   border-radius: $main-border-radius;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font-size: min(calc(0.5rem + 1vw), 1rem);
+  font-family: inherit;
+  font-size: $font-size-normal-responsive;
   text-align: center;
-  text-decoration: none;
-  color: #ffffff;
+  color: $main-color;
   background-color: transparent;
   transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
   cursor: pointer;
@@ -61,8 +58,8 @@ button:focus:not(:focus-visible) {
 .reset-button:hover,
 .continue-button.enabled:hover,
 .new-game-button:hover {
-  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-  transform: translateY(-2px);
+  box-shadow: $button-box-shadow;
+  transform: translateY(-0.125rem);
 }
 
 .axis-button:active,
@@ -70,73 +67,6 @@ button:focus:not(:focus-visible) {
 .continue-button.active:active,
 .new-game-button:active,
 .axis-button.selected {
-  color: #000;
-  background-color: #ffffff;
-}
-
-.new-game-button {
-  margin-top: 0.5rem;
-}
-
-.github-button {
-  @include flexColumnCenter;
-  @include mainBackground;
-  position: relative;
-  z-index: 1;
-  padding: 0.625em 1.5em;
-  margin-top: 1rem;
-  border: none;
-  border-radius: 0.625em;
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: white;
-  overflow: hidden;
-  text-decoration: none;
-  -webkit-text-decoration-line: none;
-  text-decoration-line: none;
-  transition: color 0.5s;
-  cursor: pointer;
-}
-
-.github-button:hover {
-  color: transparent;
-}
-
-.github-button:before {
-  content: '';
-  background: white url('../assets/images/github.svg') no-repeat center;
-  position: absolute;
-  z-index: 2;
-  left: -20%;
-  right: -20%;
-  top: 0;
-  bottom: 0;
-  transform: scale(0, 0);
-  transition: all 0.5s;
-}
-
-.github-button:after {
-  content: '';
-  background: white;
-  position: absolute;
-  z-index: -1;
-  left: -20%;
-  right: -20%;
-  top: 0;
-  bottom: 0;
-  transform: skewX(-45deg) scale(0, 1);
-  transition: all 0.5s;
-}
-
-.github-button:hover::before,
-.github-button:hover:after {
-  transition: all 0.5s;
-}
-
-.github-button:hover::before {
-  transform: scale(0.8, 0.6);
-}
-
-.github-button:hover:after {
-  transform: skewX(-45deg) scale(1, 1);
+  color: $main-opposite-color;
+  background-color: $main-color;
 }

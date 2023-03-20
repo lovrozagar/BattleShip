@@ -41,7 +41,7 @@
     }
   }
   &.hidden {
-    background: rgba(0, 0, 0, 0.5);
+    @include mainBackground;
     box-shadow: none;
     pointer-events: none;
     opacity: 0.5;

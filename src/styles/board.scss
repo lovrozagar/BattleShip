@@ -17,7 +17,7 @@
   display: grid;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto auto;
-  max-width: 600px;
+  max-width: $board-max-width;
   border-radius: $main-border-radius;
   .map-title-container {
     .map-title {
@@ -34,6 +34,7 @@
   }
   .letter-container,
   .number-container {
+    @include noUserSelect;
     font-size: $font-size-medium-low-responsive;
   }
   .letter-container {
@@ -51,23 +52,23 @@
   .field-container {
     order: 4;
     position: relative;
+    z-index: 0;
     grid-column: 2/3;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
     aspect-ratio: 1/1;
     border-collapse: collapse;
-    border: 1px solid $white-low;
     background-repeat: no-repeat;
     overflow: hidden;
-    background: rgb(2, 0, 36);
-    background: radial-gradient(
-      circle,
-      rgba(2, 0, 36, 0) 15%,
-      rgba(112, 205, 241, 0.10127801120448177) 60%,
-      rgba(112, 205, 241, 0.2497373949579832) 85%,
-      rgba(112, 205, 241, 0.40379901960784315) 100%
-    );
+    background-image: url('../assets/images/grid.svg'),
+      radial-gradient(
+        circle,
+        rgba(2, 0, 36, 0) 15%,
+        rgba(112, 205, 241, 0.10127801120448177) 60%,
+        rgba(112, 205, 241, 0.2497373949579832) 85%,
+        rgba(112, 205, 241, 0.40379901960784315) 100%
+      );
     &::before {
       @include pseudoOverlay;
       display: block;
@@ -92,7 +93,7 @@
       top: -50%;
       left: -50%;
       margin: 0 auto;
-      border-right: solid 1px #87cfeb50;
+      border-right: solid 0.0625rem #87cfeb50;
       width: 100%;
       height: 100%;
       border-radius: 100% 0 0 0;
@@ -113,7 +114,7 @@
       @include flexRowCenter;
       aspect-ratio: 1/1;
       position: relative;
-      border: 1px solid $white-low;
+      // border: 1px solid $white-low;
       &.no-drop,
       &.no-drop * {
         pointer-events: none;
@@ -129,6 +130,8 @@
       }
     }
     .ship-image-container {
+      position: relative;
+      z-index: 1;
       pointer-events: none;
       -webkit-user-select: none;
       -moz-user-select: none;
@@ -156,4 +159,15 @@
 
 .disabled {
   pointer-events: none;
+}
+
+@media screen and (max-width: 30rem) {
+  .board {
+    .field-container {
+      border-width: 0.0625rem 0 0 0.0625rem;
+      .field {
+        border-width: 0 0.0625rem 0.0625rem 0;
+      }
+    }
+  }
 }

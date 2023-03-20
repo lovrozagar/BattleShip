@@ -38,6 +38,12 @@
   justify-content: space-around;
 }
 
+@mixin flexColumnSpaceEvenly {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 @mixin gridPlaceItemsCenter {
   display: grid;
   place-items: center;
@@ -95,14 +101,31 @@
   background-color: $orange-light-color;
 }
 
-@mixin blackBlurBackground {
-  background-color: rgba(0, 0, 0, 0.5);
+@mixin mainBackground {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+@mixin blurBackground {
+  background-color: rgba(0, 0, 0, 0.75);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
-@mixin blackBlurBackgroundDark {
-  background-color: rgba(0, 0, 0, 0.7);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+@mixin appearanceNone {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: inline-block;
+}
+
+@mixin fullSizeMask {
+  mask-size: 100%;
+  -webkit-mask-size: 100%;
+}
+
+@mixin noUserSelect {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
