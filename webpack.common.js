@@ -16,11 +16,21 @@ module.exports = {
   },
   optimization: {
     runtimeChunk: 'single',
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
   },
   module: {
     rules: [
       {
-        test: /.(png|svg|jpg|jpeg|gif)$/i,
+        test: /.(png|svg|jpg|jpeg|gif|mp3)$/i,
         type: 'asset/resource',
       },
       {
