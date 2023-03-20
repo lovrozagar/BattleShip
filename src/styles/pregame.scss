@@ -1,24 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
 .pregame-card {
   @include mainBackground;
-  padding: min(calc(2rem + 3vw), 5rem) min(calc(1rem + 2vw), 3rem);
+  @include flexColumnSpaceEvenly;
+  width: 100%;
+  max-width: 28.125rem;
+  padding: $pregame-card-padding;
   border: 0.125rem solid transparent;
   border-radius: 1rem;
-  box-shadow: 0px 0px 30px 0.0625rem $transparent-shadow-color;
+  box-shadow: 0 0 30px 0.0625rem $transparent-shadow-color;
   text-align: center;
   transition: border-color 0.5s;
-  cursor: pointer;
+  aspect-ratio: 10/8;
+  &:hover {
+    border: 0.125rem solid $main-opposite-color;
+  }
   h1 {
-    font-family: 'Big Shoulders Stencil Text', cursive;
-    font-size: min(calc(1.75rem + 4vw), 5rem);
+    position: relative;
+    line-height: 1;
+    font-family: 'Anton', sans-serif;
+    font-size: 5rem;
     letter-spacing: 0.1rem;
+    color: transparent;
+    &::before {
+      @include pseudoOverlay;
+      @include fullSize;
+      top: 0;
+      left: 0;
+      background: url('../assets/images/title.svg') no-repeat center;
+      background-size: contain;
+      pointer-events: none;
+    }
   }
   .name-form {
-    margin-top: 2.75rem;
+    position: relative;
+    top: 5%;
   }
-  .play-now-button {
-    margin-top: 1rem;
-  }
-  &:hover {
-    border: 2px solid $transparent-shadow-color;
+}
+
+@media screen and (max-width: 30rem) {
+  .pregame-card {
+    h1 {
+      font-size: 3rem;
+    }
   }
 }
