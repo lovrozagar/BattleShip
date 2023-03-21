@@ -3,15 +3,16 @@ import ship from './ship'
 
 const player = (name, isCpu = false) => {
   const board = gameboard()
-  const turn = 0
+  const searchQueue = []
   return {
     name,
     isCpu,
     board,
-    turn,
+    searchQueue,
     getMap,
     getName,
     setName,
+    fillQueue,
     playTurn,
     cpuPlay,
     autoPlace,
@@ -33,20 +34,66 @@ function setName(name) {
 }
 
 function playTurn(coordinate = []) {
-  if (!this.isEmptyField(coordinate) && !this.isCpu) return
-
-  if (this.isCpu) {
-    this.cpuPlay()
-  } else {
-    this.board.receiveAttack(coordinate)
-  }
-
-  this.turn += 1
+  if (this.searchQueue) return this.playFromQueue()
+  return this.cpuPlay()
 }
 
 function isEmptyField(coordinate) {
   const [x, y] = coordinate
   return this.board.board[x][y] !== 'miss' && this.board.board[x][y] !== 'hit'
+}
+
+function fillQueue(row, col) {
+  // IF ONLY ORIGIN OF FIRST HIT LEFT, EMPTY THE QUEUE
+  if (this.searchQueue.length === 1) {
+    this.searchQueue = []
+  }
+
+  if (this.getMap().getBoard()[row][col] === 'miss') return
+
+  // IF FIRST HIT IN AN AREA, STORE IT AND USE IT AS A REFERENCE POINT FOR DIRECTION LATER
+  let origin = false
+  if (this.searchQueue.length === 0) {
+    this.searchQueue.push([row, col])
+    origin = true
+  }
+
+  if (row > 0 && row <= 9) {
+    // top
+    this.searchQueue.push([row - 1, col])
+  }
+
+  // bottom
+  if (row >= 0 && row < 9) {
+    this.searchQueue.push([row + 1, col])
+  }
+
+  // left
+  if (col > 0 && col <= 9) {
+    this.searchQueue.push([row, col - 1])
+  }
+
+  // right
+  if (col >= 0 && col < 9) {
+    this.searchQueue.push([row, col + 1])
+  }
+
+  if (this.searchQueue.length > 1 && !origin) {
+    console.log(row, col)
+    if (row === this.searchQueue[0][0]) {
+      console.log('c')
+      this.searchQueue = [
+        ...this.searchQueue.slice(0, 1),
+        ...this.searchQueue.slice(1).filter((subArr) => subArr[0] === row),
+      ]
+    } else if (col === this.searchQueue[0][1]) {
+      console.log('d')
+      this.searchQueue = [
+        ...this.searchQueue.slice(0, 1),
+        ...this.searchQueue.slice(1).filter((subArr) => subArr[1] === col),
+      ]
+    }
+  }
 }
 
 function cpuPlay() {
@@ -55,16 +102,21 @@ function cpuPlay() {
   let y
 
   while (invalidCoordinate) {
-    x = randomCoordinate()
-    y = randomCoordinate()
+    if (this.searchQueue.length > 1)
+      [x, y] = getRandomAndRemove(this.searchQueue)
+    else {
+      x = randomCoordinate()
+      y = randomCoordinate()
+    }
 
     if (this.isEmptyField([x, y])) {
-      console.log('a')
       invalidCoordinate = false
       this.board.receiveAttack([x, y])
     }
   }
 
+  this.fillQueue(x, y)
+  console.log(this.searchQueue)
   return [x, y]
 }
 
@@ -106,6 +158,13 @@ function randomCoordinate() {
 function randomAxis() {
   const axis = ['x', 'y']
   return axis[Math.round(Math.random())]
+}
+
+function getRandomAndRemove(array) {
+  const randomIndex = Math.floor(Math.random() * (array.length - 1)) + 1
+  const randomElement = array[randomIndex]
+  array.splice(randomIndex, 1)
+  return randomElement
 }
 
 export default player
