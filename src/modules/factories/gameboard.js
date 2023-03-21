@@ -1,206 +1,206 @@
-import ship from './ship'
+import Ship from './ship'
 
-const gameboard = () => {
-  const board = new Array(10).fill('x').map(() => new Array(10).fill('x'))
-  const fleet = []
-  const axis = 'X'
-  const shipOnDrag = { name: '', length: 0 }
-  return {
-    board,
-    fleet,
-    axis,
-    shipOnDrag,
-    getBoard,
-    getFleet,
-    getShip,
-    getAxis,
-    getShipOnDrag,
-    setAxisX,
-    setAxisY,
-    setFleetEmpty,
-    setAllShipsNotFound,
-    setShipOnDrag,
-    addToFleet,
-    placeX,
-    placeY,
-    receiveAttack,
-    recordHit,
-    areAllShipsFound,
-    isEveryShipSunk,
-  }
-}
+const Gameboard = (() => {
+  // MAP FACTORY
+  const createMap = () => {
+    const board = new Array(10).fill('x').map(() => new Array(10).fill('x'))
+    const shipOnDrag = { name: '', length: 0 }
+    let fleet = []
+    let axis = 'X'
 
-// GETTERS
+    // GETTERS
 
-function getBoard() {
-  return this.board
-}
+    function getBoard() {
+      return board
+    }
 
-function getFleet() {
-  return this.fleet
-}
+    function getFleet() {
+      return fleet
+    }
 
-function getAxis() {
-  return this.axis
-}
+    function getAxis() {
+      return axis
+    }
 
-function getShipOnDrag() {
-  return this.shipOnDrag
-}
+    function getShipOnDrag() {
+      return shipOnDrag
+    }
 
-function getShip(shipName) {
-  // const nameFormatted = shipName.slice(0, shipName.length - 1)
-  return this.fleet.filter((battleship) => battleship.name === shipName)[0]
-}
+    function getShip(shipName) {
+      return fleet.filter((battleship) => battleship.getName() === shipName)[0]
+    }
 
-// SETTERS
+    // SETTERS
 
-function setAxisX() {
-  this.axis = 'X'
-}
+    function setAxisX() {
+      axis = 'X'
+    }
 
-function setAxisY() {
-  this.axis = 'Y'
-}
+    function setAxisY() {
+      axis = 'Y'
+    }
 
-function setShipOnDrag(shipInfoObj) {
-  this.shipOnDrag.name = shipInfoObj.name
-  this.shipOnDrag.length = shipInfoObj.length
-}
+    function setShipOnDrag(shipInfoObj) {
+      shipOnDrag.name = shipInfoObj.name
+      shipOnDrag.length = shipInfoObj.length
+    }
 
-function setAllShipsNotFound() {
-  this.fleet.forEach((ship) => (ship.isFound = false))
-}
+    function setAllShipsNotFound() {
+      fleet.forEach((ship) => ship.resetFound())
+    }
 
-// FLEET
+    // FLEET
 
-function addToFleet(shipName) {
-  switch (shipName.name) {
-    case 'carrier':
-      this.fleet.push(ship('carrier', 5))
-      break
-    case 'battleship':
-      this.fleet.push(ship('battleship', 4))
-      break
-    case 'cruiser':
-      this.fleet.push(ship('cruiser', 3))
-      break
-    case 'submarine':
-      this.fleet.push(ship('submarine', 3))
-      break
-    default:
-      this.fleet.push(ship('destroyer', 2))
-  }
-}
+    function addToFleet(battleship) {
+      switch (battleship.getName()) {
+        case 'carrier':
+          fleet.push(Ship.createShip('carrier', 5))
+          break
+        case 'battleship':
+          fleet.push(Ship.createShip('battleship', 4))
+          break
+        case 'cruiser':
+          fleet.push(Ship.createShip('cruiser', 3))
+          break
+        case 'submarine':
+          fleet.push(Ship.createShip('submarine', 3))
+          break
+        default:
+          fleet.push(Ship.createShip('destroyer', 2))
+      }
+    }
 
-function setFleetEmpty() {
-  this.fleet = []
-}
+    function setFleetEmpty() {
+      fleet = []
+    }
 
-// PLACEMENT
+    // PLACEMENT
 
-function placeX(battleship, start) {
-  let shipLength = battleship.length
-  const [x, y] = start
-  const shipPlacement = []
+    function placeX(battleship, start) {
+      let shipLength = battleship.getLength()
+      const [x, y] = start
+      const shipPlacement = []
 
-  if (isOutOfBounds(shipLength, this.board.length, y)) return false
+      if (isOutOfBounds(shipLength, board.length, y)) return false
 
-  for (let j = y; j < this.board.length; j++) {
-    if (this.board[x][j] !== 'x') return false
+      for (let j = y; j < board.length; j++) {
+        if (board[x][j] !== 'x') return false
 
-    shipPlacement.push([x, j])
-    shipLength -= 1
-    if (shipLength === 0) {
-      break
+        shipPlacement.push([x, j])
+        shipLength -= 1
+        if (shipLength === 0) {
+          break
+        }
+      }
+
+      shipPlacement.forEach((coordinate) => {
+        const [i, j] = coordinate
+        board[i][j] = `${battleship.getName()}X`
+      })
+
+      addToFleet(battleship)
+
+      return true
+    }
+
+    function placeY(battleship, start) {
+      let shipLength = battleship.getLength()
+      const [x, y] = start
+      const shipPlacement = []
+
+      if (isOutOfBounds(shipLength, board.length, x)) return false
+
+      for (let i = x; i < board.length; i++) {
+        if (board[i][y] !== 'x') return false
+
+        shipPlacement.push([i, y])
+        shipLength -= 1
+        if (shipLength === 0) {
+          break
+        }
+      }
+
+      shipPlacement.forEach((coordinate) => {
+        const [i, j] = coordinate
+        board[i][j] = `${battleship.getName()}Y`
+      })
+
+      addToFleet(battleship)
+
+      return true
+    }
+
+    function isOutOfBounds(shipLength, boardLength, field) {
+      return shipLength > boardLength - field
+    }
+
+    // RECORD ATTACKS
+
+    function receiveAttack(coords) {
+      const [x, y] = coords
+      recordHit(x, y)
+    }
+
+    function recordHit(x, y) {
+      switch (board[x][y]) {
+        case 'carrierX':
+        case 'carrierY':
+          getShip('carrier').hit()
+          break
+        case 'battleshipX':
+        case 'battleshipY':
+          getShip('battleship').hit()
+          break
+        case 'cruiserX':
+        case 'cruiserY':
+          getShip('cruiser').hit()
+          break
+        case 'submarineX':
+        case 'submarineY':
+          getShip('submarine').hit()
+          break
+        case 'destroyerX':
+        case 'destroyerY':
+          getShip('destroyer').hit()
+          break
+        default:
+          board[x][y] = 'miss'
+      }
+    }
+
+    // CHECKERS
+
+    function areAllShipsFound() {
+      return fleet.length === 5
+    }
+
+    function isEveryShipSunk() {
+      const sunk = fleet.filter((battleship) => battleship.getSunk() === true)
+      return sunk.length === 5
+    }
+
+    return {
+      getBoard,
+      getFleet,
+      getShip,
+      getAxis,
+      getShipOnDrag,
+      setAxisX,
+      setAxisY,
+      setFleetEmpty,
+      setAllShipsNotFound,
+      setShipOnDrag,
+      addToFleet,
+      placeX,
+      placeY,
+      receiveAttack,
+      recordHit,
+      areAllShipsFound,
+      isEveryShipSunk,
     }
   }
 
-  shipPlacement.forEach((coordinate) => {
-    const [i, j] = coordinate
-    this.board[i][j] = `${battleship.name}X`
-  })
+  return { createMap }
+})()
 
-  this.addToFleet(battleship)
-
-  return true
-}
-
-function placeY(battleship, start) {
-  let shipLength = battleship.length
-  const [x, y] = start
-  const shipPlacement = []
-
-  if (isOutOfBounds(shipLength, this.board.length, x)) return false
-
-  for (let i = x; i < this.board.length; i++) {
-    if (this.board[i][y] !== 'x') return false
-
-    shipPlacement.push([i, y])
-    shipLength -= 1
-    if (shipLength === 0) {
-      break
-    }
-  }
-
-  shipPlacement.forEach((coordinate) => {
-    const [i, j] = coordinate
-    this.board[i][j] = `${battleship.name}Y`
-  })
-
-  this.addToFleet(battleship)
-
-  return true
-}
-
-function isOutOfBounds(shipLength, boardLength, field) {
-  return shipLength > boardLength - field
-}
-
-// RECORD ATTACKS
-
-function receiveAttack(coords) {
-  const [x, y] = coords
-  this.recordHit(x, y)
-}
-
-function recordHit(x, y) {
-  switch (this.board[x][y]) {
-    case 'carrierX':
-    case 'carrierY':
-      this.getShip('carrier').hit()
-      // this.board[x][y] = 'hit'
-      break
-    case 'battleshipX':
-    case 'battleshipY':
-      this.getShip('battleship').hit()
-      // this.board[x][y] = 'hit'
-      break
-    case 'cruiserX':
-    case 'cruiserY':
-      this.getShip('cruiser').hit()
-      break
-    case 'submarineX':
-    case 'submarineY':
-      this.getShip('submarine').hit()
-      break
-    case 'destroyerX':
-    case 'destroyerY':
-      this.getShip('destroyer').hit()
-      break
-    default:
-      this.board[x][y] = 'miss'
-  }
-}
-
-// ARE ALL SUNK
-function areAllShipsFound() {
-  return this.fleet.length === 5
-}
-
-function isEveryShipSunk() {
-  const sunk = this.fleet.filter((battleship) => battleship.isSunk === true)
-  return sunk.length === 5
-}
-
-export default gameboard
+export default Gameboard

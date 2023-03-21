@@ -1,13 +1,13 @@
-import player from './player'
+import Player from './player'
 
 const Game = (() => {
   const state = initializeGame()
 
   function initializeGame() {
-    const combatant = player('Captain')
-    const cpu = player('cpu', true)
+    const player = Player.createPlayer('Captain', 'player')
+    const cpu = Player.createPlayer('cpu', 'cpu')
 
-    return { combatant, cpu, getPlayer, getCPU }
+    return { player, cpu, getPlayer, getCPU }
   }
 
   // GETTERS
@@ -17,12 +17,14 @@ const Game = (() => {
   }
 
   function getPlayer() {
-    return this.combatant
+    return this.player
   }
 
   function getCPU() {
     return this.cpu
   }
+
+  // SETTERS
 
   function setPlayerName(name = 'Captain') {
     getState().getPlayer().setName(name)

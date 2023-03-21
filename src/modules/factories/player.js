@@ -1,170 +1,186 @@
-import gameboard from './gameboard'
-import ship from './ship'
+import Gameboard from './gameboard'
+import Ship from './ship'
 
-const player = (name, isCpu = false) => {
-  const board = gameboard()
-  const searchQueue = []
-  return {
-    name,
-    isCpu,
-    board,
-    searchQueue,
-    getMap,
-    getName,
-    setName,
-    fillQueue,
-    playTurn,
-    cpuPlay,
-    autoPlace,
-    isEmptyField,
-    isLoser,
-  }
-}
+const Player = (() => {
+  // PLAYER FACTORY
+  const createPlayer = (playerName, playerIdentity) => {
+    const identity = playerIdentity
+    const map = Gameboard.createMap()
+    let name = playerName
+    let searchQueue = []
 
-function getMap() {
-  return this.board
-}
+    // GETTERS
 
-function getName() {
-  return this.name
-}
+    function getName() {
+      return name
+    }
 
-function setName(name) {
-  this.name = name
-}
+    function getMap() {
+      return map
+    }
 
-function playTurn(coordinate = []) {
-  if (this.searchQueue) return this.playFromQueue()
-  return this.cpuPlay()
-}
+    function getIdentity() {
+      return identity
+    }
 
-function isEmptyField(coordinate) {
-  const [x, y] = coordinate
-  return this.board.board[x][y] !== 'miss' && this.board.board[x][y] !== 'hit'
-}
+    // SETTERS
 
-function fillQueue(row, col) {
-  // IF ONLY ORIGIN OF FIRST HIT LEFT, EMPTY THE QUEUE
-  if (this.searchQueue.length === 1) {
-    this.searchQueue = []
-  }
+    function setName(newName) {
+      name = newName
+    }
 
-  if (this.getMap().getBoard()[row][col] === 'miss') return
+    // CHECKERS
 
-  // IF FIRST HIT IN AN AREA, STORE IT AND USE IT AS A REFERENCE POINT FOR DIRECTION LATER
-  let origin = false
-  if (this.searchQueue.length === 0) {
-    this.searchQueue.push([row, col])
-    origin = true
-  }
+    function isEmptyField(coordinate) {
+      const [x, y] = coordinate
+      return (
+        getMap().getBoard()[x][y] !== 'miss' &&
+        getMap().getBoard()[x][y] !== 'hit'
+      )
+    }
 
-  if (row > 0 && row <= 9) {
-    // top
-    this.searchQueue.push([row - 1, col])
-  }
+    function isLoser() {
+      return getMap()
+        .getFleet()
+        .every((battleship) => battleship.getSunk() === true)
+    }
 
-  // bottom
-  if (row >= 0 && row < 9) {
-    this.searchQueue.push([row + 1, col])
-  }
+    // CPU METHODS
 
-  // left
-  if (col > 0 && col <= 9) {
-    this.searchQueue.push([row, col - 1])
-  }
-
-  // right
-  if (col >= 0 && col < 9) {
-    this.searchQueue.push([row, col + 1])
-  }
-
-  if (this.searchQueue.length > 1 && !origin) {
-    console.log(row, col)
-    if (row === this.searchQueue[0][0]) {
-      console.log('c')
-      this.searchQueue = [
-        ...this.searchQueue.slice(0, 1),
-        ...this.searchQueue.slice(1).filter((subArr) => subArr[0] === row),
+    function autoPlace() {
+      const fleet = [
+        'carrier',
+        'battleship',
+        'cruiser',
+        'submarine',
+        'destroyer',
       ]
-    } else if (col === this.searchQueue[0][1]) {
-      console.log('d')
-      this.searchQueue = [
-        ...this.searchQueue.slice(0, 1),
-        ...this.searchQueue.slice(1).filter((subArr) => subArr[1] === col),
-      ]
+      const length = [5, 4, 3, 3, 2]
+
+      while (fleet.length) {
+        const axis = randomAxis()
+        const row = randomCoordinate()
+        const col = randomCoordinate()
+        let placed = false
+
+        if (axis === 'x') {
+          placed = getMap().placeX(Ship.createShip(fleet[0], length[0]), [
+            row,
+            col,
+          ])
+        } else {
+          placed = getMap().placeY(Ship.createShip(fleet[0], length[0]), [
+            row,
+            col,
+          ])
+        }
+
+        if (placed) {
+          fleet.shift()
+          length.shift()
+        }
+      }
+    }
+
+    function cpuPlay() {
+      let invalidCoordinate = true
+      let x
+      let y
+
+      while (invalidCoordinate) {
+        if (searchQueue.length > 1) [x, y] = getRandomAndRemove(searchQueue)
+        else {
+          x = randomCoordinate()
+          y = randomCoordinate()
+        }
+
+        if (isEmptyField([x, y])) {
+          invalidCoordinate = false
+          getMap().receiveAttack([x, y])
+        }
+      }
+
+      fillQueue(x, y)
+      console.log(searchQueue)
+      return [x, y]
+    }
+
+    function fillQueue(row, col) {
+      // IF ONLY ORIGIN OF FIRST HIT LEFT, EMPTY THE QUEUE
+      if (searchQueue.length === 1) {
+        searchQueue = []
+      }
+      // IF ATTACK IS MISS EXIT
+      if (getMap().getBoard()[row][col] === 'miss') return
+      // IF FIRST HIT IN AN AREA, STORE IT AND USE IT AS A REFERENCE POINT FOR DIRECTION LATER
+      let origin = false
+      if (searchQueue.length === 0) {
+        searchQueue.push([row, col])
+        origin = true
+      }
+      if (row > 0 && row <= 9) {
+        searchQueue.push([row - 1, col]) // top
+      }
+      if (row >= 0 && row < 9) {
+        searchQueue.push([row + 1, col]) // bottom
+      }
+      if (col > 0 && col <= 9) {
+        searchQueue.push([row, col - 1]) // left
+      }
+      if (col >= 0 && col < 9) {
+        searchQueue.push([row, col + 1]) // right
+      }
+
+      if (searchQueue.length > 1 && !origin) {
+        console.log(row, col)
+        if (row === searchQueue[0][0]) {
+          console.log('c')
+          searchQueue = [
+            ...searchQueue.slice(0, 1),
+            ...searchQueue.slice(1).filter((subArr) => subArr[0] === row),
+          ]
+        } else if (col === searchQueue[0][1]) {
+          console.log('d')
+          searchQueue = [
+            ...searchQueue.slice(0, 1),
+            ...searchQueue.slice(1).filter((subArr) => subArr[1] === col),
+          ]
+        }
+      }
+    }
+
+    return {
+      getName,
+      getIdentity,
+      getMap,
+      setName,
+      fillQueue,
+      cpuPlay,
+      autoPlace,
+      isEmptyField,
+      isLoser,
     }
   }
-}
 
-function cpuPlay() {
-  let invalidCoordinate = true
-  let x
-  let y
+  // PLAYER HELPERS
 
-  while (invalidCoordinate) {
-    if (this.searchQueue.length > 1)
-      [x, y] = getRandomAndRemove(this.searchQueue)
-    else {
-      x = randomCoordinate()
-      y = randomCoordinate()
-    }
-
-    if (this.isEmptyField([x, y])) {
-      invalidCoordinate = false
-      this.board.receiveAttack([x, y])
-    }
+  function randomCoordinate() {
+    return Math.floor(Math.random() * (9 + 1))
   }
 
-  this.fillQueue(x, y)
-  console.log(this.searchQueue)
-  return [x, y]
-}
-
-function autoPlace() {
-  const fleet = ['carrier', 'battleship', 'cruiser', 'submarine', 'destroyer']
-  const length = [5, 4, 3, 3, 2]
-  const board = this.getMap()
-
-  while (fleet.length) {
-    const axis = randomAxis()
-    let placed = false
-
-    const row = randomCoordinate()
-    const col = randomCoordinate()
-
-    if (axis === 'x') {
-      placed = board.placeX(ship(fleet[0], length[0]), [row, col])
-    } else {
-      placed = board.placeY(ship(fleet[0], length[0]), [row, col])
-    }
-
-    if (placed) {
-      fleet.shift()
-      length.shift()
-    }
+  function randomAxis() {
+    const axis = ['x', 'y']
+    return axis[Math.round(Math.random())]
   }
-}
 
-function isLoser() {
-  return this.getMap()
-    .getFleet()
-    .every((battleship) => battleship.isSunk)
-}
+  function getRandomAndRemove(array) {
+    const randomIndex = Math.floor(Math.random() * (array.length - 1)) + 1
+    const randomElement = array[randomIndex]
+    array.splice(randomIndex, 1)
+    return randomElement
+  }
 
-function randomCoordinate() {
-  return Math.floor(Math.random() * (9 + 1))
-}
+  return { createPlayer }
+})()
 
-function randomAxis() {
-  const axis = ['x', 'y']
-  return axis[Math.round(Math.random())]
-}
-
-function getRandomAndRemove(array) {
-  const randomIndex = Math.floor(Math.random() * (array.length - 1)) + 1
-  const randomElement = array[randomIndex]
-  array.splice(randomIndex, 1)
-  return randomElement
-}
-
-export default player
+export default Player
